@@ -30,7 +30,7 @@ RUN rm -rf parallel-netcdf-1.6.0
 # Copy over the dockerfile, scripts and README.
 ###
 
-COPY README.md /root/
+COPY DOCKER_README.md /root/
 COPY Dockerfile.serial /root/
 COPY run_par_tests.sh /root/
 ENV PARTYPE -mpich
