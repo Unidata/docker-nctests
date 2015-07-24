@@ -1,5 +1,7 @@
 # unidata/nctests
 
+The Dockerfile and other information for this image may be found either by running the image interactively, or by going to the corresponding github repository: http://github.com/Unidata/docker-nctests
+
 ## Overview
 
 This docker image is used to perform spot-tests on Unidata `netCDF` packages.  It can be used to test code repositories remotely or locally.  See [Examples](#examples) for various command-line recipes for using this package.
