@@ -6,7 +6,7 @@ dohelp ()
     echo "Usage: $0 -[ix] -p [image name prefix]"
     echo -e "\t -i     Build 32-bit images."
     echo -e "\t -x     Build 64-bit images."
-    echo -e "\t -p     Specify an image name. Default: wardf/nctests"
+    echo -e "\t -p     Specify an image name. Default: unidata/nctests"
     echo ""
 }
 
@@ -14,11 +14,11 @@ DO32=""
 DO64=""
 
 ##
-# Note that the test Dockerfiles assume wardf/nctests:base[32],
+# Note that the test Dockerfiles assume unidata/nctests:base[32],
 # so we build that tag too, just in case.
 ##
 
-IPREF="wardf/nctests"
+IPREF="unidata/nctests"
 
 if [ $# -lt 1 ]; then
     dohelp
@@ -50,7 +50,7 @@ if [ "x$DO32" == "xTRUE" ]; then
     echo "Building 32-bit images."
     echo "Building Base Image"
     docker build -t $IPREF:base32 -f Dockerfile.base32 .
-    docker build -t wardf/nctests:base32 -f Dockerfile.base32 .
+    docker build -t unidata/nctests:base32 -f Dockerfile.base32 .
 
     echo "Starting Serial32 Image"
     docker build -t $IPREF:serial32 -f Dockerfile.serial32 . &> serial32.log&
@@ -72,7 +72,7 @@ if [ "x$DO64" == "xTRUE" ]; then
     echo "Building 64-bit images."
     echo "Building Base Image"
     docker build -t $IPREF:base -f Dockerfile.base .
-    docker build -t wardf/nctests:base -f Dockerfile.base .
+    docker build -t unidata/nctests:base -f Dockerfile.base .
 
     echo "Starting Serial Image"
     docker build -t $IPREF:serial -f Dockerfile.serial . &> serial.log&

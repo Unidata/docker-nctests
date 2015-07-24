@@ -1,4 +1,4 @@
-# wardf/nctests
+# unidata/nctests
 
 ## Overview
 
@@ -16,13 +16,13 @@ Each package will be built and tested.  This way, we can see if any changes in `
 
 You can specify an alternative branch for `netcdf-c` than `master` using the following syntax.
 
-    $ docker run -e CBRANCH="branch name" wardf/nctests
+    $ docker run -e CBRANCH="branch name" unidata/nctests
 
 ## Working with local copies instead of pulling from GitHub
 
 It is possible to use local directories instead of pulling from github. You do this by mounting your local git directory to the root of the docker image filesystem, e.g.
 
-    $ docker run -v $(pwd)/netcdf-c:/netcdf-c wardf/nctests
+    $ docker run -v $(pwd)/netcdf-c:/netcdf-c unidata/nctests
     
 When the image runs, it will check for the existence of `/netcdf-c`, `/netcdf-fortran` and `/netcdf-cxx4`.  If they exist, the image will clone from these instead of pulling from GitHub.
 
@@ -64,45 +64,45 @@ The following environmental variables can be used to control the behavior at run
 * `-v`: Mount a local volume to the docker image.
 * `-e`: Set an environmental variable.
 
-> The docker images/tags, `wardf/nctests:serial`, `wardf/nctests:mpich`, etc, do not matter here.  So we will simply use `wardf/nctests` (which defaults to `serial`); replace with your tag of choice, they should all work.
+> The docker images/tags, `unidata/nctests:serial`, `unidata/nctests:mpich`, etc, do not matter here.  So we will simply use `unidata/nctests` (which defaults to `serial`); replace with your tag of choice, they should all work.
 
-See [the section on environmental variables](#variables) for a complete list of variables understood by `wardf/nctests`.
+See [the section on environmental variables](#variables) for a complete list of variables understood by `unidata/nctests`.
 
 ### - Show the help file <A name="help"></A>
 	
 This will show you the help file for the docker image.
 
-    $ docker run --rm -it -e CMD=help wardf/nctests
+    $ docker run --rm -it -e CMD=help unidata/nctests
 
 ### - Run a docker container *interactively* <A name="interactive"></A>
 
 This will put you into the shell for the docker container.  Note that any changes you make will not persist once you exit.  
 
-    $ docker run --rm -it wardf/nctests bash
+    $ docker run --rm -it unidata/nctests bash
 
 ### - Run all tests (standard use case) <A name="standard"></A>
 
-    $ docker run --rm -it wardf/nctests
+    $ docker run --rm -it unidata/nctests
     
 ### - Run all tests against a specific branch <A name="usebranch"></A>
     
-    $ docker run --rm -it -e CBRANCH=working wardf/nctests
+    $ docker run --rm -it -e CBRANCH=working unidata/nctests
     
 ### - Turn off DAP tests by passing in a cmake variable <A name="nodap"></A>
 
-    $ docker run --rm -it -e COPTS="-DENABLE_DAP=OFF" wardf/nctests
+    $ docker run --rm -it -e COPTS="-DENABLE_DAP=OFF" unidata/nctests
 
 ### - Run all of the tests but do not use the remote dashboard <A name="noremote"></A>
 
-    $ docker run --rm -it -e USEDASH=OFF wardf/nctests
+    $ docker run --rm -it -e USEDASH=OFF unidata/nctests
     
 ### - Run the tests against a local copy of the netcdf-c git repository instead of pulling from GitHub <A name="uselocal"></A>
 
 Note that you will not switch branches inside the docker container when running like this; you must make sure your local repository (that you're at the root of, remember?) is on the branch you want to analyze.
 
-    $ docker run --rm -it -v $(pwd):/netcdf-c wardf/nctests
+    $ docker run --rm -it -v $(pwd):/netcdf-c unidata/nctests
     
 ### - Run the tests against a local copy, and disable the fortran, c++ and remote dashboard. <A name="localdebug"></A>
 
-    $ docker run --rm -it -v $(pwd):/netcdf-c -e USEDASH=OFF -e RUNF=OFF -e RUNCXX=OFF wardf/nctests
+    $ docker run --rm -it -v $(pwd):/netcdf-c -e USEDASH=OFF -e RUNF=OFF -e RUNCXX=OFF unidata/nctests
     

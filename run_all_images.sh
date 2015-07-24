@@ -1,7 +1,7 @@
 #!/bin/bash
 ###
 # Utility script which will spawn all docker images
-# in wardf/nctests.
+# in unidata/nctests.
 ###
 
 ##
@@ -62,24 +62,24 @@ while getopts "ixb:" o; do
 done
 
 if [ "x$DO32" == "xTRUE" ]; then
-    runtest serial32 wardf/nctests:serial32 $BRANCH
+    runtest serial32 unidata/nctests:serial32 $BRANCH
     sleep 3
 
-    runtest openmpi32 wardf/nctests:openmpi32 $BRANCH
+    runtest openmpi32 unidata/nctests:openmpi32 $BRANCH
     sleep 3
 
-    runtest mpich32 wardf/nctests:mpich32 $BRANCH
+    runtest mpich32 unidata/nctests:mpich32 $BRANCH
     sleep 3
 fi
 
 if [ "x$DO64" == "xTRUE" ]; then
-    runtest serial wardf/nctests:serial $BRANCH
+    runtest serial unidata/nctests:serial $BRANCH
     sleep 3
 
-    runtest openmpi wardf/nctests:openmpi $BRANCH
+    runtest openmpi unidata/nctests:openmpi $BRANCH
     sleep 3
 
-    runtest mpich wardf/nctests:mpich $BRANCH
+    runtest mpich unidata/nctests:mpich $BRANCH
 fi
 
 sleep 5

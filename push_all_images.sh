@@ -33,19 +33,19 @@ done
 
 if [ "x$DO32" == "xTRUE" ]; then
     echo "Pushing 32-bit images."
-    docker push wardf/nctests:base32
-    docker push wardf/nctests:serial32
-    docker push wardf/nctests:openmpi32
-    docker push wardf/nctests:mpich32
+    docker push unidata/nctests:base32
+    docker push unidata/nctests:serial32
+    docker push unidata/nctests:openmpi32
+    docker push unidata/nctests:mpich32
 fi
 
 if [ "x$DO64" == "xTRUE" ]; then
     echo "Pushing 64-bit images."
-    docker push wardf/nctests:base
-    docker push wardf/nctests
-    docker push wardf/nctests:serial
-    docker push wardf/nctests:openmpi
-    docker push wardf/nctests:mpich
+    docker push unidata/nctests:base
+    docker push unidata/nctests
+    docker push unidata/nctests:serial
+    docker push unidata/nctests:openmpi
+    docker push unidata/nctests:mpich
 
 fi
 
