@@ -1,0 +1,57 @@
+FROM wardf/nctests:base
+
+RUN apt-get install -y g++-4.8
+RUN apt-get install -y gfortran-4.8
+RUN apt-get install -y libopenmpi-dev openmpi-bin
+
+###
+# Set up some symbolic links, since
+# we are forced to install an old
+# version of gcc/g++/gfortran
+###
+
+RUN rm -f /usr/bin/gcc /usr/bin/gfortran /usr/bin/g++
+
+RUN ln -s /usr/bin/gcc-4.8 /usr/bin/gcc
+RUN ln -s /usr/bin/gfortran-4.8 /usr/bin/gfortran
+RUN ln -s /usr/bin/g++-4.8 /usr/bin/g++
+
+###
+# Manually install hdf4 so that we can run
+# those tests as well.
+###
+
+RUN cd hdf-4.2.11 && CC=`which mpicc` ./configure --disable-static --enable-shared --disable-netcdf --disable-fortran --prefix=/usr && make install -j 4
+RUN rm -rf hdf-4.2.11
+
+###
+# Manually install hdf5 so that we can run
+# those tests as well.
+###
+
+RUN cd hdf5-1.8.15 && CC=`which mpicc` ./configure --disable-static --enable-shared --disable-fortran --enable-hl --enable-parallel --prefix=/usr --with-szlib && make install -j 4
+RUN rm -rf hdf5-1.8.15
+
+
+###
+# Manually install pnetcdf so that we can
+# run pnetcdf tests.
+###
+
+RUN cd parallel-netcdf-1.6.0 && CPPFLAGS="-fPIC" CC=`which mpicc` ./configure --prefix=/usr --disable-fortran && make -j 4 -k install
+RUN rm -rf parallel-netcdf-1.6.0
+
+###
+# Copy over the dockerfile, scripts and README.
+###
+
+COPY README.md /root/
+COPY Dockerfile.serial /root/
+COPY run_par_tests.sh /root/
+
+ENV PARTYPE -openmpi
+
+##
+# Run test script on launch.
+##
+CMD /root/run_par_tests.sh

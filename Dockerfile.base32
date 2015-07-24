@@ -1,0 +1,77 @@
+#####
+# Common stuff goes at the front,
+# so that we can take advantage of the
+# shared layers that docker provides.
+#####
+FROM ggrandes/ubuntu32:14.04
+USER root
+ENV HOME /root
+WORKDIR /root
+
+###
+# Set up a couple environmental variables.
+###
+
+##
+# Let the user specify the branches.
+##
+ENV CBRANCH master
+ENV FBRANCH master
+ENV CXXBRANCH master
+
+ENV BITNESS 32
+
+
+ENV RUNF TRUE
+ENV RUNCXX TRUE
+ENV USEDASH TRUE
+
+###
+# Install common packages.
+###
+
+RUN apt-get update
+RUN apt-get -y upgrade
+###
+# Install some basics.
+###
+
+RUN apt-get install -y g++
+RUN apt-get install -y gfortran
+RUN apt-get install -y libtool automake autoconf
+RUN apt-get install -y m4
+RUN apt-get install -y bison
+RUN apt-get install -y flex
+RUN apt-get install -y libcurl4-openssl-dev
+RUN apt-get install -y zlib1g-dev
+RUN apt-get install -y git
+RUN apt-get install -y wget
+RUN apt-get install -y curl
+RUN apt-get install -y libjpeg-dev
+RUN apt-get install -y cmake
+
+###
+# Pre-fetch tarballs that we'll need.
+###
+
+RUN wget http://www.hdfgroup.org/ftp/lib-external/szip/2.1/src/szip-2.1.tar.gz
+RUN wget http://cucis.ece.northwestern.edu/projects/PnetCDF/Release/parallel-netcdf-1.6.0.tar.bz2
+RUN wget http://www.hdfgroup.org/ftp/HDF/HDF_Current/src/hdf-4.2.11.tar.bz2
+RUN wget http://www.hdfgroup.org/ftp/HDF5/releases/hdf5-1.8.15/src/hdf5-1.8.15.tar.bz2
+
+###
+# Uncompress tarballs.
+###
+
+RUN tar -jxf hdf-4.2.11.tar.bz2
+RUN tar -jxf hdf5-1.8.15.tar.bz2
+RUN tar -zxf szip-2.1.tar.gz
+RUN tar -jxf parallel-netcdf-1.6.0.tar.bz2
+###
+# Build szip, since we will use it for
+# all of our projects.
+###
+
+RUN cd szip-2.1 && ./configure --prefix=/usr && make install -j 4
+RUN rm -rf szip-2.1
+

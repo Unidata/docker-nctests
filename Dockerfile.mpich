@@ -1,0 +1,42 @@
+FROM wardf/nctests:base
+
+RUN apt-get install -y mpich libmpich-dev
+
+###
+# Manually install hdf4 so that we can run
+# those tests as well.
+###
+
+RUN cd hdf-4.2.11 && CC=`which mpicc` ./configure --disable-static --enable-shared --disable-netcdf --disable-fortran --prefix=/usr && make install -j 4
+RUN rm -rf hdf-4.2.11
+
+###
+# Manually install hdf5 so that we can run
+# those tests as well.
+###
+
+RUN cd hdf5-1.8.15 && CFLAGS="-Wno-format-security" CC=`which mpicc` ./configure --disable-static --enable-shared --disable-fortran --enable-hl --enable-parallel --prefix=/usr --with-szlib  && make install -j 4
+RUN rm -rf hdf5-1.8.15
+
+###
+# Manually install pnetcdf so that we can
+# run pnetcdf tests.
+###
+
+RUN cd parallel-netcdf-1.6.0 && CPPFLAGS="-fPIC" CC=`which mpicc` ./configure --prefix=/usr --disable-fortran && make -j 4 -k install
+RUN rm -rf parallel-netcdf-1.6.0
+
+###
+# Copy over the dockerfile, scripts and README.
+###
+
+COPY README.md /root/
+COPY Dockerfile.serial /root/
+COPY run_par_tests.sh /root/
+
+ENV PARTYPE -mpich
+
+##
+# Run test scripts on launch.
+##
+CMD /root/run_par_tests.sh

@@ -1,0 +1,31 @@
+FROM wardf/nctests:base32
+
+###
+# Manually install hdf4 so that we can run
+# those tests as well.
+###
+
+
+RUN cd hdf-4.2.11 && ./configure --disable-static --enable-shared --disable-netcdf --disable-fortran --prefix=/usr && make install -j 4
+RUN rm -rf hdf-4.2.11
+
+
+###
+# Manually install hdf5 so that we can run
+# those tests as well.
+###
+
+RUN cd hdf5-1.8.15 && ./configure --disable-static --enable-shared --disable-fortran --enable-hl --prefix=/usr && make install -j 4
+RUN rm -rf hdf5-1.8.15
+###
+# Copy over the dockerfile, scripts and README.
+###
+
+COPY README.md /root/
+COPY Dockerfile.serial /root/
+COPY run_serial_tests.sh /root/
+
+##
+# Run test script on launch.
+##
+CMD /root/run_serial_tests.sh
