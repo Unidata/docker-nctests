@@ -75,3 +75,11 @@ RUN tar -jxf parallel-netcdf-1.6.0.tar.bz2
 
 RUN cd szip-2.1 && ./configure --prefix=/usr && make install -j 4
 RUN rm -rf szip-2.1
+
+###
+# Add the utility scripts, for portability.
+###
+
+COPY run_all_images.sh /root/
+COPY build_all_images.sh /root/
+COPY push_all_images.sh /root/
