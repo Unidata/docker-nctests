@@ -3,7 +3,7 @@
 # so that we can take advantage of the
 # shared layers that docker provides.
 #####
-FROM ubuntu:utopic
+FROM ubuntu:vivid
 USER root
 ENV HOME /root
 WORKDIR /root
@@ -28,10 +28,9 @@ ENV USEDASH TRUE
 ENV USEAC FALSE
 ENV USECMAKE TRUE
 
-ENV CREPS=1
-ENV FREPS=1
-ENV CXXREPS=1
-
+ENV CREPS 1
+ENV FREPS 1
+ENV CXXREPS 1
 
 ###
 # Install common packages.
