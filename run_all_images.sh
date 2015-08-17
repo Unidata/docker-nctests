@@ -66,6 +66,7 @@ while getopts "ixb:r:a" o; do
         a)
             DCMAKE="FALSE"
             DOAC="TRUE"
+            ;;
         *)
             dohelp
             exit 0
