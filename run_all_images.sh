@@ -17,7 +17,10 @@ runtest() {
     DIMAGE=$2
     CBRANCH=$3
     REPS=$4
-    xterm -T "$WINTITLE [$CBRANCH]" -bg black -fg white -geometry 140x20+10+10 -e time docker run --rm -it -e CBRANCH=$CBRANCH -e CREPS=$REPS -e FREPS=$REPS -e CXXREPS=$REPS -e USECMAKE=$DCMAKE -e USEAC=$DOAC $DIMAGE &
+    USECMAKE=$5
+    USEAC=$6
+
+    xterm -T "$WINTITLE [$CBRANCH]" -bg black -fg white -geometry 140x20+10+10 -e time docker run --rm -it -e CBRANCH=$CBRANCH -e CREPS=$REPS -e FREPS=$REPS -e CXXREPS=$REPS -e USECMAKE=$USECMAKE -e USEAC=$USEACC $DIMAGE &
     return 0
 }
 
@@ -74,24 +77,24 @@ while getopts "ixb:r:a" o; do
 done
 
 if [ "x$DO32" == "xTRUE" ]; then
-    runtest serial32 unidata/nctests:serial32 $BRANCH $MREPS
+    runtest serial32 unidata/nctests:serial32 $BRANCH $MREPS $DOCMAKE $DOAC
     sleep 3
 
-    runtest openmpi32 unidata/nctests:openmpi32 $BRANCH $MREPS
+    runtest openmpi32 unidata/nctests:openmpi32 $BRANCH $MREPS $DOCMAKE $DOAC
     sleep 3
 
-    runtest mpich32 unidata/nctests:mpich32 $BRANCH $MREPS
+    runtest mpich32 unidata/nctests:mpich32 $BRANCH $MREPS $DOCMAKE $DOAC
     sleep 3
 fi
 
 if [ "x$DO64" == "xTRUE" ]; then
-    runtest serial unidata/nctests:serial $BRANCH $MREPS
+    runtest serial unidata/nctests:serial $BRANCH $MREPS $DOCMAKE $DOAC
     sleep 3
 
-    runtest openmpi unidata/nctests:openmpi $BRANCH $MREPS
+    runtest openmpi unidata/nctests:openmpi $BRANCH $MREPS $DOCMAKE $DOAC
     sleep 3
 
-    runtest mpich unidata/nctests:mpich $BRANCH $MREPS
+    runtest mpich unidata/nctests:mpich $BRANCH $MREPS $DOCMAKE $DOAC
 fi
 
 sleep 2
