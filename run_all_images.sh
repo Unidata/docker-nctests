@@ -16,8 +16,8 @@ runtest() {
     WINTITLE=$1
     DIMAGE=$2
     CBRANCH=$3
-
-    xterm -T "$WINTITLE [$CBRANCH]" -bg black -fg white -geometry 140x20+10+10 -e time docker run --rm -it -e CBRANCH=$CBRANCH $DIMAGE &
+    REPS=$4
+    xterm -T "$WINTITLE [$CBRANCH]" -bg black -fg white -geometry 140x20+10+10 -e time docker run --rm -it -e CBRANCH=$CBRANCH -e CREPS=$REPS -e FREPS=$REPS -e CXXREPS=$REPS -e USECMAKE=$DCMAKE -e USEAC=$DOAC $DIMAGE &
     return 0
 }
 
@@ -28,19 +28,24 @@ dohelp ()
     echo -e "\t -i     Run 32-bit tests."
     echo -e "\t -x     Run 64-bit tests."
     echo -e "\t -b     Specify a branch. Default is 'master'"
+    echo -e "\t -r     Number of times to repeat the tests. Default is '1'"
+    echo -e "\t -a     Enable Autoconf-based builds, disable cmake-based builds."
     echo ""
 }
 
 DO32=""
 DO64=""
 BRANCH="master"
+MREPS=1
+DOAC="OFF"
+DOCMAKE="TRUE"
 
 if [ $# -lt 1 ]; then
     dohelp
     exit 0
 fi
 
-while getopts "ixb:" o; do
+while getopts "ixb:r:a" o; do
     case "${o}" in
         i)
             DO32="TRUE"
@@ -55,6 +60,12 @@ while getopts "ixb:" o; do
                 exit 0
             fi
             ;;
+        r)
+            MREPS=${OPTARG}
+            ;;
+        a)
+            DCMAKE="FALSE"
+            DOAC="TRUE"
         *)
             dohelp
             exit 0
@@ -62,25 +73,25 @@ while getopts "ixb:" o; do
 done
 
 if [ "x$DO32" == "xTRUE" ]; then
-    runtest serial32 unidata/nctests:serial32 $BRANCH
+    runtest serial32 unidata/nctests:serial32 $BRANCH $MREPS
     sleep 3
 
-    runtest openmpi32 unidata/nctests:openmpi32 $BRANCH
+    runtest openmpi32 unidata/nctests:openmpi32 $BRANCH $MREPS
     sleep 3
 
-    runtest mpich32 unidata/nctests:mpich32 $BRANCH
+    runtest mpich32 unidata/nctests:mpich32 $BRANCH $MREPS
     sleep 3
 fi
 
 if [ "x$DO64" == "xTRUE" ]; then
-    runtest serial unidata/nctests:serial $BRANCH
+    runtest serial unidata/nctests:serial $BRANCH $MREPS
     sleep 3
 
-    runtest openmpi unidata/nctests:openmpi $BRANCH
+    runtest openmpi unidata/nctests:openmpi $BRANCH $MREPS
     sleep 3
 
-    runtest mpich unidata/nctests:mpich $BRANCH
+    runtest mpich unidata/nctests:mpich $BRANCH $MREPS
 fi
 
-sleep 5
+sleep 2
 xterm -T "Docker Stats" -bg black -fg white -geometry 140x20+10+10 -e docker stats $(docker ps -q) &
