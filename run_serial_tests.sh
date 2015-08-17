@@ -63,23 +63,41 @@ else
 fi
 
 ###
+# Initalize some variables
+# for looping/performing repeated tests.
+###
+CCOUNT=1
+FCOUNT=1
+CXXCOUNT=1
+
+###
 # Build & test netcdf-c, then install it so it
 # can be used by the other projects.
 ###
 
 cd /root
 
-mkdir build-netcdf-c
-cd build-netcdf-c
-cmake /root/netcdf-c -DCMAKE_INSTALL_PREFIX=/usr -DENABLE_HDF4=ON -DENABLE_EXTRA_TESTS=ON -DENABLE_MMAP=ON -DBUILDNAME_PREFIX="docker$BITNESS" -DBUILDNAME_SUFFIX="$CBRANCH" $COPTS
 
-if [ "x$USEDASH" == "xTRUE" ]; then
-    make Experimental
-else
-    make -j 4 && make test
-fi
+# CREPS is defined as an environmental variable.
 
-make install
+while [[ $CCOUNT -le $CREPS ]]; do
+    echo "Testing netCDF-C $CCOUNT of $CREPS"
+    echo "----------------------------------"
+    mkdir -p build-netcdf-c
+    cd build-netcdf-c
+    cmake /root/netcdf-c -DCMAKE_INSTALL_PREFIX=/usr -DENABLE_HDF4=ON -DENABLE_EXTRA_TESTS=ON -DENABLE_MMAP=ON -DBUILDNAME_PREFIX="docker$BITNESS" -DBUILDNAME_SUFFIX="$CBRANCH" $COPTS
+
+    if [ "x$USEDASH" == "xTRUE" ]; then
+        make Experimental
+    else
+        make -j 4 && make test
+    fi
+    make install
+    make clean
+    cd /root
+    echo ""
+    CCOUNT=$[$CCOUNT+1]
+done
 
 
 ###
@@ -87,16 +105,25 @@ make install
 ###
 
 if [ "x$RUNF" == "xTRUE" ]; then
-    cd /root
-    mkdir build-netcdf-fortran
-    cd build-netcdf-fortran
-    cmake /root/netcdf-fortran -DBUILDNAME_PREFIX="docker$BITNESS" -DBUILDNAME_SUFFIX="$FBRANCH" $FOPTS
-    if [ "x$USEDASH" == "xTRUE" ]; then
-        make Experimental
-    else
-        make -j 4 && make test
+
+
+    while [[ $FCOUNT -le $FREPS ]]; do
+        echo "Testing netCDF-Fortran $FCOUNT of $FREPS"
+        echo "----------------------------------"
+        cd /root
+        mkdir -p build-netcdf-fortran
+        cd build-netcdf-fortran
+        cmake /root/netcdf-fortran -DBUILDNAME_PREFIX="docker$BITNESS" -DBUILDNAME_SUFFIX="$FBRANCH" $FOPTS
+        if [ "x$USEDASH" == "xTRUE" ]; then
+            make Experimental
+        else
+            make -j 4 && make test
+        fi
+        make clean
+        cd /root
+        echo ""
+        FCOUNT=$[$FCOUNT+1]
     fi
-fi
 
 ###
 # Build & test netcdf-cxx4.
@@ -104,14 +131,22 @@ fi
 
 if [ "x$RUNCXX" == "xTRUE" ]; then
 
-    cd /root
-    mkdir build-netcdf-cxx4
-    cd build-netcdf-cxx4
-    cmake /root/netcdf-cxx4 -DBUILDNAME_PREFIX="docker$BITNESS" -DBUILDNAME_SUFFIX="$CXXBRANCH" $CXXOPTS
-    if [ "x$USEDASH" == "xTRUE" ]; then
-        make Experimental
-    else
-        make -j 4 && make test
-    fi
 
+    while [[ $CXXCOUNT -le $CXXREPS ]]; do
+        echo "Testing netCDF-CXX4 $CXXCOUNT of $CXXREPS"
+        echo "----------------------------------"
+
+        mkdir -p build-netcdf-cxx4
+        cd build-netcdf-cxx4
+        cmake /root/netcdf-cxx4 -DBUILDNAME_PREFIX="docker$BITNESS" -DBUILDNAME_SUFFIX="$CXXBRANCH" $CXXOPTS
+        if [ "x$USEDASH" == "xTRUE" ]; then
+            make Experimental
+        else
+            make -j 4 && make test
+        fi
+        make clean
+        cd /root
+        echo ""
+        CXXCOUNT=$[CXXCOUNT+1]
+    done
 fi
