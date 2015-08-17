@@ -9,6 +9,17 @@ if [ "x$CMD" = "xhelp" ]; then
     exit
 fi
 
+CHECKERR() {
+
+    RES=$?
+
+    if [[ $RES -ne 0 ]]; then
+        echo "Error Caught: $RES"
+        exit $RES
+    fi
+
+}
+
 ###
 # Check out all the projects.
 #
@@ -81,24 +92,54 @@ cd /root
 # CREPS is defined as an environmental variable.
 
 while [[ $CCOUNT -le $CREPS ]]; do
-    echo "Testing netCDF-C $CCOUNT of $CREPS"
-    echo "----------------------------------"
-    mkdir -p build-netcdf-c
-    cd build-netcdf-c
-    cmake /root/netcdf-c -DCMAKE_INSTALL_PREFIX=/usr -DENABLE_HDF4=ON -DENABLE_EXTRA_TESTS=ON -DENABLE_MMAP=ON -DBUILDNAME_PREFIX="docker$BITNESS" -DBUILDNAME_SUFFIX="$CBRANCH" $COPTS
 
-    if [ "x$USEDASH" == "xTRUE" ]; then
-        make Experimental
-    else
-        make -j 4 && make test
+    if [ "x$USECMAKE" = "xTRUE" ]; then
+
+        echo "[$CCOUNT | $CREPS] Testing netCDF-C - CMAKE"
+        echo "----------------------------------"
+        sleep 2
+        mkdir -p build-netcdf-c
+        cd build-netcdf-c
+
+        cmake /root/netcdf-c -DCMAKE_INSTALL_PREFIX=/usr -DENABLE_HDF4=ON -DENABLE_EXTRA_TESTS=ON -DENABLE_MMAP=ON -DBUILDNAME_PREFIX="docker$BITNESS" -DBUILDNAME_SUFFIX="$CBRANCH" $COPTS
+        make clean
+        if [ "x$USEDASH" == "xTRUE" ]; then
+            make Experimental
+        else
+            make -j 4 && make test
+        fi
+        cd /root
+        echo ""
     fi
-    make install
-    make clean
-    cd /root
-    echo ""
+
+    if [ "x$USEAC" = "xTRUE" ]; then
+        echo "[$CCOUNT | $CREPS] Testing netCDF-C - AutoConf"
+        echo "----------------------------------"
+        sleep 2
+        cd netcdf-c
+        autoreconf -if
+        ./configure --enable-hdf4 --enable-extra-tests --enable-mmap "$AC_COPTS"
+        make clean
+        make -j 4
+        make check TESTS="" -j 4
+        make check
+        cd /root
+        echo ""
+    fi
+
     CCOUNT=$[$CCOUNT+1]
 done
 
+
+if [ "x$USECDASH" = "xTRUE" ]; then
+    cd build-netcdf-c
+    make install
+elif [ "x$USEAC" = "xTRUE" ]; then
+    cd netcdf-c
+    make install
+fi
+
+cd /root
 
 ###
 # Build & test netcdf-fortran
@@ -108,22 +149,43 @@ if [ "x$RUNF" == "xTRUE" ]; then
 
 
     while [[ $FCOUNT -le $FREPS ]]; do
-        echo "Testing netCDF-Fortran $FCOUNT of $FREPS"
-        echo "----------------------------------"
-        cd /root
-        mkdir -p build-netcdf-fortran
-        cd build-netcdf-fortran
-        cmake /root/netcdf-fortran -DBUILDNAME_PREFIX="docker$BITNESS" -DBUILDNAME_SUFFIX="$FBRANCH" $FOPTS
-        if [ "x$USEDASH" == "xTRUE" ]; then
-            make Experimental
-        else
-            make -j 4 && make test
+
+        if [ "x$USECMAKE" = "xTRUE" ]; then
+            echo "[$FCOUNT | $FREPS] Testing netCDF-Fortran - CMAKE"
+            echo "----------------------------------"
+            cd /root
+            mkdir -p build-netcdf-fortran
+            cd build-netcdf-fortran
+            cmake /root/netcdf-fortran -DBUILDNAME_PREFIX="docker$BITNESS" -DBUILDNAME_SUFFIX="$FBRANCH" $FOPTS
+            if [ "x$USEDASH" == "xTRUE" ]; then
+                make Experimental ; CHECKERR
+            else
+                make -j 4 && make test
+
+            fi
+            make clean
+            cd /root
+            echo ""
         fi
-        make clean
-        cd /root
-        echo ""
+
+        if [ "x$USEAC" = "xTRUE" ]; then
+            echo "[$FCOUNT | $FREPS] Testing netCDF-Fortran - AutoConf"
+            echo "----------------------------------"
+            sleep 2
+            cd netcdf-fortran
+            autoreconf -if
+            ./configure "$AC_FOPTS"
+            make -j 4 ; CHECKERR
+            make check TESTS="" -j 4
+            make check ; CHECKERR
+            make clean
+            cd /root
+            echo ""
+        fi
+
         FCOUNT=$[$FCOUNT+1]
-    fi
+    done
+fi
 
 ###
 # Build & test netcdf-cxx4.
@@ -133,20 +195,41 @@ if [ "x$RUNCXX" == "xTRUE" ]; then
 
 
     while [[ $CXXCOUNT -le $CXXREPS ]]; do
-        echo "Testing netCDF-CXX4 $CXXCOUNT of $CXXREPS"
-        echo "----------------------------------"
 
-        mkdir -p build-netcdf-cxx4
-        cd build-netcdf-cxx4
-        cmake /root/netcdf-cxx4 -DBUILDNAME_PREFIX="docker$BITNESS" -DBUILDNAME_SUFFIX="$CXXBRANCH" $CXXOPTS
-        if [ "x$USEDASH" == "xTRUE" ]; then
-            make Experimental
-        else
-            make -j 4 && make test
+        if [ "x$USECMAKE" = "xTRUE" ]; then
+            echo "[$CXXCOUNT | $CXXREPS] Testing netCDF-CXX4 - CMAKE"
+            echo "----------------------------------"
+
+            mkdir -p build-netcdf-cxx4
+            cd build-netcdf-cxx4
+            cmake /root/netcdf-cxx4 -DBUILDNAME_PREFIX="docker$BITNESS" -DBUILDNAME_SUFFIX="$CXXBRANCH" $CXXOPTS
+            if [ "x$USEDASH" == "xTRUE" ]; then
+                make Experimental
+            else
+                make -j 4 && make test
+            fi
+            make clean
+            cd /root
+            echo ""
         fi
-        make clean
-        cd /root
-        echo ""
+
+        if [ "x$USEAC" = "xTRUE" ]; then
+            echo "[$CXXCOUNT | $CXXREPS] Testing netCDF-CXX4 - AutoConf"
+            echo "----------------------------------"
+            sleep 2
+            cd netcdf-fortran
+            autoreconf -if
+            ./configure "$AC_CXXOPTS"
+            make -j 4
+            make check TESTS="" -j 4
+            make check ; CHECKERR
+            make clean
+            cd /root
+            echo ""
+        fi
+
         CXXCOUNT=$[CXXCOUNT+1]
+
     done
+
 fi

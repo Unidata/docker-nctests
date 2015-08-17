@@ -45,6 +45,11 @@ The following environmental variables can be used to control the behavior at run
 * `FOPTS` - CMake options for `netcdf-fortran`
 * `CXXOPTS` - CMake options for `netcdf-cxx4`
 ----
+* `AC_COPTS` - Autoconf options for `netcdf-c`
+* `AC_FOPTS` - Autoconf options for `netcdf-fortran`
+* `AC_CXXOPTS` - Autoconf options for `netcdf-cxx4`
+
+----
 * `RUNF` - Set to `OFF`, `FALSE`, anything but `TRUE`, to disable running fortran tests.
 * `RUNCXX` - Set to `OFF`, `FALSE`, anything but `TRUE`, to disable running netcdf-cxx4 tests.
 ----
@@ -52,6 +57,12 @@ The following environmental variables can be used to control the behavior at run
 * `CREPS` - Default 1.  How many times to repeat the `netcdf-c` build and tests.
 * `FREPS` - Default 1.  How many times to repeat the `netcdf-fortran` build and tests.
 * `CXXREPS` - Default 1.  How many times to repeat the `netcdf-cxx4` build and tests.
+----
+
+* `USECMAKE` - Default to `TRUE`. When `TRUE`, run `cmake` builds.
+* `USEAC` - Default to `FALSE`. When `TRUE`, run *in-source* `autoconf`-based builds.
+
+> Note that `USECMAKE` and `USEAC` may be used concurrently and, when coupled with `CREPS` and other loop control options, we can see if the different build systems interfere with each other.
 
 ## Examples <A name="examples"></A>
 
