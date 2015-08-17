@@ -32,15 +32,31 @@ When the image runs, it will check for the existence of `/netcdf-c`, `/netcdf-fo
 
 The following environmental variables can be used to control the behavior at runtime.
 * `CMD` - Run an alternative command. Options for this are `help`.
+* `USEDASH` - Set to any non-`TRUE` value to disable using the remote dashboard.
+
+---- 
+ 
 * `CBRANCH` - Git branch for `netcdf-c`
 * `FBRANCH` - Git branch for `netcdf-fortran`
 * `CXXBRANCH` - Git branch for `netcdf-cxx4`
+
+---- 
+ 
 * `COPTS` - CMake options for `netcdf-c`
 * `FOPTS` - CMake options for `netcdf-fortran`
 * `CXXOPTS` - CMake options for `netcdf-cxx4`
+
+----
+ 
 * `RUNF` - Set to `OFF`, `FALSE`, anything but `TRUE`, to disable running fortran tests.
 * `RUNCXX` - Set to `OFF`, `FALSE`, anything but `TRUE`, to disable running netcdf-cxx4 tests.
-* `USEDASH` - Set to any non-`TRUE` value to disable using the remote dashboard.
+
+----
+
+* `CREPS` - Default 1.  How many times to repeat the `netcdf-c` build and tests.
+* `FREPS` - Default 1.  How many times to repeat the `netcdf-fortran` build and tests.
+* `CXXREPS` - Default 1.  How many times to repeat the `netcdf-cxx4` build and tests.
+
 
 ## Examples <A name="examples"></A>
 
