@@ -72,14 +72,15 @@ The following environmental variables can be used to control the behavior at run
 
 ## Examples <A name="examples"></A>
 
-* [Show the help file](#help)
-* [Run a docker container Interactively](#interactive)
-* [Run all tests (standard use case)](#standard)
+* [Show the help file.](#help)
+* [Run a docker container Interactively.](#interactive)
+* [Run all tests (standard use case).](#standard)
 * [Run all tests against a particular netcdf-c branch.](#usebranch)
 * [Turn off DAP tests.](#nodap)
-* [Disable remote dashboard, just use local output](#noremote)
-* [Test a local git repository instead of pulling from Github](#uselocal)
-* [Test local git repository, disable fortran, c++ and remote dashboard](#localdebug)
+* [Disable remote dashboard, just use local output.](#noremote)
+* [Test a local git repository instead of pulling from Github.](#uselocal)
+* [Test local git repository, disable fortran, c++ and remote dashboard.](#localdebug)
+* [Use Autotools and repeat the test twice.](#repnetcdfc)
 
 ### Important Information for the Examples
 
@@ -92,45 +93,50 @@ The following environmental variables can be used to control the behavior at run
 * `-v`: Mount a local volume to the docker image.
 * `-e`: Set an environmental variable.
 
-> The docker images/tags, `unidata/nctests:serial`, `unidata/nctests:mpich`, etc, do not matter here.  So we will simply use `unidata/nctests` (which defaults to `serial`); replace with your tag of choice, they should all work.
-
 See [the section on environmental variables](#variables) for a complete list of variables understood by `unidata/nctests`.
 
 ### - Show the help file <A name="help"></A>
 	
 This will show you the help file for the docker image.
 
-    $ docker run --rm -it -e CMD=help unidata/nctests
+    $ docker run --rm -it -e CMD=help unidata/nctests:serial
 
 ### - Run a docker container *interactively* <A name="interactive"></A>
 
 This will put you into the shell for the docker container.  Note that any changes you make will not persist once you exit.  
 
-    $ docker run --rm -it unidata/nctests bash
+    $ docker run --rm -it unidata/nctests:serial bash
 
 ### - Run all tests (standard use case) <A name="standard"></A>
 
-    $ docker run --rm -it unidata/nctests
+    $ docker run --rm -it unidata/nctests:serial
     
 ### - Run all tests against a specific branch <A name="usebranch"></A>
     
-    $ docker run --rm -it -e CBRANCH=working unidata/nctests
+    $ docker run --rm -it -e CBRANCH=working unidata/nctests:serial
     
 ### - Turn off DAP tests by passing in a cmake variable <A name="nodap"></A>
 
-    $ docker run --rm -it -e COPTS="-DENABLE_DAP=OFF" unidata/nctests
+    $ docker run --rm -it -e COPTS="-DENABLE_DAP=OFF" unidata/nctests:serial
 
 ### - Run all of the tests but do not use the remote dashboard <A name="noremote"></A>
 
-    $ docker run --rm -it -e USEDASH=OFF unidata/nctests
+    $ docker run --rm -it -e USEDASH=OFF unidata/nctests:serial
     
 ### - Run the tests against a local copy of the netcdf-c git repository instead of pulling from GitHub <A name="uselocal"></A>
 
-Note that you will not switch branches inside the docker container when running like this; you must make sure your local repository (that you're at the root of, remember?) is on the branch you want to analyze.
+> Note that you will not switch branches inside the docker container when running like this; you must make sure your local repository (that you're at the root of, remember?) is on the branch you want to analyze.
 
-    $ docker run --rm -it -v $(pwd):/netcdf-c unidata/nctests
+    $ docker run --rm -it -v $(pwd):/netcdf-c unidata/nctests:serial
     
 ### - Run the tests against a local copy, and disable the fortran, c++ and remote dashboard. <A name="localdebug"></A>
 
-    $ docker run --rm -it -v $(pwd):/netcdf-c -e USEDASH=OFF -e RUNF=OFF -e RUNCXX=OFF unidata/nctests
+    $ docker run --rm -it -v $(pwd):/netcdf-c -e USEDASH=OFF -e RUNF=OFF -e RUNCXX=OFF unidata/nctests:serial
     
+### - Run the NetCDF-C tests using Autootools instead of CMake, and repeat the build twice. <A name="repnetcdfc"></A>
+
+    # docker run --rm -it -e USECMAKE=OFF -e USEAC=TRUE -e CREPS=2 unidata/nctests:serial
+    
+#### Running non-serial tests
+
+> To run any of the above examples against a different environment, you would replace `nctests:serial` with one of `nctests:openmpi`, `nctests:mpich`, `nctests:serial32`, etc.

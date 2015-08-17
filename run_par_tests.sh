@@ -114,8 +114,10 @@ while [[ $CCOUNT -le $CREPS ]]; do
         echo "----------------------------------"
         sleep 2
         cd netcdf-c
-        autoreconf -if
-        CC=`which mpich` ./configure --enable-hdf4 --enable-extra-tests --enable-mmap --enable-pnetcdf --enable-parallel-tests "$AC_COPTS"
+        if [ ! -f "configure" ]; then
+            autoreconf -if
+        fi
+        CC=`which mpicc` ./configure --enable-hdf4 --enable-extra-tests --enable-mmap --enable-pnetcdf --enable-parallel-tests "$AC_COPTS"
         make clean
         make -j 4
         make check TESTS="" -j 4
@@ -175,7 +177,9 @@ if [ "x$RUNF" == "xTRUE" ]; then
             echo "----------------------------------"
             sleep 2
             cd netcdf-fortran
-            autoreconf -if
+            if [ ! -f "configure" ]; then
+                autoreconf -if
+            fi
             CC=`which mpicc` F90=`which mpif90` ./configure "$AC_FOPTS"
             make -j 4 ; CHECKERR
             make check TESTS="" -j 4
@@ -218,8 +222,10 @@ if [ "x$RUNCXX" == "xTRUE" ]; then
             echo "[$CXXCOUNT | $CXXREPS] Testing netCDF-CXX4 - AutoConf"
             echo "----------------------------------"
             sleep 2
-            cd netcdf-fortran
-            autoreconf -if
+            cd netcdf-cxx4
+            if [ ! -f "configure" ]; then
+                autoreconf -if
+            fi
             ./configure "$AC_CXXOPTS"
             make -j 4
             make check TESTS="" -j 4

@@ -100,7 +100,6 @@ while [[ $CCOUNT -le $CREPS ]]; do
         sleep 2
         mkdir -p build-netcdf-c
         cd build-netcdf-c
-
         cmake /root/netcdf-c -DCMAKE_INSTALL_PREFIX=/usr -DENABLE_HDF4=ON -DENABLE_EXTRA_TESTS=ON -DENABLE_MMAP=ON -DBUILDNAME_PREFIX="docker$BITNESS" -DBUILDNAME_SUFFIX="$CBRANCH" $COPTS
         make clean
         if [ "x$USEDASH" == "xTRUE" ]; then
@@ -117,7 +116,9 @@ while [[ $CCOUNT -le $CREPS ]]; do
         echo "----------------------------------"
         sleep 2
         cd netcdf-c
-        autoreconf -if
+        if [ ! -f "configure" ]; then
+            autoreconf -if
+        fi
         ./configure --enable-hdf4 --enable-extra-tests --enable-mmap "$AC_COPTS"
         make clean
         make -j 4
@@ -173,7 +174,9 @@ if [ "x$RUNF" == "xTRUE" ]; then
             echo "----------------------------------"
             sleep 2
             cd netcdf-fortran
-            autoreconf -if
+            if [ ! -f "configure" ]; then
+                autoreconf -if
+            fi
             ./configure "$AC_FOPTS"
             make -j 4 ; CHECKERR
             make check TESTS="" -j 4
@@ -217,8 +220,10 @@ if [ "x$RUNCXX" == "xTRUE" ]; then
             echo "[$CXXCOUNT | $CXXREPS] Testing netCDF-CXX4 - AutoConf"
             echo "----------------------------------"
             sleep 2
-            cd netcdf-fortran
-            autoreconf -if
+            cd netcdf-cxx4
+            if [ ! -f "configure" ]; then
+                autoreconf -if
+            fi
             ./configure "$AC_CXXOPTS"
             make -j 4
             make check TESTS="" -j 4
