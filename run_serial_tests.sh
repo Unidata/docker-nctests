@@ -132,7 +132,7 @@ while [[ $CCOUNT -le $CREPS ]]; do
 done
 
 
-if [ "x$USECDASH" = "xTRUE" ]; then
+if [ "x$USECMAKE" = "xTRUE" ]; then
     cd build-netcdf-c
     make install
 elif [ "x$USEAC" = "xTRUE" ]; then
