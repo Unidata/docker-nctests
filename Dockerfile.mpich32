@@ -23,8 +23,8 @@ RUN rm -rf hdf5-1.8.15
 # run pnetcdf tests.
 ###
 
-RUN cd parallel-netcdf-1.6.0 && CPPFLAGS="-fPIC" CC=`which mpicc` ./configure --prefix=/usr --disable-fortran && make -j 4 -k install
-RUN rm -rf parallel-netcdf-1.6.0
+RUN cd parallel-netcdf-1.6.1 && CPPFLAGS="-fPIC" CC=`which mpicc` ./configure --prefix=/usr --disable-fortran && make -j 4 -k install
+RUN rm -rf parallel-netcdf-1.6.1
 
 ###
 # Copy over the dockerfile, scripts and README.

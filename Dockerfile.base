@@ -61,7 +61,7 @@ RUN apt-get install -y cmake
 ###
 
 RUN wget http://www.hdfgroup.org/ftp/lib-external/szip/2.1/src/szip-2.1.tar.gz
-RUN wget http://cucis.ece.northwestern.edu/projects/PnetCDF/Release/parallel-netcdf-1.6.0.tar.bz2
+RUN wget http://cucis.ece.northwestern.edu/projects/PnetCDF/Release/parallel-netcdf-1.6.1.tar.bz2
 RUN wget http://www.hdfgroup.org/ftp/HDF/HDF_Current/src/hdf-4.2.11.tar.bz2
 RUN wget http://www.hdfgroup.org/ftp/HDF5/releases/hdf5-1.8.15/src/hdf5-1.8.15.tar.bz2
 
@@ -73,7 +73,7 @@ RUN wget http://www.hdfgroup.org/ftp/HDF5/releases/hdf5-1.8.15/src/hdf5-1.8.15.t
 RUN tar -jxf hdf-4.2.11.tar.bz2
 RUN tar -jxf hdf5-1.8.15.tar.bz2
 RUN tar -zxf szip-2.1.tar.gz
-RUN tar -jxf parallel-netcdf-1.6.0.tar.bz2
+RUN tar -jxf parallel-netcdf-1.6.1.tar.bz2
 
 ###
 # Build szip, since we will use it for
