@@ -26,6 +26,13 @@ ENV RUNF TRUE
 ENV RUNCXX TRUE
 ENV USEDASH TRUE
 
+ENV USEAC FALSE
+ENV USECMAKE TRUE
+
+ENV CREPS 1
+ENV FREPS 1
+ENV CXXREPS 1
+
 ###
 # Install common packages.
 ###
@@ -59,6 +66,7 @@ RUN wget http://cucis.ece.northwestern.edu/projects/PnetCDF/Release/parallel-net
 RUN wget http://www.hdfgroup.org/ftp/HDF/HDF_Current/src/hdf-4.2.11.tar.bz2
 RUN wget http://www.hdfgroup.org/ftp/HDF5/releases/hdf5-1.8.15/src/hdf5-1.8.15.tar.bz2
 
+
 ###
 # Uncompress tarballs.
 ###
@@ -67,6 +75,7 @@ RUN tar -jxf hdf-4.2.11.tar.bz2
 RUN tar -jxf hdf5-1.8.15.tar.bz2
 RUN tar -zxf szip-2.1.tar.gz
 RUN tar -jxf parallel-netcdf-1.6.1.tar.bz2
+
 ###
 # Build szip, since we will use it for
 # all of our projects.
@@ -75,3 +84,10 @@ RUN tar -jxf parallel-netcdf-1.6.1.tar.bz2
 RUN cd szip-2.1 && ./configure --prefix=/usr && make install -j 4
 RUN rm -rf szip-2.1
 
+###
+# Add the utility scripts, for portability.
+###
+
+COPY run_all_images.sh /root/
+COPY build_all_images.sh /root/
+COPY push_all_images.sh /root/
