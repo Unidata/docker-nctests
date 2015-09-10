@@ -32,7 +32,7 @@ echo "#" $(date) >> ${OUTSCRIPT}
 echo "#" >> ${OUTSCRIPT}
 for X in $IMGS; do
     echo $X
-    OUTPREF=$(echo $X | sed "s/:/-/g" | sed "s/\//_/g").tar
+    OUTPREF=$(echo $X | sed "s/:/-/g" | sed "s/\//_/g")
     OUTNAME=${OUTPREF}.tar
     TMPNAME=${OUTPREF}.tmp.tar
 
