@@ -32,13 +32,10 @@ echo "#" $(date) >> ${OUTSCRIPT}
 echo "#" >> ${OUTSCRIPT}
 for X in $IMGS; do
     echo $X
-    OUTPREF=$(echo $X | sed "s/:/-/g" | sed "s/\//_/g")
-    OUTNAME=${OUTPREF}.tar
-    TMPNAME=${OUTPREF}.tmp.tar
+    OUTNAME=$(echo $X | sed "s/:/-/g" | sed "s/\//_/g").tar
 
     echo "Squashing ${X} to ${OUTNAME}"
-    docker save $X > ${TMPNAME}
-    sudo docker-squash -verbose -t $X -i ${TMPNAME} -o ${OUTNAME}
+    docker save $X | sudo docker-squash -verbose -t $X -o ${OUTNAME}
     echo "Loading ${OUTNAME}"
     docker load -i ${OUTNAME}
     echo ""
@@ -49,6 +46,7 @@ for X in $IMGS; do
     echo "echo" >> ${OUTSCRIPT}
 
 done
+chmod 755 ${OUTSCRIPT}
 
 echo "echo Finished" >> ${OUTSCRIPT}
 
