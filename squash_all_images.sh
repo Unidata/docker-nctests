@@ -6,7 +6,7 @@
 # Note that there is a markdown file with OSX-specific
 # instructions.
 
-set -e
+#set -e
 
 DOHELP()
 {
@@ -25,7 +25,7 @@ OUTSCRIPT="load-docker-images-${1}.sh"
 
 PATH="/usr/local/opt/gnu-tar/libexec/gnubin:$PATH"
 
-IMGS="unidata/nctests:base unidata/nctests:base32 unidata/nctests:serial unidata/nctests:serial32 unidata/nctests:mpich unidata/nctests:mpich32 unidata/nctests:openmpi unidata/nctests:openmpi32"
+IMGS="unidata/nctests:serial unidata/nctests:serial32 unidata/nctests:mpich unidata/nctests:mpich32 unidata/nctests:openmpi unidata/nctests:openmpi32"
 
 echo "#!/bin/bash" > ${OUTSCRIPT}
 echo "#" $(date) >> ${OUTSCRIPT}
