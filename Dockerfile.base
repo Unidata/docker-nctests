@@ -18,11 +18,14 @@ WORKDIR /root
 ENV CBRANCH master
 ENV FBRANCH master
 ENV CXXBRANCH master
+ENV PBRANCH master
 
 ENV BITNESS 64
 
 ENV RUNF TRUE
 ENV RUNCXX TRUE
+ENV RUNP TRUE
+
 ENV USEDASH TRUE
 
 ENV USEAC FALSE
@@ -31,6 +34,7 @@ ENV USECMAKE TRUE
 ENV CREPS 1
 ENV FREPS 1
 ENV CXXREPS 1
+ENV PREPS 1
 
 ###
 # Install common packages.
@@ -42,19 +46,7 @@ RUN apt-get -y upgrade
 # Install some basics.
 ###
 
-RUN apt-get install -y g++
-RUN apt-get install -y gfortran
-RUN apt-get install -y libtool automake autoconf
-RUN apt-get install -y m4
-RUN apt-get install -y bison
-RUN apt-get install -y flex
-RUN apt-get install -y libcurl4-openssl-dev
-RUN apt-get install -y zlib1g-dev
-RUN apt-get install -y git
-RUN apt-get install -y wget
-RUN apt-get install -y curl
-RUN apt-get install -y libjpeg-dev
-RUN apt-get install -y cmake
+RUN apt-get -y g++ gfortran libtool automake autoconf m4 bison flex libcurl4-openssl-dev zlib1g-dev git wget curl libjpeg-dev cmake python cython python-numpy
 
 ###
 # Pre-fetch tarballs that we'll need.
