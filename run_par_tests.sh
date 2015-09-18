@@ -250,20 +250,21 @@ fi
 
 ###
 # Build & test netcdf4-python.
+# Doesn't work in parallel tests.
 ###
-
-if [ "x$RUNP" == "xTRUE" ]; then
-
-    while [[ $PCOUNT -le $PREPS ]]; do
-        echo "[$PCOUNT | $PREPS] Testing netcdf4-python"
-        cd /root/netcdf4-python
-        python setup.py build
-        python setup.py install
-        cd test
-        python run_all.py
-        cd /root
-
-        PCOUNT=$[PCOUNT+1]
-
-    done
-fi
+#
+#if [ "x$RUNP" == "xTRUE" ]; then
+#
+#    while [[ $PCOUNT -le $PREPS ]]; do
+#        echo "[$PCOUNT | $PREPS] Testing netcdf4-python"
+#        cd /root/netcdf4-python
+#        python setup.py build
+#        python setup.py install
+#        cd test
+#        python run_all.py
+#        cd /root
+#
+#        PCOUNT=$[PCOUNT+1]
+#
+#    done
+#fi
