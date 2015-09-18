@@ -73,6 +73,19 @@ else
     echo "Skipping CXX"
 fi
 
+if [ "x$RUNP" == "xTRUE" ]; then
+    if [ -d "/netcdf4-python" ]; then
+        echo "Using local netcdf4-python repository"
+        git clone /netcdf4-python /root/netcdf4-python
+    else
+        echo "Using remote netcdf4-python repository"
+        git clone http://github.com/Unidata/netcdf4-python --single-branch --branch $PBRANCH --depth=1 $PBRANCH
+        mv $PBRANCH netcdf4-python
+    fi
+else
+    echo "Skipping Python"
+fi
+
 ###
 # Initalize some variables
 # for looping/performing repeated tests.
@@ -80,6 +93,7 @@ fi
 CCOUNT=1
 FCOUNT=1
 CXXCOUNT=1
+PCOUNT=1
 
 ###
 # Build & test netcdf-c, then install it so it
@@ -234,6 +248,27 @@ if [ "x$RUNCXX" == "xTRUE" ]; then
         fi
 
         CXXCOUNT=$[CXXCOUNT+1]
+
+    done
+
+fi
+
+###
+# Build & test netcdf4-python.
+###
+
+if [ "x$RUNP" == "xTRUE" ]; then
+
+    while [[ $PCOUNT -le $PREPS ]]; do
+        echo "[$PCOUNT | $PREPS] Testing netcdf4-python"
+        cd /root/netcdf4-python
+        python setup.py build
+        python setup.py install
+        cd test
+        python run_all.py
+        cd /root
+
+        PCOUNT=$[PCOUNT+1]
 
     done
 
