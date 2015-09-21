@@ -41,7 +41,7 @@ for X in $IMGS; do
 
     echo "Squashing ${X} to ${OUTNAME}"
     docker save $X | sudo docker-squash -verbose -t $X -o ${OUTNAME}
-    sudo chown wfisher:wfisher ${OUTNAME}
+    sudo chown wfisher ${OUTNAME}
     echo "Loading ${OUTNAME}"
     docker load -i ${OUTNAME}
     echo ""
@@ -56,7 +56,7 @@ chmod 755 ${OUTSCRIPT}
 
 echo "echo Finished" >> ${OUTSCRIPT}
 
-sudo chown wfisher:wfisher ${OUTSCRIPT}
+sudo chown wfisher ${OUTSCRIPT}
 echo ""
 echo "Created utility loading script ${OUTSCRIPT}."
 echo ""

@@ -12,6 +12,10 @@ WORKDIR /root
 # Set up a couple environmental variables.
 ###
 
+ENV HDF5VER 1.8.15-patch1
+ENV HDF5_VER hdf5-${HDF5VER}
+ENV HDF5_FILE ${HDF5_VER}.tar.bz2
+
 ##
 # Let the user specify the branches.
 ##
@@ -55,7 +59,8 @@ RUN apt-get -y install g++ gfortran libtool automake autoconf m4 bison flex libc
 RUN wget http://www.hdfgroup.org/ftp/lib-external/szip/2.1/src/szip-2.1.tar.gz
 RUN wget http://cucis.ece.northwestern.edu/projects/PnetCDF/Release/parallel-netcdf-1.6.1.tar.bz2
 RUN wget http://www.hdfgroup.org/ftp/HDF/HDF_Current/src/hdf-4.2.11.tar.bz2
-RUN wget http://www.hdfgroup.org/ftp/HDF5/releases/hdf5-1.8.15/src/hdf5-1.8.15.tar.bz2
+RUN wget http://www.hdfgroup.org/ftp/HDF5/releases/${HDF5_VER}/src/${HDF5_FILE}
+
 
 
 ###
@@ -63,7 +68,7 @@ RUN wget http://www.hdfgroup.org/ftp/HDF5/releases/hdf5-1.8.15/src/hdf5-1.8.15.t
 ###
 
 RUN tar -jxf hdf-4.2.11.tar.bz2
-RUN tar -jxf hdf5-1.8.15.tar.bz2
+RUN tar -jxf ${HDF5_FILE}
 RUN tar -zxf szip-2.1.tar.gz
 RUN tar -jxf parallel-netcdf-1.6.1.tar.bz2
 
@@ -79,6 +84,6 @@ RUN rm -rf szip-2.1
 # Add the utility scripts, for portability.
 ###
 
-COPY run_all_images.sh /root/
+COPY run_all_nctest_images.sh /root/
 COPY build_all_images.sh /root/
 COPY push_all_images.sh /root/
