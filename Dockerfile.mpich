@@ -15,8 +15,8 @@ RUN rm -rf hdf-4.2.11
 # those tests as well.
 ###
 
-RUN cd hdf5-1.8.15 && CFLAGS="-Wno-format-security" CC=`which mpicc` ./configure --disable-static --enable-shared --disable-fortran --enable-hl --enable-parallel --prefix=/usr --with-szlib  && make install -j 4
-RUN rm -rf hdf5-1.8.15
+RUN cd ${HDF5_VER} && CFLAGS="-Wno-format-security" CC=`which mpicc` ./configure --disable-static --enable-shared --disable-fortran --enable-hl --enable-parallel --prefix=/usr --with-szlib  && make install -j 4
+RUN rm -rf ${HDF5_VER}
 
 ###
 # Manually install pnetcdf so that we can
