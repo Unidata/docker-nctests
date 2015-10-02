@@ -85,5 +85,6 @@ RUN rm -rf szip-2.1
 ###
 
 COPY run_all_nctest_images.sh /root/
-COPY build_all_images.sh /root/
-COPY push_all_images.sh /root/
+COPY build_all_nctest_images.sh /root/
+COPY push_all_nctest_images.sh /root/
+COPY squash_all_nctest_images.sh /root/
