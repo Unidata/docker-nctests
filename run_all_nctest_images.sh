@@ -20,7 +20,7 @@ runtest() {
     USECMAKE=$5
     USEAC=$6
 
-    xterm -T "$WINTITLE [$CBRANCH]" -bg black -fg white -geometry 140x20+10+10 -e time docker run --rm -it -e CBRANCH=$CBRANCH -e CREPS=$REPS -e FREPS=$REPS -e CXXREPS=$REPS -e USECMAKE=$USECMAKE -e USEAC=$USEACC $DIMAGE &
+    xterm -T "$WINTITLE [$CBRANCH]" -bg black -fg white -geometry 140x20 -e time docker run --rm -it -e CBRANCH=$CBRANCH -e CREPS=$REPS -e FREPS=$REPS -e CXXREPS=$REPS -e USECMAKE=$USECMAKE -e USEAC=$USEACC $DIMAGE &
     return 0
 }
 
@@ -98,4 +98,4 @@ if [ "x$DO64" == "xTRUE" ]; then
 fi
 
 sleep 2
-xterm -T "Docker Stats" -bg black -fg white -geometry 140x20+10+10 -e docker stats $(docker ps -q) &
+xterm -T "Docker Stats" -bg black -fg white -geometry 140x20 -e docker stats $(docker ps -q) &
