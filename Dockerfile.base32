@@ -51,6 +51,7 @@ RUN apt-get -y upgrade
 ###
 
 RUN apt-get -y install g++ gfortran libtool automake autoconf m4 bison flex libcurl4-openssl-dev zlib1g-dev git wget curl libjpeg-dev cmake python cython python-numpy
+RUN apt-get -y install gdb
 
 ###
 # Pre-fetch tarballs that we'll need.
