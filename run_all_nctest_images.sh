@@ -96,6 +96,3 @@ if [ "x$DO64" == "xTRUE" ]; then
 
     runtest mpich unidata/nctests:mpich $BRANCH $MREPS $DOCMAKE $DOAC
 fi
-
-sleep 2
-xterm -T "Docker Stats" -bg black -fg white -geometry 140x20 -e docker stats $(docker ps -q) &
