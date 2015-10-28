@@ -5,7 +5,7 @@ set -e
 trap "echo TRAPed signal" HUP INT QUIT KILL TERM
 
 if [ "x$CMD" = "xhelp" ]; then
-    cat DOCKER_README.md
+    cat README.md
     exit
 fi
 

@@ -22,7 +22,7 @@ RUN rm -rf ${HDF5_VER}
 # Copy over the dockerfile, scripts and README.
 ###
 
-COPY DOCKER_README.md /root/
+
 COPY Dockerfile.serial /root/
 COPY run_serial_tests.sh /root/
 

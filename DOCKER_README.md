@@ -11,6 +11,7 @@ When this docker container is run, it will check out the following packages from
 * netcdf-c
 * netcdf-fortran
 * netcdf-cxx4
+* netcdf4-python
 
 Each package will be built and tested.  This way, we can see if any changes in `netcdf-c` break anything which depends on it (`netcdf-fortran` and `netcdf-cxx4`).
 
@@ -26,7 +27,7 @@ It is possible to use local directories instead of pulling from github. You do t
 
     $ docker run -v $(pwd)/netcdf-c:/netcdf-c unidata/nctests
     
-When the image runs, it will check for the existence of `/netcdf-c`, `/netcdf-fortran` and `/netcdf-cxx4`.  If they exist, the image will clone from these instead of pulling from GitHub.
+When the image runs, it will check for the existence of `/netcdf-c`, `/netcdf-fortran`, `/netcdf-cxx4` and `/netcdf4-python`.  If they exist, the image will clone from these instead of pulling from GitHub.
 
 > Note: Because it is cloning from a 'local' directory, it is important that you have that local directory already on the branch you want to analyze.  You will still need to set the appropriate Environmental Variable, however, if you want the build to be properly labelled for the CDash Dashboard.
     
@@ -40,25 +41,30 @@ The following environmental variables can be used to control the behavior at run
 * `CBRANCH` - Git branch for `netcdf-c`
 * `FBRANCH` - Git branch for `netcdf-fortran`
 * `CXXBRANCH` - Git branch for `netcdf-cxx4`
+* `PBRANCH` - Git branch for `netcdf4-python`
+
 ---- 
 * `COPTS` - CMake options for `netcdf-c`
 * `FOPTS` - CMake options for `netcdf-fortran`
 * `CXXOPTS` - CMake options for `netcdf-cxx4`
+
 ----
 * `AC_COPTS` - Autoconf options for `netcdf-c`
 * `AC_FOPTS` - Autoconf options for `netcdf-fortran`
 * `AC_CXXOPTS` - Autoconf options for `netcdf-cxx4`
 
 ----
-* `RUNF` - Set to `OFF`, `FALSE`, anything but `TRUE`, to disable running fortran tests.
-* `RUNCXX` - Set to `OFF`, `FALSE`, anything but `TRUE`, to disable running netcdf-cxx4 tests.
-----
+* `RUNF` - Set to `OFF`, `FALSE`, anything but `TRUE`, to disable running `netcdf-fortran` tests.
+* `RUNCXX` - Set to `OFF`, `FALSE`, anything but `TRUE`, to disable running `netcdf-cxx4` tests.
+* `RUNP` - Set to `OFF`, `FALSE`, anything but `TRUE`, to disable running `netcdf4-python` tests.
 
+----
 * `CREPS` - Default 1.  How many times to repeat the `netcdf-c` build and tests.
 * `FREPS` - Default 1.  How many times to repeat the `netcdf-fortran` build and tests.
 * `CXXREPS` - Default 1.  How many times to repeat the `netcdf-cxx4` build and tests.
-----
+* `PREPS` - Default 1.  How many times to repeat the `netcdf4-python` build and tests.
 
+----
 * `USECMAKE` - Default to `TRUE`. When `TRUE`, run `cmake` builds.
 * `USEAC` - Default to `FALSE`. When `TRUE`, run *in-source* `autoconf`-based builds.
 
