@@ -23,7 +23,7 @@ fi
 
 OUTSCRIPT="load-docker-images-${1}.sh"
 
-PATH="/usr/local/opt/gnu-tar/libexec/gnubin:$PATH"
+export PATH="/usr/local/opt/gnu-tar/libexec/gnubin:$PATH"
 
 IMGS="unidata/nctests:serial \
 unidata/nctests:serial32 \
