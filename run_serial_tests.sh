@@ -133,7 +133,7 @@ while [[ $CCOUNT -le $CREPS ]]; do
         if [ ! -f "configure" ]; then
             autoreconf -if
         fi
-        ./configure --enable-hdf4 --enable-extra-tests --enable-mmap "$AC_COPTS"
+        ./configure --prefix=/usr --enable-hdf4 --enable-extra-tests --enable-mmap "$AC_COPTS"
         make clean
         make -j 4
         make check TESTS="" -j 4

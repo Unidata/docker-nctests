@@ -130,7 +130,7 @@ while [[ $CCOUNT -le $CREPS ]]; do
         if [ ! -f "configure" ]; then
             autoreconf -if
         fi
-        CC=`which mpicc` ./configure --enable-hdf4 --enable-extra-tests --enable-mmap --enable-pnetcdf --enable-parallel-tests "$AC_COPTS"
+        CC=`which mpicc` ./configure --enable-hdf4 --enable-extra-tests --enable-mmap --enable-pnetcdf --enable-parallel-tests --prefix=/usr "$AC_COPTS"
         make clean
         make -j 4
         make check TESTS="" -j 4
@@ -188,7 +188,7 @@ if [ "x$RUNF" == "xTRUE" ]; then
             if [ ! -f "configure" ]; then
                 autoreconf -if
             fi
-            CC=`which mpicc` F90=`which mpif90` ./configure "$AC_FOPTS"
+            CC=`which mpicc` F90=`which mpif90` F77=`which m pif77` ./configure "$AC_FOPTS"
             make -j 4 ; CHECKERR
             make check TESTS="" -j 4
             make check ; CHECKERR
