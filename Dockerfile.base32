@@ -50,8 +50,8 @@ RUN apt-get -y upgrade
 # Install some basics.
 ###
 
-RUN apt-get -y install g++ gfortran libtool automake autoconf m4 bison flex libcurl4-openssl-dev zlib1g-dev git wget curl libjpeg-dev cmake python cython python-numpy
-RUN apt-get -y install gdb
+RUN apt-get -y install g++ gfortran libtool automake autoconf m4 bison flex libcurl4-openssl-dev zlib1g-dev git wget curl libjpeg-dev cmake python cython python-numpy gdb dos2unix
+
 
 ###
 # Pre-fetch tarballs that we'll need.
@@ -83,6 +83,11 @@ RUN rm -rf szip-2.1
 ###
 # Add the utility scripts, for portability.
 ###
+COPY run_serial_tests.sh /root/
+RUN dos2unix /root/run_serial_tests.sh
+
+COPY run_par_tests.sh /root/
+RUN dos2unix /root/run_par_tests.sh
 
 COPY run_all_nctest_images.sh /root/
 COPY build_all_nctest_images.sh /root/
