@@ -27,17 +27,17 @@ From the [NCO website]:
 
 
 
-## Specifying an Alternative Branch
+## Specifying an Alternative netcdf-c Branch
 
 You can specify an alternative branch for `netcdf-c` than `master` using the following syntax.
 
-    $ docker run -e CBRANCH="branch name" unidata/nctests
+    $ docker run -e CBRANCH="branch name" unidata/nctests:serial
 
 ## Working with local copies instead of pulling from GitHub
 
 It is possible to use local directories instead of pulling from github. You do this by mounting your local git directory to the root of the docker image filesystem, e.g.
 
-    $ docker run -v $(pwd)/netcdf-c:/netcdf-c unidata/nctests
+    $ docker run -v $(pwd)/netcdf-c:/netcdf-c unidata/nctests:serial
     
 When the image runs, it will check for the existence of `/netcdf-c`, `/netcdf-fortran`, `/netcdf-cxx4` and `/netcdf4-python`.  If they exist, the image will clone from these instead of pulling from GitHub.
 
@@ -70,7 +70,7 @@ The following environmental variables can be used to control the behavior at run
 * `RUNF` - Set to `OFF`, `FALSE`, anything but `TRUE`, to disable running `netcdf-fortran` tests.
 * `RUNCXX` - Set to `OFF`, `FALSE`, anything but `TRUE`, to disable running `netcdf-cxx4` tests.
 * `RUNP` - Set to `OFF`, `FALSE`, anything but `TRUE`, to disable running `netcdf4-python` tests.
-* `RUNNCO` - Set to `OFF`, FALSE`, anything but `TRUE`, to disable running `NCO` tests.
+* `RUNNCO` - Set to `OFF`, `FALSE`, anything but `TRUE`, to disable running `NCO` tests.
 
 ----
 * `CREPS` - Default 1.  How many times to repeat the `netcdf-c` build and tests.
