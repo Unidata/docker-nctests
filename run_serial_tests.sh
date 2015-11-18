@@ -287,3 +287,21 @@ if [ "x$RUNP" == "xTRUE" ]; then
     done
 
 fi
+
+
+###
+# Build & test NCO
+###
+if [ "x$RUNNCO" == "xTRUE" ]; then
+
+    while [[ $NCOCOUNT -le $NCOREPS ]]; do
+        echo "[$NCOCOUNT | $NCOREPS] Testing NCO"
+        cd /root/nco
+        ./configure
+        make
+        make check
+        NCOCOUNT=$[NCOCOUNT+1]
+
+    done
+
+fi
