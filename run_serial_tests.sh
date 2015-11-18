@@ -86,6 +86,19 @@ else
     echo "Skipping Python"
 fi
 
+if [ "x$RUNNCO" == "xTRUE" ]; then
+    if [ -d "/nco" ]; then
+        echo "Using local NCO repository"
+        git clone /nco /root/nco
+    else
+        echo "Using remote NCO repository"
+        git clone https://github.com/nco/nco.git --single-branch --branch $NCOBRANCH --depth=1 $NCOBRANCH
+        mv $NCOBRANCH nco
+    fi
+else
+    echo "Skipping NCO"
+fi
+
 ###
 # Initalize some variables
 # for looping/performing repeated tests.
@@ -94,6 +107,7 @@ CCOUNT=1
 FCOUNT=1
 CXXCOUNT=1
 PCOUNT=1
+NCOCOUNT=1
 
 ###
 # Build & test netcdf-c, then install it so it

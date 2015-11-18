@@ -12,8 +12,20 @@ When this docker container is run, it will check out the following packages from
 * netcdf-fortran
 * netcdf-cxx4
 * netcdf4-python
+* NetCDF Operators (NCO)
+
 
 Each package will be built and tested.  This way, we can see if any changes in `netcdf-c` break anything which depends on it (`netcdf-fortran` and `netcdf-cxx4`).
+
+### NetCDF Operators (NCO)
+
+From the [NCO website]:
+
+> The NCO toolkit manipulates and analyzes data stored in netCDF-accessible formats, including DAP, HDF4, and HDF5. It exploits the geophysical expressivity of many CF (Climate & Forecast) metadata conventions, the flexible description of physical dimensions translated by UDUnits, the network transparency of OPeNDAP, the storage features (e.g., compression, chunking, groups) of HDF (the Hierarchical Data Format), and many powerful mathematical and statistical algorithms of GSL (the GNU Scientific Library). NCO is fast, powerful, and free. 
+
+[NCO website]:http://nco.sourceforge.net/
+
+
 
 ## Specifying an Alternative Branch
 
@@ -42,6 +54,7 @@ The following environmental variables can be used to control the behavior at run
 * `FBRANCH` - Git branch for `netcdf-fortran`
 * `CXXBRANCH` - Git branch for `netcdf-cxx4`
 * `PBRANCH` - Git branch for `netcdf4-python`
+* `NCOBRANCH` - Git branch for `NCO`. Default: `4.5.3`.
 
 ---- 
 * `COPTS` - CMake options for `netcdf-c`
@@ -57,12 +70,15 @@ The following environmental variables can be used to control the behavior at run
 * `RUNF` - Set to `OFF`, `FALSE`, anything but `TRUE`, to disable running `netcdf-fortran` tests.
 * `RUNCXX` - Set to `OFF`, `FALSE`, anything but `TRUE`, to disable running `netcdf-cxx4` tests.
 * `RUNP` - Set to `OFF`, `FALSE`, anything but `TRUE`, to disable running `netcdf4-python` tests.
+* `RUNNCO` - Set to `OFF`, FALSE`, anything but `TRUE`, to disable running `NCO` tests.
 
 ----
 * `CREPS` - Default 1.  How many times to repeat the `netcdf-c` build and tests.
 * `FREPS` - Default 1.  How many times to repeat the `netcdf-fortran` build and tests.
 * `CXXREPS` - Default 1.  How many times to repeat the `netcdf-cxx4` build and tests.
 * `PREPS` - Default 1.  How many times to repeat the `netcdf4-python` build and tests.
+* `NCOREPS` - Default 1.  How many times to repeat the `NCO` build and tests.
+
 
 ----
 * `USECMAKE` - Default to `TRUE`. When `TRUE`, run `cmake` builds.

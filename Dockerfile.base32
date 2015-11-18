@@ -23,6 +23,7 @@ ENV CBRANCH master
 ENV FBRANCH master
 ENV CXXBRANCH master
 ENV PBRANCH master
+ENV NCOBRANCH 4.5.3
 
 ENV BITNESS 32
 
@@ -30,6 +31,8 @@ ENV BITNESS 32
 ENV RUNF TRUE
 ENV RUNCXX TRUE
 ENV RUNP TRUE
+ENV RUNNCO TRUE
+
 ENV USEDASH TRUE
 
 ENV USEAC FALSE
@@ -39,6 +42,7 @@ ENV CREPS 1
 ENV FREPS 1
 ENV CXXREPS 1
 ENV PREPS 1
+ENV NCOREPS 1
 
 ###
 # Install common packages.
@@ -50,8 +54,7 @@ RUN apt-get -y upgrade
 # Install some basics.
 ###
 
-RUN apt-get -y install g++ gfortran libtool automake autoconf m4 bison flex libcurl4-openssl-dev zlib1g-dev git wget curl libjpeg-dev cmake python cython python-numpy gdb dos2unix
-
+RUN apt-get -y install g++ gfortran libtool automake autoconf m4 bison flex libcurl4-openssl-dev zlib1g-dev git wget curl libjpeg-dev cmake python cython python-numpy gdb dos2unix antlr libantlr-dev libexpat1-dev libxml2-dev gsl-bin libgsl0-dev udunits-bin libudunits2-0 libudunits2-dev
 
 ###
 # Pre-fetch tarballs that we'll need.
@@ -61,7 +64,6 @@ RUN wget http://www.hdfgroup.org/ftp/lib-external/szip/2.1/src/szip-2.1.tar.gz
 RUN wget http://cucis.ece.northwestern.edu/projects/PnetCDF/Release/parallel-netcdf-1.6.1.tar.bz2
 RUN wget http://www.hdfgroup.org/ftp/HDF/HDF_Current/src/hdf-4.2.11.tar.bz2
 RUN wget http://www.hdfgroup.org/ftp/HDF5/releases/${HDF5_VER}/src/${HDF5_FILE}
-
 
 ###
 # Uncompress tarballs.
