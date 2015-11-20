@@ -26,7 +26,8 @@ ENV PBRANCH master
 ENV NCOBRANCH 4.5.3
 
 ENV BITNESS 32
-
+ENV USE_CC gcc
+ENV USE_CXX g++
 
 ENV RUNF TRUE
 ENV RUNCXX TRUE
@@ -54,7 +55,7 @@ RUN apt-get -y upgrade
 # Install some basics.
 ###
 
-RUN apt-get -y install g++ gfortran libtool automake autoconf m4 bison flex libcurl4-openssl-dev zlib1g-dev git wget curl libjpeg-dev cmake python cython python-numpy gdb dos2unix antlr libantlr-dev libexpat1-dev libxml2-dev gsl-bin libgsl0-dev udunits-bin libudunits2-0 libudunits2-dev
+RUN apt-get -y install g++ gfortran libtool automake autoconf m4 bison flex libcurl4-openssl-dev zlib1g-dev git wget curl libjpeg-dev cmake python cython python-numpy gdb dos2unix antlr libantlr-dev libexpat1-dev libxml2-dev gsl-bin libgsl0-dev udunits-bin libudunits2-0 libudunits2-dev clang
 
 ###
 # Pre-fetch tarballs that we'll need.

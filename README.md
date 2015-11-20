@@ -14,8 +14,17 @@ When this docker container is run, it will check out the following packages from
 * netcdf4-python
 * NetCDF Operators (NCO)
 
-
 Each package will be built and tested.  This way, we can see if any changes in `netcdf-c` break anything which depends on it (`netcdf-fortran` and `netcdf-cxx4`).
+
+### Available Compilers
+
+The docker containers will let you use the following compilers:
+
+* `gcc` and `g++`
+* `clang` and `clang++`
+
+These are controlled via the `USE_CC` and `USE_CXX` options.
+
 
 ### NetCDF Operators (NCO)
 
@@ -59,6 +68,16 @@ The following environmental variables can be used to control the behavior at run
 * `CXXBRANCH` - Git branch for `netcdf-cxx4`
 * `PBRANCH` - Git branch for `netcdf4-python`
 * `NCOBRANCH` - Git branch for `NCO`. Default: `4.5.3`.
+
+----
+* `USE_CC` - `C` language compiler to use.
+	* `gcc` - Default
+	* `clang`
+* `USE_CXX` - `C++` language compiler to use.
+	* `g++` - Default
+	* `clang++`
+	
+> Note that these options are currently only honored by the `serial` and `serial32` images.  How they function with the parallel images is TBD.
 
 ---- 
 * `COPTS` - CMake options for `netcdf-c`
@@ -123,6 +142,10 @@ This will put you into the shell for the docker container.  Note that any change
 
     $ docker run --rm -it unidata/nctests:serial
     
+### - Run all tests (standard use case) using `clang` instead of `gcc`
+
+    $ docker run --rm -it -e USE_CC=clang -e USE_CXX=clang++ unidata/nctests:serial
+
 ### - Run all tests against a specific branch
     
     $ docker run --rm -it -e CBRANCH=working unidata/nctests:serial

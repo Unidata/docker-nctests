@@ -128,7 +128,7 @@ while [[ $CCOUNT -le $CREPS ]]; do
         sleep 2
         mkdir -p build-netcdf-c
         cd build-netcdf-c
-        cmake /root/netcdf-c -DCMAKE_INSTALL_PREFIX=/usr -DENABLE_HDF4=ON -DENABLE_EXTRA_TESTS=ON -DENABLE_MMAP=ON -DBUILDNAME_PREFIX="docker$BITNESS" -DBUILDNAME_SUFFIX="$CBRANCH" $COPTS
+        cmake /root/netcdf-c -DCMAKE_INSTALL_PREFIX=/usr -DENABLE_HDF4=ON -DENABLE_EXTRA_TESTS=ON -DENABLE_MMAP=ON -DBUILDNAME_PREFIX="docker$BITNESS-$USE_CC" -DBUILDNAME_SUFFIX="$CBRANCH" -DCMAKE_C_COMPILER=$USE_CC $COPTS
         make clean
         if [ "x$USEDASH" == "xTRUE" ]; then
             make Experimental
@@ -147,7 +147,7 @@ while [[ $CCOUNT -le $CREPS ]]; do
         if [ ! -f "configure" ]; then
             autoreconf -if
         fi
-        ./configure --prefix=/usr --enable-hdf4 --enable-extra-tests --enable-mmap "$AC_COPTS"
+        CC=$USE_CC ./configure --prefix=/usr --enable-hdf4 --enable-extra-tests --enable-mmap "$AC_COPTS"
         make clean
         make -j 4
         make check TESTS="" -j 4
@@ -185,7 +185,7 @@ if [ "x$RUNF" == "xTRUE" ]; then
             cd /root
             mkdir -p build-netcdf-fortran
             cd build-netcdf-fortran
-            cmake /root/netcdf-fortran -DBUILDNAME_PREFIX="docker$BITNESS" -DBUILDNAME_SUFFIX="$FBRANCH" $FOPTS
+            cmake /root/netcdf-fortran -DBUILDNAME_PREFIX="docker$BITNESS-$USE_CC" -DBUILDNAME_SUFFIX="$FBRANCH" -DCMAKE_C_COMPILER=$USE_CC $FOPTS
             if [ "x$USEDASH" == "xTRUE" ]; then
                 make Experimental ; CHECKERR
             else
@@ -205,7 +205,7 @@ if [ "x$RUNF" == "xTRUE" ]; then
             if [ ! -f "configure" ]; then
                 autoreconf -if
             fi
-            ./configure "$AC_FOPTS"
+            CC=$USE_CC ./configure "$AC_FOPTS"
             make -j 4 ; CHECKERR
             make check TESTS="" -j 4
             make check ; CHECKERR
@@ -233,7 +233,7 @@ if [ "x$RUNCXX" == "xTRUE" ]; then
 
             mkdir -p build-netcdf-cxx4
             cd build-netcdf-cxx4
-            cmake /root/netcdf-cxx4 -DBUILDNAME_PREFIX="docker$BITNESS" -DBUILDNAME_SUFFIX="$CXXBRANCH" $CXXOPTS
+            cmake /root/netcdf-cxx4 -DBUILDNAME_PREFIX="docker$BITNESS-$USE_CXX" -DBUILDNAME_SUFFIX="$CXXBRANCH" -DCMAKE_CXX_COMPILER=$USE_CXX $CXXOPTS
             if [ "x$USEDASH" == "xTRUE" ]; then
                 make Experimental
             else
@@ -252,7 +252,7 @@ if [ "x$RUNCXX" == "xTRUE" ]; then
             if [ ! -f "configure" ]; then
                 autoreconf -if
             fi
-            ./configure "$AC_CXXOPTS"
+            CXX=$USE_CXX ./configure "$AC_CXXOPTS"
             make -j 4
             make check TESTS="" -j 4
             make check ; CHECKERR
@@ -297,7 +297,7 @@ if [ "x$RUNNCO" == "xTRUE" ]; then
     while [[ $NCOCOUNT -le $NCOREPS ]]; do
         echo "[$NCOCOUNT | $NCOREPS] Testing NCO"
         cd /root/nco
-        ./configure
+        CC=$USE_CC ./configure
         make
         make check
         NCOCOUNT=$[NCOCOUNT+1]
