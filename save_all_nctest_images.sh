@@ -42,8 +42,7 @@ for X in $IMGS; do
     OUTNAME=$(echo $X | sed "s/:/-/g" | sed "s/\//_/g").tar
 
     echo "Saving ${X} to ${OUTNAME}"
-    docker save $X -o ${OUTNAME}
-    sudo chown wfisher ${OUTNAME}
+    docker save -o ${OUTNAME} $X
 
     # Add to loading script.
     echo "echo Loading ${OUTNAME} as ${X}" >> ${OUTSCRIPT}
@@ -55,7 +54,6 @@ chmod 755 ${OUTSCRIPT}
 
 echo "echo Finished" >> ${OUTSCRIPT}
 
-sudo chown wfisher ${OUTSCRIPT}
 echo ""
 echo "Created utility loading script ${OUTSCRIPT}."
 echo ""
