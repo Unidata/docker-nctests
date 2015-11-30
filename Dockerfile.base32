@@ -3,7 +3,7 @@
 # so that we can take advantage of the
 # shared layers that docker provides.
 #####
-FROM ggrandes/ubuntu32:14.04
+FROM f69m/ubuntu32:wily
 USER root
 ENV HOME /root
 WORKDIR /root
