@@ -4,6 +4,11 @@ set -e
 
 trap "echo TRAPed signal" HUP INT QUIT KILL TERM
 
+export OMPI_MPICC=$USE_CC
+export OMPI_CC=$USE_CC
+export OMPI_CXX=$USE_CXX
+
+
 if [ "x$CMD" = "xhelp" ]; then
     cat README.md
     exit
