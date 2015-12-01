@@ -1,4 +1,4 @@
-FROM unidata/nctests:base
+FROM dockernctests_base
 
 RUN apt-get install -y mpich libmpich-dev
 

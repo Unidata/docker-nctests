@@ -1,5 +1,31 @@
 base:
-    build: .
-    dockerfile: Dockerfile.base
-    environment:
-      - COMPOSE_PROJECT_NAME=unidata/nctests:base
+  build: .
+  dockerfile: Dockerfile.base
+
+serial:
+  build: .
+  dockerfile: Dockerfile.serial
+
+openmpi:
+  build: .
+  dockerfile: Dockerfile.openmpi
+
+mpich:
+  build: .
+  dockerfile: Dockerfile.mpich
+
+base32:
+  build: .
+  dockerfile: Dockerfile.base32
+
+serial32:
+  build: .
+  dockerfile: Dockerfile.serial32
+
+openmpi32:
+  build: .
+  dockerfile: Dockerfile.openmpi32
+
+mpich32:
+  build: .
+  dockerfile: Dockerfile.mpich32

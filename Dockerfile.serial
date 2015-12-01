@@ -1,4 +1,4 @@
-FROM unidata/nctests:base
+FROM dockernctests_base
 
 ###
 # Manually install hdf4 so that we can run
