@@ -1,0 +1,11 @@
+base:
+    build: .
+    dockerfile: Dockerfile.base
+    environment:
+      - COMPOSE_PROJECT_NAME=unidata/nctests:base
+
+base32:
+    build: .
+    dockerfile: Dockerfile.base32
+    environment:
+      - COMPOSE_PROJECT_NAME=unidata/nctests:base32
