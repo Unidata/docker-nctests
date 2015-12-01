@@ -5,14 +5,20 @@ base:
 serial:
   build: .
   dockerfile: Dockerfile.serial
+  links:
+    - base
 
 openmpi:
   build: .
   dockerfile: Dockerfile.openmpi
+  links:
+    - base
 
 mpich:
   build: .
   dockerfile: Dockerfile.mpich
+  links:
+    - base
 
 base32:
   build: .
@@ -21,11 +27,17 @@ base32:
 serial32:
   build: .
   dockerfile: Dockerfile.serial32
+  links:
+    - base32
 
 openmpi32:
   build: .
   dockerfile: Dockerfile.openmpi32
+  links:
+    - base32
 
 mpich32:
   build: .
   dockerfile: Dockerfile.mpich32
+  links:
+    - base32
