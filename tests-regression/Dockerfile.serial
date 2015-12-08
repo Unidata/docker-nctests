@@ -1,4 +1,4 @@
-FROM dockernctests_base
+FROM testsregression_base
 
 ###
 # Manually install hdf4 so that we can run

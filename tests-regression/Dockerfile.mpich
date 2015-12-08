@@ -1,4 +1,4 @@
-FROM dockernctests_base
+FROM testsregression_base
 
 RUN apt-get install -y mpich libmpich-dev
 
