@@ -5,14 +5,23 @@
 #
 
 set -e
-set -x
 
-docker tag dockernctests_base      unidata/nctests:base
-docker tag dockernctests_serial    unidata/nctests:serial
-docker tag dockernctests_openmpi   unidata/nctests:openmpi
-docker tag dockernctests_mpich     unidata/nctests:mpich
+RETAG() {
 
-docker tag dockernctests_base32    unidata/nctests:base32
-docker tag dockernctests_serial32  unidata/nctests:serial32
-docker tag dockernctests_openmpi32 unidata/nctests:openmpi32
-docker tag dockernctests_mpich32   unidata/nctests:mpich32
+    echo "Retagging $1 to $2"
+    docker tag $1 $2
+    docker rmi -f $1
+
+}
+
+
+
+RETAG dockernctests_base      unidata/nctests:base
+RETAG dockernctests_serial    unidata/nctests:serial
+RETAG dockernctests_openmpi   unidata/nctests:openmpi
+RETAG dockernctests_mpich     unidata/nctests:mpich
+
+RETAG dockernctests_base32    unidata/nctests:base32
+RETAG dockernctests_serial32  unidata/nctests:serial32
+RETAG dockernctests_openmpi32 unidata/nctests:openmpi32
+RETAG dockernctests_mpich32   unidata/nctests:mpich32
