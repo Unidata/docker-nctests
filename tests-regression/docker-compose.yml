@@ -1,4 +1,4 @@
-ﬁbase:
+base:
   build: .
   dockerfile: Dockerfile.base
 
