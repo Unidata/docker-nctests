@@ -1,0 +1,49 @@
+wily64:
+  build: .
+  dockerfile: Dockerfile.wily-x64
+  hostname: wily-x64
+
+wily32:
+  build: .
+  dockerfile: Dockerfile.wily-x86
+  hostname: wily-x86
+
+trusty64:
+  build: .
+  dockerfile: Dockerfile.trusty-x64
+  hostname: trusty-x64
+
+trusty32:
+  build: .
+  dockerfile: Dockerfile.trusty-x86
+  hostname: trusty-x86
+
+trusty-openmpi:
+  build: .
+  dockerfile: Dockerfile.trusty-openmpi-x64
+  hostname: trusty-openmpi-x64
+
+trusty-mpich:
+  build: .
+  dockerfile: Dockerfile.trusty-mpich-x64
+  hostname: trusty-mpich-x64
+
+fedora21:
+  build: .
+  dockerfile: Dockerfile.fedora21-x64
+  hostname: fedora21-x64
+
+fedora22:
+  build: .
+  dockerfile: Dockerfile.fedora22-x64
+  hostname: fedora22-x64
+
+fedora23:
+  build: .
+  dockerfile: Dockerfile.fedora23-x64
+  hostname: fedora23-x64
+
+centos7:
+  build: .
+  dockerfile: Dockerfile.centos7-x64
+  hostname: centos7-x64

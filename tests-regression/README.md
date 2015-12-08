@@ -1,4 +1,4 @@
-# unidata/nctests
+# unidata/nctests - Regression Testing
 
 The Dockerfile and other information for this image may be found either by running the image interactively, or by going to the corresponding github repository: http://github.com/Unidata/docker-nctests
 
@@ -30,7 +30,7 @@ These are controlled via the `USE_CC` and `USE_CXX` options.
 
 From the [NCO website]:
 
-> The NCO toolkit manipulates and analyzes data stored in netCDF-accessible formats, including DAP, HDF4, and HDF5. It exploits the geophysical expressivity of many CF (Climate & Forecast) metadata conventions, the flexible description of physical dimensions translated by UDUnits, the network transparency of OPeNDAP, the storage features (e.g., compression, chunking, groups) of HDF (the Hierarchical Data Format), and many powerful mathematical and statistical algorithms of GSL (the GNU Scientific Library). NCO is fast, powerful, and free. 
+> The NCO toolkit manipulates and analyzes data stored in netCDF-accessible formats, including DAP, HDF4, and HDF5. It exploits the geophysical expressivity of many CF (Climate & Forecast) metadata conventions, the flexible description of physical dimensions translated by UDUnits, the network transparency of OPeNDAP, the storage features (e.g., compression, chunking, groups) of HDF (the Hierarchical Data Format), and many powerful mathematical and statistical algorithms of GSL (the GNU Scientific Library). NCO is fast, powerful, and free.
 
 [NCO website]:http://nco.sourceforge.net/
 
@@ -51,18 +51,18 @@ You can specify an alternative branch for `netcdf-c` than `master` using the fol
 It is possible to use local directories instead of pulling from github. You do this by mounting your local git directory to the root of the docker image filesystem, e.g.
 
     $ docker run -v $(pwd)/netcdf-c:/netcdf-c unidata/nctests:serial
-    
+
 When the image runs, it will check for the existence of `/netcdf-c`, `/netcdf-fortran`, `/netcdf-cxx4` and `/netcdf4-python`.  If they exist, the image will clone from these instead of pulling from GitHub.
 
 > Note: Because it is cloning from a 'local' directory, it is important that you have that local directory already on the branch you want to analyze.  You will still need to set the appropriate Environmental Variable, however, if you want the build to be properly labelled for the CDash Dashboard.
-    
-## Environmental Variables 
+
+## Environmental Variables
 
 The following environmental variables can be used to control the behavior at runtime.
 * `CMD` - Run an alternative command. Options for this are `help`.
 * `USEDASH` - Set to any non-`TRUE` value to disable using the remote dashboard.
 
----- 
+----
 * `CBRANCH` - Git branch for `netcdf-c`
 * `FBRANCH` - Git branch for `netcdf-fortran`
 * `CXXBRANCH` - Git branch for `netcdf-cxx4`
@@ -76,10 +76,10 @@ The following environmental variables can be used to control the behavior at run
 * `USE_CXX` - `C++` language compiler to use.
 	* `g++` - Default
 	* `clang++`
-	
+
 > Note that these options are currently only honored by the `serial` and `serial32` images.  How they function with the parallel images is TBD.
 
----- 
+----
 * `COPTS` - CMake options for `netcdf-c`
 * `FOPTS` - CMake options for `netcdf-fortran`
 * `CXXOPTS` - CMake options for `netcdf-cxx4`
@@ -127,7 +127,7 @@ The following environmental variables can be used to control the behavior at run
 See [the section on environmental variables](#variables) for a complete list of variables understood by `unidata/nctests`.
 
 ### - Show the help file
-	
+
 This will show you the help file for the docker image.
 
     $ docker run --rm -it -e CMD=help unidata/nctests:serial
@@ -141,35 +141,35 @@ This will put you into the shell for the docker container.  Note that any change
 ### - Run all tests (standard use case)
 
     $ docker run --rm -it unidata/nctests:serial
-    
+
 ### - Run all tests (standard use case) using `clang` instead of `gcc`
 
     $ docker run --rm -it -e USE_CC=clang -e USE_CXX=clang++ unidata/nctests:serial
 
 ### - Run all tests against a specific branch
-    
+
     $ docker run --rm -it -e CBRANCH=working unidata/nctests:serial
-    
-### - Turn off DAP tests by passing in a cmake variable 
+
+### - Turn off DAP tests by passing in a cmake variable
 
     $ docker run --rm -it -e COPTS="-DENABLE_DAP=OFF" unidata/nctests:serial
 
-### - Run all of the tests but do not use the remote dashboard 
+### - Run all of the tests but do not use the remote dashboard
 
     $ docker run --rm -it -e USEDASH=OFF unidata/nctests:serial
-    
-### - Run the tests against a local copy of the netcdf-c git repository instead of pulling from GitHub 
+
+### - Run the tests against a local copy of the netcdf-c git repository instead of pulling from GitHub
 
 > Note that you will not switch branches inside the docker container when running like this; you must make sure your local repository (that you're at the root of, remember?) is on the branch you want to analyze.
 
     $ docker run --rm -it -v $(pwd):/netcdf-c unidata/nctests:serial
-    
-### - Run the tests against a local copy, and disable the fortran, c++ and remote dashboard. 
+
+### - Run the tests against a local copy, and disable the fortran, c++ and remote dashboard.
     $ docker run --rm -it -v $(pwd):/netcdf-c -e USEDASH=OFF -e RUNF=OFF -e RUNCXX=OFF unidata/nctests:serial
-    
-### - Run the NetCDF-C tests using Autootools instead of CMake, and repeat the build twice. 
+
+### - Run the NetCDF-C tests using Autootools instead of CMake, and repeat the build twice.
     # docker run --rm -it -e USECMAKE=OFF -e USEAC=TRUE -e CREPS=2 unidata/nctests:serial
-    
+
 #### Running non-serial tests
 
 > To run any of the above examples against a different environment, you would replace `nctests:serial` with one of `nctests:openmpi`, `nctests:mpich`, `nctests:serial32`, etc.
