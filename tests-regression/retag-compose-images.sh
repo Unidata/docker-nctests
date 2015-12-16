@@ -9,7 +9,7 @@ set -e
 RETAG() {
 
     echo "Retagging $1 to $2"
-    docker tag $1 $2
+    docker tag -f $1 $2
     docker rmi -f $1
 
 }
