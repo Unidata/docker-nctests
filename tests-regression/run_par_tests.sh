@@ -118,10 +118,14 @@ while [[ $CCOUNT -le $CREPS ]]; do
         cd build-netcdf-c
         cmake /root/netcdf-c -DCMAKE_INSTALL_PREFIX=/usr -DENABLE_HDF4=ON -DENABLE_EXTRA_TESTS=ON -DENABLE_MMAP=ON -DBUILDNAME_PREFIX="docker$BITNESS-parallel$PARTYPE" -DBUILDNAME_SUFFIX="$CBRANCH" -DCMAKE_C_COMPILER=$(which mpicc) -DENABLE_PNETCDF=ON -DENABLE_PARALLEL_TESTS=ON $COPTS
 
-        if [ "x$USEDASH" == "xTRUE" ]; then
-            make Experimental
+        if [ "x$RUNC" == "xTRUE" ]; then
+            if [ "x$USEDASH" == "xTRUE" ]; then
+                make Experimental
+            else
+                make -j 4 && make test
+            fi
         else
-            make -j 4 && make test
+            make -j 4
         fi
         cd /root
         echo ""
@@ -138,8 +142,10 @@ while [[ $CCOUNT -le $CREPS ]]; do
         CC=`which mpicc` ./configure --enable-hdf4 --enable-extra-tests --enable-mmap --enable-pnetcdf --enable-parallel-tests --prefix=/usr "$AC_COPTS"
         make clean
         make -j 4
-        make check TESTS="" -j 4
-        make check
+        if [ "x$RUNC" == "xTRUE" ]; then
+            make check TESTS="" -j 4
+            make check
+        fi
         cd /root
         echo ""
     fi
