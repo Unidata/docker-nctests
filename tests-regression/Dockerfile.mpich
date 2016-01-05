@@ -1,4 +1,4 @@
-FROM testsregression_base
+FROM unidata/nctests:base
 
 RUN apt-get install -y mpich libmpich-dev
 

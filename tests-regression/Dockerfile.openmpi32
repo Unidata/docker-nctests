@@ -1,4 +1,4 @@
-FROM testsregression_base32
+FROM unidata/nctests:base32
 
 RUN apt-get install -y g++-4.8
 RUN apt-get install -y gfortran-4.8
