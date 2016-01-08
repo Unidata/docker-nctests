@@ -67,7 +67,7 @@ The following environmental variables can be used to control the behavior at run
 * `FBRANCH` - Git branch for `netcdf-fortran`
 * `CXXBRANCH` - Git branch for `netcdf-cxx4`
 * `PBRANCH` - Git branch for `netcdf4-python`
-* `NCOBRANCH` - Git branch for `NCO`. Default: `4.5.3`.
+* `NCOBRANCH` - Git branch for `NCO`. Default: `4.5.4`.
 
 ----
 * `USE_CC` - `C` language compiler to use.
