@@ -17,6 +17,17 @@ if [ ! -d "/output" ]; then
     exit
 fi
 
+if [ "x$OLDVER" == "x" ]; then
+    cat README.md
+    exit
+fi
+
+if [ "x$NEWVER" == "x" ]; then
+    cat README.md
+    exit
+fi
+
+
 TOPDIR=$(pwd)
 OLDBUILD="build-$OLDVER"
 NEWBUILD="build-$NEWVER"

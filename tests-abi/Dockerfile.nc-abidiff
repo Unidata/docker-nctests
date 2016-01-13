@@ -12,9 +12,6 @@ WORKDIR /root
 ###
 
 ENV DEBIAN_FRONTEND noninteractive
-ENV OLDVER master
-ENV NEWVER master
-
 
 ###
 # Install common packages.
