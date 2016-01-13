@@ -32,7 +32,8 @@ TOPDIR=$(pwd)
 OLDBUILD="build-$OLDVER"
 NEWBUILD="build-$NEWVER"
 
-$TDIR="netcdf-c"
+TDIR="netcdf-c"
+
 git clone http://github.com/Unidata/netcdf-c $TDIR
 cd $TDIR
 mkdir $OLDBUILD
