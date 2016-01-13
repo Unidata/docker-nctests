@@ -1,0 +1,75 @@
+####
+# Common stuff at front.
+####
+FROM ubuntu:trusty
+MAINTAINER Ward Fisher <wfisher@ucar.edu>
+USER root
+ENV HOME /root
+WORKDIR /root
+
+###
+# Define environmental Variables
+###
+
+ENV DEBIAN_FRONTEND noninteractive
+ENV OLDVER master
+ENV NEWVER master
+
+
+###
+# Install common packages.
+###
+
+RUN apt-get update
+RUN apt-get -y upgrade
+RUN apt-get install -y man nano curl git emacs wget gcc g++ gfortran clang gdb autoconf automake make libtool m4 bison flex zlib1g-dev libjpeg-dev libcurl4-openssl-dev python zip elfutils libelf-dev
+
+###
+# Install hdf4, hdf5 manually.
+###
+
+#
+# HDF4
+#
+ENV HDF4_VER hdf-4.2.11
+ENV HDF4_FILE ${HDF4_VER}.tar.bz2
+RUN wget http://www.hdfgroup.org/ftp/HDF/HDF_Current/src/${HDF4_FILE}
+RUN tar -jxf ${HDF4_FILE}
+
+RUN cd ${HDF4_VER} && ./configure --disable-static --enable-shared --disable-netcdf --disable-fortran --prefix=/usr && make install -j 4
+RUN rm -rf ${HDF4_VER}
+
+##
+# HDF5
+##
+ENV HDF5VER 1.8.16
+ENV HDF5_VER hdf5-${HDF5VER}
+ENV HDF5_FILE ${HDF5_VER}.tar.bz2
+
+RUN wget http://www.hdfgroup.org/ftp/HDF5/releases/${HDF5_VER}/src/${HDF5_FILE}
+RUN tar -jxf ${HDF5_FILE}
+
+RUN cd ${HDF5_VER} && ./configure --disable-static --enable-shared --disable-fortran --enable-hl --prefix=/usr && make install -j 4
+RUN rm -rf ${HDF5_VER}
+
+###
+# Install lvc-maintained abi information.
+###
+RUN git clone http://github.com/lvc/installer lvc-installer
+RUN cd lvc-installer && make install prefix=/usr target=abi-tracker
+
+###
+# Copy over some files.
+###
+
+COPY run_abi_diff.sh /root/
+RUN dos2unix /root/run_abi_diff.sh
+
+COPY README.md /root/
+RUN dos2unix /root/README.md
+
+###
+# Run script.
+###
+
+CMD /root/run_abi_diff.sh
