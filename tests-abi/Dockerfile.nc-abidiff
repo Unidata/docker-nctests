@@ -52,6 +52,7 @@ RUN rm -rf ${HDF5_VER}
 ###
 # Install lvc-maintained abi information.
 ###
+RUN apt-get install -y dos2unix
 RUN git clone http://github.com/lvc/installer lvc-installer
 RUN cd lvc-installer && make install prefix=/usr target=abi-tracker
 
