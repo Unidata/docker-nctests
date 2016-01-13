@@ -4,7 +4,7 @@
 # shared layers that docker provides.
 #####
 #FROM f69m/ubuntu32:trusty
-FROM wtanaka/trusty32
+FROM veilleperso/trusty32
 USER root
 ENV HOME /root
 WORKDIR /root
