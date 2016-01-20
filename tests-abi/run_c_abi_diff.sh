@@ -43,7 +43,7 @@ pushd $OLDBUILD
 git checkout $OLDVER
 cmake .. -DCMAKE_C_FLAGS="-g -Og" -DENABLE_TESTS=OFF
 make -j 4
-abi-dumper liblib/libnetcdf.so -o /output/ABI-$OLDVER.dump -lver $OLDVER
+abi-dumper liblib/libnetcdf.so -o /output/ABI-C-$OLDVER.dump -lver $OLDVER
 git reset --hard
 popd
 
@@ -51,10 +51,10 @@ pushd $NEWBUILD
 git checkout $NEWVER
 cmake .. -DCMAKE_C_FLAGS="-g -Og" -DENABLE_TESTS=OFF
 make -j 4
-abi-dumper liblib/libnetcdf.so -o /output/ABI-$NEWVER.dump -lver $NEWVER
+abi-dumper liblib/libnetcdf.so -o /output/ABI-C-$NEWVER.dump -lver $NEWVER
 popd
 
 cd /output
-abi-compliance-checker -l libnetcdf -old ABI-$OLDVER.dump -new ABI-$NEWVER.dump
+abi-compliance-checker -l libnetcdf -old ABI-C-$OLDVER.dump -new ABI-C-$NEWVER.dump
 
 echo "Finished."
