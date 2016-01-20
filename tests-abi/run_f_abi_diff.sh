@@ -43,7 +43,7 @@ pushd $OLDBUILD
 git checkout $OLDVER
 cmake .. -DCMAKE_C_FLAGS="-g -Og" -DENABLE_TESTS=OFF
 make -j 4
-abi-dumper liblib/libnetcdff.so -o /output/ABI-F-$OLDVER.dump -lver $OLDVER
+abi-dumper fortran/libnetcdff.so -o /output/ABI-F-$OLDVER.dump -lver $OLDVER
 git reset --hard
 popd
 
@@ -51,7 +51,7 @@ pushd $NEWBUILD
 git checkout $NEWVER
 cmake .. -DCMAKE_C_FLAGS="-g -Og" -DENABLE_TESTS=OFF
 make -j 4
-abi-dumper liblib/libnetcdff.so -o /output/ABI-F-$NEWVER.dump -lver $NEWVER
+abi-dumper fortran/libnetcdff.so -o /output/ABI-F-$NEWVER.dump -lver $NEWVER
 popd
 
 cd /output

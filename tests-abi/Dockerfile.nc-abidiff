@@ -19,7 +19,7 @@ ENV DEBIAN_FRONTEND noninteractive
 
 RUN apt-get update
 RUN apt-get -y upgrade
-RUN apt-get install -y man nano curl git emacs wget gcc g++ gfortran clang gdb autoconf automake make libtool m4 bison flex zlib1g-dev libjpeg-dev libcurl4-openssl-dev python zip elfutils libelf-dev
+RUN apt-get install -y man nano curl git emacs wget gcc g++ gfortran clang gdb autoconf automake make libtool m4 bison flex zlib1g-dev libjpeg-dev libcurl4-openssl-dev python zip elfutils libelf-dev dos2unix cmake
 
 ###
 # Install hdf4, hdf5 manually.
@@ -52,7 +52,6 @@ RUN rm -rf ${HDF5_VER}
 ###
 # Install lvc-maintained abi information.
 ###
-RUN apt-get install -y dos2unix cmake
 RUN git clone http://github.com/lvc/installer lvc-installer
 RUN cd lvc-installer && make install prefix=/usr target=abi-tracker
 
@@ -60,7 +59,7 @@ RUN cd lvc-installer && make install prefix=/usr target=abi-tracker
 # Copy over some files.
 ###
 
-COPY run_abi_diff.sh /root/
+COPY run_c_abi_diff.sh /root/
 RUN dos2unix /root/run_c_abi_diff.sh
 
 COPY README.md /root/
