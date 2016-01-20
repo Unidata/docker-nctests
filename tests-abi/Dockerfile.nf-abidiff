@@ -49,6 +49,13 @@ RUN tar -jxf ${HDF5_FILE}
 RUN cd ${HDF5_VER} && ./configure --disable-static --enable-shared --disable-fortran --enable-hl --prefix=/usr && make install -j 4
 RUN rm -rf ${HDF5_VER}
 
+
+###
+# NetCDF-C
+###
+ENV NCVER=v4.4.0
+RUN git clone http://github.com/Unidata/netcdf-c && cd netcdf-c && git checkout ${NCVER} && mkdir build && cd build && cmake .. -DENABLE_TESTS=OFF -DCMAKE_INSTALL_PREFIX=/usr && make -j 4 && make install
+
 ###
 # Install lvc-maintained abi information.
 ###
@@ -60,8 +67,8 @@ RUN cd lvc-installer && make install prefix=/usr target=abi-tracker
 # Copy over some files.
 ###
 
-COPY run_abi_diff.sh /root/
-RUN dos2unix /root/run_c_abi_diff.sh
+COPY run_f_abi_diff.sh /root/
+RUN dos2unix /root/run_f_abi_diff.sh
 
 COPY README.md /root/
 RUN dos2unix /root/README.md
@@ -70,4 +77,4 @@ RUN dos2unix /root/README.md
 # Run script.
 ###
 
-CMD /root/run_c_abi_diff.sh
+CMD /root/run_f_abi_diff.sh
