@@ -97,7 +97,7 @@ RUN dos2unix /root/run_serial_tests.sh
 COPY run_par_tests.sh /root/
 RUN dos2unix /root/run_par_tests.sh
 
-RUN echo -e "Version:\n\tunidata/nctests ($BITNESS) :\t$NCTEST_VERSION\t$(date)" > $VERSION_FILE
+RUN echo "Version:\n\tunidata/nctests ($BITNESS) :\t$NCTEST_VERSION\t$(date)" > $VERSION_FILE
 
 COPY run_all_nctest_images.sh /root/
 COPY build_all_nctest_images.sh /root/
