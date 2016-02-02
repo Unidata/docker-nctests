@@ -9,6 +9,9 @@ USER root
 ENV HOME /root
 WORKDIR /root
 
+ENV NCTEST_VERSION 1.0.0 - development
+ENV VERSION_FILE VERSION.md
+
 ###
 # Set up a couple environmental variables.
 ###
@@ -93,6 +96,8 @@ RUN dos2unix /root/run_serial_tests.sh
 
 COPY run_par_tests.sh /root/
 RUN dos2unix /root/run_par_tests.sh
+
+RUN echo -e "Version:\n\tunidata/nctests ($BITNESS) :\t$NCTEST_VERSION\t$(date)" > $VERSION_FILE
 
 COPY run_all_nctest_images.sh /root/
 COPY build_all_nctest_images.sh /root/
