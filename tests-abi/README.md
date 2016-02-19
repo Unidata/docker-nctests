@@ -8,5 +8,5 @@ Two versions are required, and an `/output` directory must be mapped.
 
 ## Usage
 
-    $ docker run -e OLDVER="OLDBRANCH" -e NEWVER="NEWBRANCH" -v $(pwd):/output unidata/ncabi
+    $ docker run -it -e OLDVER="OLDBRANCH" -e NEWVER="NEWBRANCH" -v $(pwd):/output unidata/ncabi
 
