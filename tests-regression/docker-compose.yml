@@ -1,7 +1,3 @@
-base:
-  build: .
-  dockerfile: Dockerfile.base
-
 serial:
   build: .
   dockerfile: Dockerfile.serial
@@ -13,10 +9,6 @@ openmpi:
 mpich:
   build: .
   dockerfile: Dockerfile.mpich
-
-base32:
-  build: .
-  dockerfile: Dockerfile.base32
 
 serial32:
   build: .
