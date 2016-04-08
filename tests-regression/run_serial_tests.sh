@@ -207,7 +207,7 @@ if [ "x$RUNF" == "xTRUE" ]; then
             if [ "x$USEDASH" == "xTRUE" ]; then
                 make Experimental ; CHECKERR
             else
-                make -j 4 && make test
+                make && make test
 
             fi
             make clean
@@ -224,8 +224,8 @@ if [ "x$RUNF" == "xTRUE" ]; then
                 autoreconf -if
             fi
             CC=$USE_CC ./configure "$AC_FOPTS"
-            make -j 4 ; CHECKERR
-            make check TESTS="" -j 4
+            make ; CHECKERR
+            make check TESTS=""
             make check ; CHECKERR
             make clean
             cd /root
