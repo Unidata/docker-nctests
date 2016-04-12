@@ -153,7 +153,7 @@ while [[ $CCOUNT -le $CREPS ]]; do
             make check TESTS="" -j 4 ; CHECKERR
             make check ; CHECKERR
 
-            if[ "x$DISTCHECK" == "xTRUE" ]; then
+            if [ "x$DISTCHECK" == "xTRUE" ]; then
                 make distcheck ; CHECKERR
             fi
 
@@ -216,7 +216,7 @@ if [ "x$RUNF" == "xTRUE" ]; then
             make check TESTS=""
             make check ; CHECKERR
 
-            if[ "x$DISTCHECK" == "xTRUE" ]; then
+            if [ "x$DISTCHECK" == "xTRUE" ]; then
                 make distcheck ; CHECKERR
             fi
 
@@ -267,7 +267,7 @@ if [ "x$RUNCXX" == "xTRUE" ]; then
             make check TESTS="" -j 4
             make check ; CHECKERR
 
-            if[ "x$DISTCHECK" == "xTRUE" ]; then
+            if [ "x$DISTCHECK" == "xTRUE" ]; then
                 make distcheck ; CHECKERR
             fi
 
