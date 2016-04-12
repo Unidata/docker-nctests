@@ -127,12 +127,12 @@ while [[ $CCOUNT -le $CREPS ]]; do
 
         if [ "x$RUNC" == "xTRUE" ]; then
             if [ "x$USEDASH" == "xTRUE" ]; then
-                make Experimental
+                make Experimental ; CHECKERR
             else
-                make -j 4 && make test
+                make -j 4 && make test ; CHECKERR
             fi
         else
-            make -j 4
+            make -j 4 ; CHECKERR
         fi
         cd /root
         echo ""
@@ -148,10 +148,15 @@ while [[ $CCOUNT -le $CREPS ]]; do
         fi
         CC=`which mpicc` ./configure --enable-hdf4 --enable-extra-tests --enable-mmap --enable-pnetcdf --enable-parallel-tests --prefix=/usr "$AC_COPTS"
         make clean
-        make -j 4
+        make -j 4 ; CHECKERR
         if [ "x$RUNC" == "xTRUE" ]; then
-            make check TESTS="" -j 4
-            make check
+            make check TESTS="" -j 4 ; CHECKERR
+            make check ; CHECKERR
+
+            if[ "x$DISTCHECK" == "xTRUE" ]; then
+                make distcheck ; CHECKERR
+            fi
+
         fi
         cd /root
         echo ""
@@ -210,6 +215,11 @@ if [ "x$RUNF" == "xTRUE" ]; then
             make -j 4 ; CHECKERR
             make check TESTS="" -j 4
             make check ; CHECKERR
+
+            if[ "x$DISTCHECK" == "xTRUE" ]; then
+                make distcheck ; CHECKERR
+            fi
+
             make clean
             cd /root
             echo ""
@@ -256,6 +266,11 @@ if [ "x$RUNCXX" == "xTRUE" ]; then
             make -j 4
             make check TESTS="" -j 4
             make check ; CHECKERR
+
+            if[ "x$DISTCHECK" == "xTRUE" ]; then
+                make distcheck ; CHECKERR
+            fi
+
             make clean
             cd /root
             echo ""
