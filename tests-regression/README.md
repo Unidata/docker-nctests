@@ -106,6 +106,7 @@ The following environmental variables can be used to control the behavior at run
 ----
 * `USECMAKE` - Default to `TRUE`. When `TRUE`, run `cmake` builds.
 * `USEAC` - Default to `FALSE`. When `TRUE`, run *in-source* `autoconf`-based builds.
+* `DISTCHECK` - Default to `FALSE`.  Requires `USEAC` to be `TRUE`.  Runs `make distcheck` after `make check`.
 
 > Note that `USECMAKE` and `USEAC` may be used concurrently and, when coupled with `CREPS` and other loop control options, we can see if the different build systems interfere with each other.
 
