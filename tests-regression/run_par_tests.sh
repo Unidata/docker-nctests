@@ -196,7 +196,7 @@ if [ "x$RUNF" == "xTRUE" ]; then
                 make Experimental ; CHECKERR
 
             else
-                make -j 4 && make test
+                make && make test
             fi
             make clean
             cd /root
@@ -212,8 +212,8 @@ if [ "x$RUNF" == "xTRUE" ]; then
                 autoreconf -if
             fi
             CC=`which mpicc` F90=`which mpif90` F77=`which mpif77` ./configure "$AC_FOPTS"
-            make -j 4 ; CHECKERR
-            make check TESTS="" -j 4
+            make ; CHECKERR
+            make check TESTS=""
             make check ; CHECKERR
 
             if[ "x$DISTCHECK" == "xTRUE" ]; then
