@@ -212,7 +212,7 @@ if [ "x$RUNF" == "xTRUE" ]; then
             if [ "x$USEDASH" == "xTRUE" ]; then
                 make Experimental ; CHECKERR
             else
-                make -j 4 && make test ; CHECKERR
+                make && make test ; CHECKERR
             fi
             make clean
             cd /root
