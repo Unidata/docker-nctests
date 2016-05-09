@@ -133,7 +133,11 @@ while [[ $CCOUNT -le $CREPS ]]; do
 
     if [ "x$USECMAKE" = "xTRUE" ]; then
 
-        echo "[$CCOUNT | $CREPS] Testing netCDF-C - CMAKE"
+        if [ "x$RUNC" == "xTRUE" ]; then
+            echo "[$CCOUNT | $CREPS] Testing netCDF-C - CMAKE"
+        else
+            echo "[$CCOUNT | $CREPS] Installing netCDF-C - CMAKE"
+        fi
         echo "----------------------------------"
         sleep 2
         mkdir -p build-netcdf-c
@@ -156,8 +160,15 @@ while [[ $CCOUNT -le $CREPS ]]; do
     fi
 
     if [ "x$USEAC" = "xTRUE" ]; then
-        echo "[$CCOUNT | $CREPS] Testing netCDF-C - AutoConf"
+
+        if [ "x$RUNC" == "xTRUE" ]; then
+            echo "[$CCOUNT | $CREPS] Testing netCDF-C - AutoConf"
+        else
+            echo "[$CCOUNT | $CREPS] Installing netCDF-C - AutoConf"
+        fi
+
         echo "----------------------------------"
+
         sleep 2
         cd netcdf-c
         if [ ! -f "configure" ]; then
