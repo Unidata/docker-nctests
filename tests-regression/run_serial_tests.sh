@@ -182,7 +182,7 @@ while [[ $CCOUNT -le $CREPS ]]; do
             make check ; CHECKERR
 
             if [ "x$DISTCHECK" == "xTRUE" ]; then
-                make distcheck ; CHECKERR
+                DISTCHECK_CONFIGURE_FLAGS="--enable-hdf4 --enable-extra-tests --enable-mmap $AC_OPTS" make distcheck ; CHECKERR
             fi
 
         fi
@@ -244,7 +244,7 @@ if [ "x$RUNF" == "xTRUE" ]; then
             make check ; CHECKERR
 
             if [ "x$DISTCHECK" == "xTRUE" ]; then
-                make distcheck ; CHECKERR
+                DISTCHECK_CONFIGURE_FLAGS="$AC_FOPTS" make distcheck ; CHECKERR
             fi
 
             make clean
@@ -296,7 +296,7 @@ if [ "x$RUNCXX" == "xTRUE" ]; then
             make check ; CHECKERR
 
             if [ "x$DISTCHECK" == "xTRUE" ]; then
-                make distcheck ; CHECKERR
+                DISTCHECK_CONFIGURE_FLAGS="$AC_CXXOPTS" make distcheck ; CHECKERR
             fi
 
             make clean
