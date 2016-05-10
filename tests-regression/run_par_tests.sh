@@ -154,7 +154,7 @@ while [[ $CCOUNT -le $CREPS ]]; do
             make check ; CHECKERR
 
             if [ "x$DISTCHECK" == "xTRUE" ]; then
-                DISTCHECK_CONFIGURE_FLAGS="--enable-hdf4 --enable-extra-tests --enable-mmap --enable-pnetcdf --enable-parallel-tests $AC_OPTS" make distcheck ; CHECKERR
+                CC=$(which mpicc) DISTCHECK_CONFIGURE_FLAGS="--enable-hdf4 --enable-extra-tests --enable-mmap --enable-pnetcdf --enable-parallel-tests $AC_OPTS" make distcheck ; CHECKERR
             fi
 
         fi
