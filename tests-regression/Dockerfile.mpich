@@ -7,8 +7,8 @@ RUN apt-get install -y mpich libmpich-dev
 # those tests as well.
 ###
 
-RUN cd hdf-4.2.11 && CC=`which mpicc` ./configure --disable-static --enable-shared --disable-netcdf --disable-fortran --prefix=/usr && make install -j 4
-RUN rm -rf hdf-4.2.11
+RUN cd hdf-4.2.12 && CC=`which mpicc` ./configure --disable-static --enable-shared --disable-netcdf --disable-fortran --prefix=/usr && make install -j 4
+RUN rm -rf hdf-4.2.12
 
 ###
 # Manually install hdf5 so that we can run
