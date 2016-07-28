@@ -70,6 +70,12 @@ The following environmental variables can be used to control the behavior at run
 * `NCOBRANCH` - Git branch for `NCO`. Default: `4.5.4`.
 
 ----
+* `PNCVER` - Version of `parallel-netcdf to use`.
+    * **Parallel Tests Only**
+    * `1.6.1` - Version 1.6.1 **Default**
+    * `1.7.0` - Version 1.7.0
+
+----
 * `USE_CC` - `C` language compiler to use.
 	* `gcc` - Default
 	* `clang`
