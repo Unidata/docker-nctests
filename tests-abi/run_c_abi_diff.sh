@@ -34,7 +34,13 @@ NEWBUILD="build-$NEWVER"
 
 TDIR="netcdf-c"
 
-git clone http://github.com/Unidata/netcdf-c $TDIR
+if [ -d "/netcdf-c" ]; then
+    cp -R /netcdf-c .
+    mv netcdf-c $TDIR
+else
+    git clone http://github.com/Unidata/netcdf-c $TDIR
+fi
+
 cd $TDIR
 mkdir $OLDBUILD
 mkdir $NEWBUILD
