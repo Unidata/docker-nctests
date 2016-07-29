@@ -40,9 +40,9 @@ USER ciuser
 # CMake stuff, to ensure we have an
 # appropriate version.
 ###
-ENV CMAKE_VER cmake-3.3.2
+ENV CMAKE_VER cmake-3.6.1
 ENV CMAKE_FILE ${CMAKE_VER}.tar.gz
-RUN wget http://www.cmake.org/files/v3.3/${CMAKE_FILE}
+RUN wget http://www.cmake.org/files/v3.6/${CMAKE_FILE}
 RUN tar -zxf ${CMAKE_FILE}
 
 USER root
@@ -53,7 +53,7 @@ USER ciuser
 ##
 # HDF4
 ##
-ENV HDF4_VER hdf-4.2.11
+ENV HDF4_VER hdf-4.2.12
 ENV HDF4_FILE ${HDF4_VER}.tar.bz2
 RUN wget http://www.hdfgroup.org/ftp/HDF/HDF_Current/src/${HDF4_FILE}
 
