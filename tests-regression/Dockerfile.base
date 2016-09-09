@@ -8,6 +8,8 @@ USER root
 ENV HOME /root
 WORKDIR /root
 
+ENV DEBIAN_FRONTEND noninteractive
+
 ENV NCTEST_VERSION 1.0.0 - development
 ENV VERSION_FILE VERSION.md
 
