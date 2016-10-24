@@ -108,13 +108,13 @@ PCOUNT=1
 ###
 # Copy the proper version of pnetcdf over.
 ###
-if [ "x$PNCVER" = "x1.6.1" ]; then
-    PNC=${PNC161_INSTALL}
-elif [ "x$PNCVER" = "x1.7.0" ]; then
+if [ "x$PNCVER" = "x1.7.0" ]; then
     PNC=${PNC170_INSTALL}
 else
-    echo "Invalid PNCVER: ${PNCVER}"
-    exit 1
+    PNC=${PNC161_INSTALL}
+    PNCVER="1.6.1"
+    #echo "Invalid PNCVER: ${PNCVER}"
+    #exit 1
 fi
 
 echo ""
