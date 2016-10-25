@@ -28,7 +28,7 @@ RUN apt-get install -y man nano curl git emacs wget gcc g++ gfortran clang gdb a
 #
 # HDF4
 #
-ENV HDF4_VER hdf-4.2.11
+ENV HDF4_VER hdf-4.2.12
 ENV HDF4_FILE ${HDF4_VER}.tar.bz2
 RUN wget http://www.hdfgroup.org/ftp/HDF/HDF_Current/src/${HDF4_FILE}
 RUN tar -jxf ${HDF4_FILE}
@@ -39,11 +39,11 @@ RUN rm -rf ${HDF4_VER}
 ##
 # HDF5
 ##
-ENV HDF5VER 1.8.16
+ENV HDF5VER 1.8.17
 ENV HDF5_VER hdf5-${HDF5VER}
 ENV HDF5_FILE ${HDF5_VER}.tar.bz2
 
-RUN wget http://www.hdfgroup.org/ftp/HDF5/releases/${HDF5_VER}/src/${HDF5_FILE}
+RUN wget https://support.hdfgroup.org/ftp/HDF5/current/src/${HDF5_FILE}
 RUN tar -jxf ${HDF5_FILE}
 
 RUN cd ${HDF5_VER} && ./configure --disable-static --enable-shared --disable-fortran --enable-hl --prefix=/usr && make install -j 4
