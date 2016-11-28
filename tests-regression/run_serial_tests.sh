@@ -29,6 +29,11 @@ CHECKERR() {
 }
 
 ###
+# Print out version.
+###
+cat VERSION.md
+
+###
 # Check out all the projects.
 #
 # If the project file has been mapped to a directory

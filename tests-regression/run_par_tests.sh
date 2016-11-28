@@ -31,6 +31,12 @@ CHECKERR() {
     fi
 
 }
+
+###
+# Print out version.
+###
+cat VERSION.md
+
 ###
 # Check out all the projects.
 #
