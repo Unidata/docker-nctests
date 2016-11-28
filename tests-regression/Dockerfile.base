@@ -87,7 +87,7 @@ RUN tar -jxf parallel-netcdf-1.6.1.tar.bz2 && tar -jxf parallel-netcdf-1.7.0.tar
 # all of our projects.
 ###
 
-RUN cd szip-2.1 && ./configure --prefix=/usr --disable-shared --enable-static && make install -j 4
+RUN cd szip-2.1 && ./configure --prefix=/usr --enable-shared --disable-static && make install -j 4
 RUN rm -rf szip-2.1
 
 ###
