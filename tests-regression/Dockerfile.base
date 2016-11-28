@@ -18,7 +18,7 @@ ENV VERSION_FILE VERSION.md
 # Set up a couple environmental variables.
 ###
 
-ENV HDF5VER 1.8.17
+ENV HDF5VER 1.8.18
 ENV HDF5_VER hdf5-${HDF5VER}
 ENV HDF5_FILE ${HDF5_VER}.tar.bz2
 ENV PNCVER 1.6.1
@@ -70,8 +70,8 @@ RUN apt-get -y install g++ gfortran libtool automake autoconf m4 bison flex libc
 
 RUN wget http://www.hdfgroup.org/ftp/lib-external/szip/2.1/src/szip-2.1.tar.gz
 RUN wget http://cucis.ece.northwestern.edu/projects/PnetCDF/Release/parallel-netcdf-1.6.1.tar.bz2 && wget http://cucis.ece.northwestern.edu/projects/PnetCDF/Release/parallel-netcdf-1.7.0.tar.bz2
-RUN wget http://www.hdfgroup.org/ftp/HDF/HDF_Current/src/hdf-4.2.12.tar.bz2
-RUN wget https://support.hdfgroup.org/ftp/HDF5/current/src/${HDF5_FILE}
+RUN wget https://support.hdfgroup.org/ftp/HDF/releases/HDF4.2.12/src/hdf-4.2.12.tar.bz2
+RUN wget https://support.hdfgroup.org/ftp/HDF5/current18/src/${HDF5_FILE}
 
 ###
 # Uncompress tarballs.
@@ -87,7 +87,7 @@ RUN tar -jxf parallel-netcdf-1.6.1.tar.bz2 && tar -jxf parallel-netcdf-1.7.0.tar
 # all of our projects.
 ###
 
-RUN cd szip-2.1 && ./configure --prefix=/usr && make install -j 4
+RUN cd szip-2.1 && ./configure --prefix=/usr --disable-shared --enable-static && make install -j 4
 RUN rm -rf szip-2.1
 
 ###
