@@ -59,8 +59,10 @@ When the image runs, it will check for the existence of `/netcdf-c`, `/netcdf-fo
 ## Environmental Variables
 
 The following environmental variables can be used to control the behavior at runtime.
+
 * `CMD` - Run an alternative command. Options for this are `help`.
 * `USEDASH` - Set to any non-`TRUE` value to disable using the remote dashboard.
+* `HELP` - If non-zero, the `help` information will be printed to standard out.
 
 ----
 * `CBRANCH` - Git branch for `netcdf-c`
