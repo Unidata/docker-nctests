@@ -8,6 +8,10 @@ export OMPI_MPICC=$USE_CC
 export OMPI_CC=$USE_CC
 export OMPI_CXX=$USE_CXX
 
+if [ "x$HELP" != "x" ]; then
+    cat README.md
+    cat VERSION.md
+fi
 
 if [ "x$CMD" = "xhelp" ]; then
     cat README.md

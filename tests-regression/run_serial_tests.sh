@@ -4,6 +4,11 @@ set -e
 
 trap "echo TRAPed signal" HUP INT QUIT KILL TERM
 
+if [ "x$HELP" != "x" ]; then
+    cat README.md
+    cat VERSION.md
+fi
+
 if [ "x$CMD" = "xhelp" ]; then
     cat README.md
     cat VERSION.md
