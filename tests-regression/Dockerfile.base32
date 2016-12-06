@@ -11,7 +11,7 @@ WORKDIR /root
 
 ENV DEBIAN_FRONTEND noninteractive
 
-ENV NCTEST_VERSION 1.1.0 - development
+ENV NCTEST_VERSION 1.1.1 - development
 ENV VERSION_FILE VERSION.md
 
 ###
