@@ -3,15 +3,14 @@
 # so that we can take advantage of the
 # shared layers that docker provides.
 #####
-#FROM f69m/ubuntu32:trusty
-FROM veilleperso/trusty32
+FROM pankona/xenial-32bit
 USER root
 ENV HOME /root
 WORKDIR /root
 
 ENV DEBIAN_FRONTEND noninteractive
 
-ENV NCTEST_VERSION 1.1.1 - development
+ENV NCTEST_VERSION 1.2.0 - development
 ENV VERSION_FILE VERSION.md
 
 ###
