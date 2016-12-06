@@ -7,6 +7,7 @@ trap "echo TRAPed signal" HUP INT QUIT KILL TERM
 if [ "x$HELP" != "x" ]; then
     cat README.md
     cat VERSION.md
+    exit
 fi
 
 if [ "x$CMD" = "xhelp" ]; then

@@ -11,6 +11,7 @@ export OMPI_CXX=$USE_CXX
 if [ "x$HELP" != "x" ]; then
     cat README.md
     cat VERSION.md
+    exit
 fi
 
 if [ "x$CMD" = "xhelp" ]; then
