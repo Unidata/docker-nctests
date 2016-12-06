@@ -43,7 +43,7 @@ ENV HDF5VER 1.8.18
 ENV HDF5_VER hdf5-${HDF5VER}
 ENV HDF5_FILE ${HDF5_VER}.tar.bz2
 
-RUN wget https://support.hdfgroup.org/ftp/HDF5/current/src/${HDF5_FILE}
+RUN wget https://support.hdfgroup.org/ftp/HDF5/current18/src/${HDF5_FILE}
 RUN tar -jxf ${HDF5_FILE}
 
 RUN cd ${HDF5_VER} && ./configure --disable-static --enable-shared --disable-fortran --enable-hl --prefix=/usr && make install -j 4
