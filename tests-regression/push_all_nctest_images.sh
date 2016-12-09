@@ -42,7 +42,6 @@ fi
 if [ "x$DO64" == "xTRUE" ]; then
     echo "Pushing 64-bit images."
     docker push unidata/nctests:base
-    docker push unidata/nctests
     docker push unidata/nctests:serial
     docker push unidata/nctests:openmpi
     docker push unidata/nctests:mpich
