@@ -63,7 +63,7 @@ cat VERSION.md
 
 if [ -d "/netcdf-c" ]; then
     echo "Using local netcdf-c repository"
-    git clone /netcdf-c /root/netcdf-c
+    git clone /netcdf-c ${HOME}/netcdf-c
 else
     echo "Using remote netcdf-c repository"
     git clone http://www.github.com/Unidata/netcdf-c --single-branch --branch $CBRANCH --depth=1 $CBRANCH
@@ -73,7 +73,7 @@ fi
 if [ "x$RUNF" == "xTRUE" ]; then
     if [ -d "/netcdf-fortran" ]; then
         echo "Using local netcdf-fortran repository"
-        git clone /netcdf-fortran /root/netcdf-fortran
+        git clone /netcdf-fortran ${HOME}/netcdf-fortran
     else
         echo "Using remote netcdf-fortran repository"
         git clone http://www.github.com/Unidata/netcdf-fortran --single-branch --branch $FBRANCH --depth=1 $FBRANCH
@@ -87,12 +87,12 @@ if [ "x$RUNCXX" == "xTRUE" ]; then
 
     if [ -d "/netcdf-cxx4" ]; then
         echo "Using local netcdf-cxx4 repository"
-        git clone /netcdf-cxx4 /root/netcdf-cxx4
+        git clone /netcdf-cxx4 ${HOME}/netcdf-cxx4
     else
         echo "Using remote netcdf-cxx4 repository"
         git clone http://www.github.com/Unidata/netcdf-cxx4 --single-branch --branch $CXXBRANCH --depth=1 $CXXBRANCH
         mv $CXXBRANCH netcdf-cxx4
-        cd /root
+        cd ${HOME}
     fi
 
 else
@@ -102,7 +102,7 @@ fi
 if [ "x$RUNP" == "xTRUE" ]; then
     if [ -d "/netcdf4-python" ]; then
         echo "Using local netcdf4-python repository"
-        git clone /netcdf4-python /root/netcdf4-python
+        git clone /netcdf4-python ${HOME}/netcdf4-python
     else
         echo "Using remote netcdf4-python repository"
         git clone http://github.com/Unidata/netcdf4-python --single-branch --branch $PBRANCH --depth=1 $PBRANCH
@@ -141,7 +141,7 @@ cp -R ${PNC}/* /usr/
 # can be used by the other projects.
 ###
 
-cd /root
+cd ${HOME}
 
 # CREPS is defined as an environmental variable.
 
@@ -154,7 +154,7 @@ while [[ $CCOUNT -le $CREPS ]]; do
         sleep 2
         mkdir -p build-netcdf-c
         cd build-netcdf-c
-        cmake /root/netcdf-c -DCMAKE_INSTALL_PREFIX=/usr -DENABLE_HDF4=ON -DENABLE_EXTRA_TESTS=ON -DENABLE_MMAP=ON -DBUILDNAME_PREFIX="docker$BITNESS-parallel$PARTYPE" -DBUILDNAME_SUFFIX="$CBRANCH" -DCMAKE_C_COMPILER=$(which mpicc) -DENABLE_PNETCDF=ON -DENABLE_PARALLEL_TESTS=ON $COPTS
+        cmake ${HOME}/netcdf-c -DCMAKE_INSTALL_PREFIX=/usr -DENABLE_HDF4=ON -DENABLE_EXTRA_TESTS=ON -DENABLE_MMAP=ON -DBUILDNAME_PREFIX="docker$BITNESS-parallel$PARTYPE" -DBUILDNAME_SUFFIX="$CBRANCH" -DCMAKE_C_COMPILER=$(which mpicc) -DENABLE_PNETCDF=ON -DENABLE_PARALLEL_TESTS=ON $COPTS
 
         if [ "x$RUNC" == "xTRUE" ]; then
             if [ "x$USEDASH" == "xTRUE" ]; then
@@ -165,7 +165,7 @@ while [[ $CCOUNT -le $CREPS ]]; do
         else
             make -j 4 ; CHECKERR
         fi
-        cd /root
+        cd ${HOME}
         echo ""
     fi
 
@@ -189,7 +189,7 @@ while [[ $CCOUNT -le $CREPS ]]; do
             fi
 
         fi
-        cd /root
+        cd ${HOME}
         echo ""
     fi
 
@@ -199,13 +199,13 @@ done
 
 if [ "x$USECMAKE" = "xTRUE" ]; then
     cd build-netcdf-c
-    make install
+    sudo make install
 elif [ "x$USEAC" = "xTRUE" ]; then
     cd netcdf-c
-    make install
+    sudo make install
 fi
 
-cd /root
+cd ${HOME}
 
 ###
 # Build & test netcdf-fortran
@@ -218,10 +218,10 @@ if [ "x$RUNF" == "xTRUE" ]; then
         if [ "x$USECMAKE" = "xTRUE" ]; then
             echo "[$FCOUNT | $FREPS] Testing netCDF-Fortran - CMAKE"
             echo "----------------------------------"
-            cd /root
+            cd ${HOME}
             mkdir -p build-netcdf-fortran
             cd build-netcdf-fortran
-            cmake /root/netcdf-fortran -DBUILDNAME_PREFIX="docker$BITNESS-parallel$PARTYPE" -DBUILDNAME_SUFFIX="$FBRANCH" -DTEST_PARALLEL=OFF -DCMAKE_Fortran_COMPILER=$(which mpif90) $FOPTS
+            cmake ${HOME}/netcdf-fortran -DBUILDNAME_PREFIX="docker$BITNESS-parallel$PARTYPE" -DBUILDNAME_SUFFIX="$FBRANCH" -DTEST_PARALLEL=OFF -DCMAKE_Fortran_COMPILER=$(which mpif90) $FOPTS
 
             if [ "x$USEDASH" == "xTRUE" ]; then
                 make Experimental ; CHECKERR
@@ -230,7 +230,7 @@ if [ "x$RUNF" == "xTRUE" ]; then
                 make && make test ; CHECKERR
             fi
             make clean
-            cd /root
+            cd ${HOME}
             echo ""
         fi
 
@@ -252,7 +252,7 @@ if [ "x$RUNF" == "xTRUE" ]; then
             fi
 
             make clean
-            cd /root
+            cd ${HOME}
             echo ""
         fi
 
@@ -273,7 +273,7 @@ if [ "x$RUNCXX" == "xTRUE" ]; then
 
             mkdir -p build-netcdf-cxx4
             cd build-netcdf-cxx4
-            cmake /root/netcdf-cxx4 -DBUILDNAME_PREFIX="docker$BITNESS-parallel$PARTYPE" -DBUILDNAME_SUFFIX="$CXXBRANCH" -DCMAKE_CXX_COMPILER=$(which mpic++) $CXXOPTS
+            cmake ${HOME}/netcdf-cxx4 -DBUILDNAME_PREFIX="docker$BITNESS-parallel$PARTYPE" -DBUILDNAME_SUFFIX="$CXXBRANCH" -DCMAKE_CXX_COMPILER=$(which mpic++) $CXXOPTS
 
             if [ "x$USEDASH" == "xTRUE" ]; then
                 make Experimental
@@ -281,7 +281,7 @@ if [ "x$RUNCXX" == "xTRUE" ]; then
                 make -j 4 && make test
             fi
             make clean
-            cd /root
+            cd ${HOME}
             echo ""
         fi
 
@@ -303,7 +303,7 @@ if [ "x$RUNCXX" == "xTRUE" ]; then
             fi
 
             make clean
-            cd /root
+            cd ${HOME}
             echo ""
         fi
 
@@ -321,12 +321,12 @@ fi
 #
 #    while [[ $PCOUNT -le $PREPS ]]; do
 #        echo "[$PCOUNT | $PREPS] Testing netcdf4-python"
-#        cd /root/netcdf4-python
+#        cd ${HOME}/netcdf4-python
 #        python setup.py build
 #        python setup.py install
 #        cd test
 #        python run_all.py
-#        cd /root
+#        cd ${HOME}
 #
 #        PCOUNT=$[PCOUNT+1]
 #

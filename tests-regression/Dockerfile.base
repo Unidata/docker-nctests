@@ -51,17 +51,34 @@ ENV CXXREPS 1
 ENV PREPS 1
 ENV NCOREPS 1
 
-###
-# Install common packages.
-###
 
 RUN apt-get update
 RUN apt-get -y upgrade
+RUN apt-get -y install sudo
+
+##
+# Set up a non-root admin to run the tests as.
+##
+
+ENV CUSER tester
+ENV CUSSERPWORD "password.1234"
+
+RUN useradd -ms /bin/bash ${CUSER}
+RUN adduser ${CUSER} sudo
+RUN echo "${CUSER}:${CUSERPWORD}${RANDOM} " | chpasswd
+RUN echo "${CUSER} ALL=NOPASSWD: ALL" >> /etc/sudoers
+
+#####
+# Configure system and environment.
+#####
+USER ${CUSER}
+ENV HOME /home/${CUSER}
+WORKDIR ${HOME}
+
 ###
 # Install some basics.
 ###
-
-RUN apt-get -y install g++ gfortran libtool automake autoconf m4 bison flex libcurl4-openssl-dev zlib1g-dev git wget curl libjpeg-dev cmake python cython python-numpy gdb dos2unix antlr libantlr-dev libexpat1-dev libxml2-dev gsl-bin libgsl0-dev udunits-bin libudunits2-0 libudunits2-dev clang zip
+RUN sudo apt-get -y install g++ gfortran libtool automake autoconf m4 bison flex libcurl4-openssl-dev zlib1g-dev git wget curl libjpeg-dev cmake python cython python-numpy gdb dos2unix antlr libantlr-dev libexpat1-dev libxml2-dev gsl-bin libgsl0-dev udunits-bin libudunits2-0 libudunits2-dev clang zip
 
 ###
 # Pre-fetch tarballs that we'll need.
@@ -86,22 +103,23 @@ RUN tar -jxf parallel-netcdf-1.6.1.tar.bz2 && tar -jxf parallel-netcdf-1.7.0.tar
 # all of our projects.
 ###
 
-RUN cd szip-2.1 && ./configure --prefix=/usr --enable-shared --disable-static && make install -j 4
+RUN cd szip-2.1 && ./configure --prefix=/usr --enable-shared --disable-static && sudo make install -j 4
 RUN rm -rf szip-2.1
 
 ###
 # Add the utility scripts, for portability.
 ###
-COPY run_serial_tests.sh /root/
-RUN dos2unix /root/run_serial_tests.sh
+COPY run_serial_tests.sh ${HOME}/
+RUN dos2unix ${HOME}/run_serial_tests.sh
 
-COPY run_par_tests.sh /root/
-RUN dos2unix /root/run_par_tests.sh
+COPY run_par_tests.sh ${HOME}/
+RUN dos2unix ${HOME}/run_par_tests.sh
 
 RUN echo "Version:\n\tunidata/nctests ($BITNESS) :\t$NCTEST_VERSION\t$(date)" > $VERSION_FILE
 
-COPY run_all_nctest_images.sh /root/
-COPY build_all_nctest_images.sh /root/
-COPY push_all_nctest_images.sh /root/
-COPY squash_all_nctest_images.sh /root/
-COPY README.md /root/
+
+COPY run_all_nctest_images.sh ${HOME}/
+COPY build_all_nctest_images.sh ${HOME}/
+COPY push_all_nctest_images.sh ${HOME}/
+COPY squash_all_nctest_images.sh ${HOME}/
+COPY README.md ${HOME}/
