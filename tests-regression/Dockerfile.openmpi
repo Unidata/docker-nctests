@@ -29,7 +29,7 @@ RUN rm -rf hdf-4.2.12
 # those tests as well.
 ###
 
-RUN cd ${HDF5_VER} && CC=`which mpicc` ./configure --disable-static --enable-shared --disable-fortran --enable-hl --enable-parallel --prefix=/usr --with-szlib && make -j 4 && sudo install
+RUN cd ${HDF5_VER} && CC=`which mpicc` ./configure --disable-static --enable-shared --disable-fortran --enable-hl --enable-parallel --prefix=/usr --with-szlib && make -j 4 && sudo make install
 RUN rm -rf ${HDF5_VER}
 
 
