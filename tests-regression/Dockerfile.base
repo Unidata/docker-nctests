@@ -103,23 +103,23 @@ RUN tar -jxf parallel-netcdf-1.6.1.tar.bz2 && tar -jxf parallel-netcdf-1.7.0.tar
 # all of our projects.
 ###
 
-RUN cd szip-2.1 && ./configure --prefix=/usr --enable-shared --disable-static && sudo make install -j 4
+RUN cd szip-2.1 && ./configure --prefix=/usr --enable-shared --disable-static && make -j 4 && sudo make install -j 4
 RUN rm -rf szip-2.1
 
 ###
 # Add the utility scripts, for portability.
 ###
 COPY run_serial_tests.sh ${HOME}/
-RUN dos2unix ${HOME}/run_serial_tests.sh
-
 COPY run_par_tests.sh ${HOME}/
-RUN dos2unix ${HOME}/run_par_tests.sh
-
-RUN echo "Version:\n\tunidata/nctests ($BITNESS) :\t$NCTEST_VERSION\t$(date)" > $VERSION_FILE
-
-
 COPY run_all_nctest_images.sh ${HOME}/
 COPY build_all_nctest_images.sh ${HOME}/
 COPY push_all_nctest_images.sh ${HOME}/
 COPY squash_all_nctest_images.sh ${HOME}/
 COPY README.md ${HOME}/
+
+RUN echo "Version:\n\tunidata/nctests ($BITNESS) :\t$NCTEST_VERSION\t$(date)" > $VERSION_FILE
+
+RUN sudo chown -R tester:tester ${HOME}
+
+RUN dos2unix ${HOME}/run_serial_tests.sh
+RUN dos2unix ${HOME}/run_par_tests.sh
