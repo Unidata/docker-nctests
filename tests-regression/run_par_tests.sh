@@ -134,7 +134,7 @@ fi
 
 echo ""
 echo "Using pnetcdf version ${PNCVER}"
-cp -R ${PNC}/* /usr/
+sudo cp -R ${PNC}/* /usr/
 
 ###
 # Build & test netcdf-c, then install it so it

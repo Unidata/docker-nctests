@@ -334,7 +334,7 @@ if [ "x$RUNP" == "xTRUE" ]; then
         echo "[$PCOUNT | $PREPS] Testing netcdf4-python"
         cd ${HOME}/netcdf4-python
         python setup.py build
-        python setup.py install
+        sudo python setup.py install
         cd test
         python run_all.py
         cd ${HOME}
