@@ -6,7 +6,7 @@ FROM unidata/nctests:base32
 ###
 
 
-RUN cd hdf-4.2.12 && ./configure --disable-static --enable-shared --disable-netcdf --disable-fortran --prefix=/usr && make install -j 4
+RUN cd hdf-4.2.12 && ./configure --disable-static --enable-shared --disable-netcdf --disable-fortran --prefix=/usr && make -j 4 && sudo make install
 RUN rm -rf hdf-4.2.12
 
 
@@ -15,17 +15,19 @@ RUN rm -rf hdf-4.2.12
 # those tests as well.
 ###
 
-RUN cd ${HDF5_VER} && ./configure --disable-static --enable-shared --disable-fortran --enable-hl --prefix=/usr && make install -j 4
+RUN cd ${HDF5_VER} && ./configure --disable-static --enable-shared --disable-fortran --enable-hl --prefix=/usr && make -j 4 && sudo make install
 RUN rm -rf ${HDF5_VER}
 ###
 # Copy over the dockerfile, scripts and README.
 ###
 
 
-COPY Dockerfile.serial /root/
-# COPY run_serial_tests.sh /root/
+COPY Dockerfile.serial ${HOME}/
+# COPY run_serial_tests.sh ${HOME}/
+
+RUN sudo chown -R ${CUSER}:${CUSER} ${HOME}
 
 ##
 # Run test script on launch.
 ##
-CMD /root/run_serial_tests.sh
+CMD ${HOME}/run_serial_tests.sh
