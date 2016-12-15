@@ -1,7 +1,5 @@
 FROM unidata/nctests:base32
 
-RUN sudo apt-get install -y g++-4.8
-RUN sudo apt-get install -y gfortran-4.8
 RUN sudo apt-get install -y libopenmpi-dev openmpi-bin
 
 ###
@@ -9,12 +7,6 @@ RUN sudo apt-get install -y libopenmpi-dev openmpi-bin
 # we are forced to install an old
 # version of gcc/g++/gfortran
 ###
-
-RUN sudo rm -f /usr/bin/gcc /usr/bin/gfortran /usr/bin/g++
-
-RUN sudo ln -s /usr/bin/gcc-4.8 /usr/bin/gcc
-RUN sudo ln -s /usr/bin/gfortran-4.8 /usr/bin/gfortran
-RUN sudo ln -s /usr/bin/g++-4.8 /usr/bin/g++
 
 ###
 # Manually install hdf4 so that we can run
