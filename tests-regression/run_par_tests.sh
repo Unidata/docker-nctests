@@ -217,7 +217,7 @@ if [ "x$RUNF" == "xTRUE" ]; then
             cd /root
             mkdir -p build-netcdf-fortran
             cd build-netcdf-fortran
-            cmake /root/netcdf-fortran -DBUILDNAME_PREFIX="docker$BITNESS-parallel$PARTYPE" -DBUILDNAME_SUFFIX="$FBRANCH" -DTEST_PARALLEL=OFF -DCMAKE_Fortran_COMPILER=$(which mpif90) $FOPTS
+            cmake /root/netcdf-fortran -DBUILDNAME_PREFIX="docker$BITNESS-parallel$PARTYPE" -DBUILDNAME_SUFFIX="$FBRANCH" -DTEST_PARALLEL=ON -DCMAKE_Fortran_COMPILER=$(which mpif90) $FOPTS
 
             if [ "x$USEDASH" == "xTRUE" ]; then
                 make Experimental ; CHECKERR
@@ -238,7 +238,7 @@ if [ "x$RUNF" == "xTRUE" ]; then
             if [ ! -f "configure" ]; then
                 autoreconf -if
             fi
-            CC=`which mpicc` F90=`which mpif90` F77=`which mpif77` ./configure "$AC_FOPTS"
+            CC=`which mpicc` FC=`which mpif90` F90=`which mpif90` F77=`which mpif77` ./configure --enable-parallel-tests "$AC_FOPTS"
             make ; CHECKERR
             make check TESTS=""
             make check ; CHECKERR
