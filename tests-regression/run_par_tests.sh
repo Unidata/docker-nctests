@@ -229,7 +229,7 @@ if [ "x$RUNF" == "xTRUE" ]; then
             if [ ! -f "configure" ]; then
                 autoreconf -if
             fi
-            CC=`which mpicc` F90=`which mpif90` F77=`which mpif77` ./configure "$AC_FOPTS"
+            CC=`which mpicc` FC=`which mpif90` F90=`which mpif90` F77=`which mpif77` ./configure --enable-parallel-tests "$AC_FOPTS"
             make ; CHECKERR
             make check TESTS=""
             make check ; CHECKERR
