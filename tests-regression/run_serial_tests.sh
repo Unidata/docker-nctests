@@ -163,9 +163,19 @@ while [[ $CCOUNT -le $CREPS ]]; do
 
             if [ "x$USEDASH" == "xTRUE" ]; then
                 make Experimental ; CHECKERR
+                if [ "x$USE_VALGRIND" == "xTRUE" ]; then
+                    make ExperimentalMemCheck
+                    make ExperimentalSubmit
+                fi
             else
                 make -j 4 && make test ; CHECKERR
+                if [ "x$USE_VALGRIND" == "xTRUE" ]; then
+                    make ExperimentalMemCheck
+                fi
             fi
+
+
+
         else
             make -j 4 ; CHECKERR
         fi
