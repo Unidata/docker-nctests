@@ -38,8 +38,8 @@ RUN rm -rf parallel-netcdf-1.7.0
 ###
 
 
-COPY Dockerfile.serial /root/
-# COPY run_par_tests.sh /root/
+COPY Dockerfile.serial ${HOME}/
+# COPY run_par_tests.sh ${HOME}/
 
 ENV PARTYPE -mpich
 
@@ -48,4 +48,4 @@ RUN sudo chown -R ${CUSER}:${CUSER} ${HOME}
 ##
 # Run test scripts on launch.
 ##
-CMD /root/run_par_tests.sh
+CMD ${HOME}/run_par_tests.sh
