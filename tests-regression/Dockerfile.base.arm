@@ -4,7 +4,7 @@
 # shared layers that docker provides.
 #####
 #FROM ubuntu:xenial
-FROM resin/rpi-raspbian:jessie-20160831
+FROM resin/rpi-raspbian
 USER root
 ENV HOME /root
 WORKDIR /root
@@ -80,7 +80,7 @@ WORKDIR ${HOME}
 ###
 # Install some basics.
 ###
-RUN sudo apt-get -y install g++ gfortran libtool automake autoconf m4 bison flex libcurl4-openssl-dev zlib1g-dev git wget curl libjpeg-dev cmake python cython python-numpy gdb dos2unix antlr libantlr-dev libexpat1-dev libxml2-dev gsl-bin libgsl0-dev udunits-bin libudunits2-0 libudunits2-dev clang zip bzip2 make libhdf4-alt-dev
+RUN sudo apt-get -y install cmake g++ gfortran libtool automake autoconf m4 bison flex libcurl4-openssl-dev zlib1g-dev git wget curl libjpeg-dev python cython python-numpy gdb dos2unix antlr libantlr-dev libexpat1-dev libxml2-dev gsl-bin libgsl0-dev udunits-bin libudunits2-0 libudunits2-dev clang zip bzip2 make libhdf4-alt-dev
 
 ###
 # Pre-fetch tarballs that we'll need.
@@ -108,9 +108,11 @@ RUN rm -rf szip-2.1
 
 ##
 # Install cmake manually
+#
+# Maybe not necessary if using :latest image?
 ##
-RUN wget https://cmake.org/files/v3.7/cmake-3.7.2.tar.gz
-RUN tar -zxf cmake-3.7.2.tar.gz && cd cmake-3.7.2 && ./configure --prefix=/usr && make -j 4 && sudo make install
+#RUN wget https://cmake.org/files/v3.7/cmake-3.7.2.tar.gz
+#RUN tar -zxf cmake-3.7.2.tar.gz && cd cmake-3.7.2 && ./configure --prefix=/usr && make -j 4 && sudo make install
 
 
 ##
@@ -118,8 +120,8 @@ RUN tar -zxf cmake-3.7.2.tar.gz && cd cmake-3.7.2 && ./configure --prefix=/usr &
 # by the package manager.
 ##
 
-
-
+RUN sudo mv /usr/include/hdf/*.h /usr/include
+RUN sudo rm /usr/include/netcdf*.* && sudo rm /usr/lib/libnetcdf*
 
 ###
 # Add the utility scripts, for portability.
