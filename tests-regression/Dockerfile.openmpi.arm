@@ -1,4 +1,4 @@
-FROM unidata/nctests:base
+FROM unidata/nctests:base.arm
 
 RUN sudo apt-get install -y g++-4.8
 RUN sudo apt-get install -y gfortran-4.8

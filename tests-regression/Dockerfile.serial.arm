@@ -4,8 +4,6 @@ FROM unidata/nctests:base.arm
 # Manually install hdf4 so that we can run
 # those tests as well.
 ###
-
-RUN sudo apt-get install -y libhdf4-alt-dev
 #RUN cd hdf-4.2.12 && ./configure --disable-static --enable-shared --disable-netcdf --disable-fortran --prefix=/usr && make -j 4 && sudo make install
 #RUN rm -rf hdf-4.2.12
 
