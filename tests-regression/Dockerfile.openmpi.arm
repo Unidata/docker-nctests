@@ -17,14 +17,6 @@ RUN sudo ln -s /usr/bin/gfortran-4.8 /usr/bin/gfortran
 RUN sudo ln -s /usr/bin/g++-4.8 /usr/bin/g++
 
 ###
-# Manually install hdf4 so that we can run
-# those tests as well.
-###
-
-RUN cd hdf-4.2.12 && CC=`which mpicc` ./configure --disable-static --enable-shared --disable-netcdf --disable-fortran --prefix=/usr && make -j 4 && sudo make install
-RUN rm -rf hdf-4.2.12
-
-###
 # Manually install hdf5 so that we can run
 # those tests as well.
 ###
