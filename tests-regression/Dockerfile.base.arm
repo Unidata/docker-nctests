@@ -117,7 +117,7 @@ RUN tar -zxf cmake-3.7.2.tar.gz && cd cmake-3.7.2 && ./configure --prefix=/usr &
 # by the package manager.
 ##
 
-RUN sudo mv /usr/include/hdf/*.h /usr/include
+RUN sudo mv /usr/include/hdf/*.h /usr/include && sudo cp /usr/lib/libdfalt.a /usr/lib/libdf.a && sudo cp /usr/lib/libmfhdfalt.a /usr/lib/libmfhdf.a
 RUN sudo rm /usr/include/netcdf*.* && sudo rm /usr/lib/libnetcdf*
 
 ###
