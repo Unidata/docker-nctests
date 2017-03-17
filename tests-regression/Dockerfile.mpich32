@@ -24,7 +24,6 @@ RUN rm -rf ${HDF5_VER}
 ###
 
 RUN cd parallel-netcdf-1.8.1 && CPPFLAGS="-fPIC" CC=`which mpicc` ./configure --prefix=/usr --disable-fortran && make -j 4 -k && sudo make install
-RUN rm -rf parallel-netcdf-1.8.1
 
 ###
 # Copy over the dockerfile, scripts and README.
