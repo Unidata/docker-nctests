@@ -21,7 +21,7 @@ ENV VERSION_FILE VERSION.md
 ENV HDF5VER 1.8.18
 ENV HDF5_VER hdf5-${HDF5VER}
 ENV HDF5_FILE ${HDF5_VER}.tar.bz2
-ENV PNCVER 1.6.1
+ENV PNCVER 1.8.1
 ##
 # Let the user specify the branches.
 ##
@@ -102,7 +102,7 @@ RUN wget https://support.hdfgroup.org/ftp/HDF5/current18/src/${HDF5_FILE}
 RUN tar -jxf hdf-4.2.12.tar.bz2
 RUN tar -jxf ${HDF5_FILE}
 RUN tar -zxf szip-2.1.tar.gz
-RUN tar -jxf parallel-netcdf-1.6.1.tar.bz2 && tar -jxf parallel-netcdf-1.7.0.tar.bz2
+RUN tar -jxf parallel-netcdf-1.8.1.tar.bz2
 
 ###
 # Build szip, since we will use it for
