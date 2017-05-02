@@ -49,7 +49,7 @@ USER ciuser
 ##
 ENV HDF4_VER hdf-4.2.12
 ENV HDF4_FILE ${HDF4_VER}.tar.bz2
-RUN wget http://support.hdfgroup.org/ftp/HDF5/releases/HDF4.2.12/src/${HDF4_FILE}
+RUN wget http://support.hdfgroup.org/ftp/HDF/releases/HDF4.2.12/src/${HDF4_FILE}
 
 RUN tar -jxf ${HDF4_FILE}
 USER root
