@@ -1,0 +1,53 @@
+FROM unidata/nctests:arch-base
+
+# RUN sudo apt-get install -y mpich libmpich-dev
+#RUN sudo pacman --noconfirm -S mpich libmpich-dev
+
+###
+# Manually install mpich, as this is required in arch linux for
+# some reason.
+###
+
+RUN wget http://www.mpich.org/static/downloads/3.2/mpich-3.2.tar.gz
+
+RUN tar -zxf mpich-3.2.tar.gz && cd mpich-3.2 && ./configure --prefix=/usr && make -j 4 && sudo make install
+
+###
+# Manually install hdf4 so that we can run
+# those tests as well.
+###
+
+RUN cd hdf-4.2.12 && CC=`which mpicc` ./configure --disable-static --enable-shared --disable-netcdf --disable-fortran --prefix=/usr && make -j 4 && sudo make install
+RUN rm -rf hdf-4.2.12
+
+###
+# Manually install hdf5 so that we can run
+# those tests as well.
+###
+
+RUN cd ${HDF5_VER} && CFLAGS="-Wno-format-security" CC=`which mpicc` ./configure --disable-static --enable-shared --disable-fortran --enable-hl --enable-parallel --prefix=/usr --with-szlib  && make -j 4 && sudo make install
+RUN rm -rf ${HDF5_VER}
+
+###
+# Manually install pnetcdf so that we can
+# run pnetcdf tests.
+###
+
+RUN cd parallel-netcdf-1.8.1 && CPPFLAGS="-fPIC" CC=`which mpicc` ./configure --prefix=/usr --disable-fortran && make -j 4 -k && sudo make install
+
+###
+# Copy over the dockerfile, scripts and README.
+###
+
+
+COPY Dockerfile.serial ${HOME}/
+# COPY run_par_tests.sh ${HOME}/
+
+ENV PARTYPE -mpich
+
+RUN sudo chown -R ${CUSER}:${CUSER} ${HOME}
+
+##
+# Run test scripts on launch.
+##
+CMD ${HOME}/run_par_tests.sh

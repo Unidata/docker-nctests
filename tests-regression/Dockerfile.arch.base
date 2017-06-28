@@ -53,9 +53,8 @@ ENV NCOREPS 1
 ###
 # Install common packages.
 ###
-RUN pacman -Syu
+RUN pacman --noconfirm -Syu
 RUN pacman --noconfirm -S sudo man
-
 
 ##
 # Set up a non-root admin to run the tests as.
@@ -65,7 +64,6 @@ ENV CUSER tester
 ENV CUSSERPWORD "password.1234"
 
 RUN useradd -ms /bin/bash ${CUSER}
-RUN adduser ${CUSER} sudo
 RUN echo "${CUSER}:${CUSERPWORD}${RANDOM} " | chpasswd
 RUN echo "${CUSER} ALL=NOPASSWD: ALL" >> /etc/sudoers
 
@@ -79,7 +77,7 @@ WORKDIR ${HOME}
 ###
 # Install some basics
 ###
-RUN pacman --noconfirm -S gcc gcc-fortran libcurl-gnutls libtool automake autoconf m4 bison flex zlib libzip libjpeg6-turbo cmake python python-numpy gdb dos2unix jdk8-openjdk antlr4 clang zip valgrind
+RUN sudo pacman --noconfirm -S gcc gcc-fortran libcurl-gnutls libtool automake autoconf m4 bison flex zlib libzip libjpeg-turbo cmake python python-numpy gdb dos2unix jdk8-openjdk antlr4 clang zip valgrind wget make git
 
 ###
 # Pre-fetch tarballs that we'll need.
