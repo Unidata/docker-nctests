@@ -16,7 +16,7 @@ ENV VERSION_FILE VERSION.md
 # Set up a couple environmental variables.
 ###
 
-ENV HDF5VER 1.8.19
+ENV HDF5VER 1.10.1
 ENV HDF5_VER hdf5-${HDF5VER}
 ENV HDF5_FILE ${HDF5_VER}.tar.bz2
 ENV PNCVER 1.8.1
@@ -86,8 +86,8 @@ RUN sudo pacman --noconfirm -S gcc gcc-fortran libcurl-gnutls libtool automake a
 RUN wget http://www.hdfgroup.org/ftp/lib-external/szip/2.1/src/szip-2.1.tar.gz
 RUN wget http://cucis.ece.northwestern.edu/projects/PnetCDF/Release/parallel-netcdf-1.8.1.tar.bz2
 RUN wget https://support.hdfgroup.org/ftp/HDF/releases/HDF4.2.12/src/hdf-4.2.12.tar.bz2
-RUN wget https://support.hdfgroup.org/ftp/HDF5/current18/src/${HDF5_FILE}
-
+#RUN wget https://support.hdfgroup.org/ftp/HDF5/current18/src/${HDF5_FILE}
+RUN wget -O hdf5-1.10.1.tar.bz2 https://www.hdfgroup.org/package/bzip2/?wpdmdl=4300
 ###
 # Uncompress tarballs.
 ###
