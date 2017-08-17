@@ -1,5 +1,8 @@
 # Usage:
 # ncpdq_tst.sh var_nm
+
+set -e
+
 ncks -H -C -m --cdl -v ${1} ~/in.nc
 ncpdq -O -C -v ${1} ~/in.nc ~/foo.nc
 ncks -H -C -m --cdl -v ${1} ~/foo.nc
