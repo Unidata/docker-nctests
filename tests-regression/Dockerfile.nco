@@ -36,7 +36,7 @@ COPY ncpdq_tst.sh ${HOME}/
 COPY in.nc ${HOME}/
 COPY foo.nc ${HOME}/
 COPY foo_upk.nc ${HOME}/
-COPY Dockerfile.gh458 ${HOME}/
+COPY Dockerfile.nco ${HOME}/
 
 RUN sudo chown -R ${CUSER}:${CUSER} ${HOME}
 
