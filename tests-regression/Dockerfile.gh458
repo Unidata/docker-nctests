@@ -19,6 +19,12 @@ RUN cd ${HDF5_VER} && ./configure --disable-static --enable-shared --disable-for
 RUN rm -rf ${HDF5_VER}
 
 ###
+# Install NCO
+###
+RUN git clone https://github.com/nc/nco.git --single-branch --branch $NCOBRANCH --depth=1 $NCOBRANCH && mv $NCOBRANCH nco
+RUN cd nco && CC=$USE_CC ./configure --prefix=/usr && make && sudo make install
+
+###
 # Copy over the dockerfile, scripts and README.
 ###
 
@@ -26,12 +32,14 @@ RUN rm -rf ${HDF5_VER}
 # Install NCO for testing here.
 ###
 
-COPY Dockerfile.serial ${HOME}/
-# COPY run_serial_tests.sh ${HOME}/
+COPY run_nco_tests.sh ${HOME}/
+COPY ncpdq_tst.sh ${HOME}/
+COPY in.nc ${HOME}/
+COPY Dockerfile.gh458 ${HOME}/
 
 RUN sudo chown -R ${CUSER}:${CUSER} ${HOME}
 
 ##
 # Run test script on launch.
 ##
-CMD ${HOME}/run_serial_tests.sh
+CMD ${HOME}/ncpdq_tst.sh
