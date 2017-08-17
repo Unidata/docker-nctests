@@ -1,0 +1,13 @@
+netcdf foo_upk {
+  dimensions:
+    lon = 4 ;
+
+  variables:
+    float fll_val(lon) ;
+      fll_val:long_name = "_FillValue example" ;
+      fll_val:_FillValue = -999.f ;
+
+  data:
+    fll_val = 73, _, 73, _ ;
+
+} // group /

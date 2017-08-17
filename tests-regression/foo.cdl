@@ -1,0 +1,14 @@
+netcdf foo {
+  dimensions:
+    lon = 4 ;
+
+  variables:
+    short fll_val(lon) ;
+      fll_val:long_name = "_FillValue example" ;
+      fll_val:_FillValue = -999.f ;
+      fll_val:add_offset = 73.f ;
+
+  data:
+    fll_val = 0, _, 0, _ ;
+
+} // group /
