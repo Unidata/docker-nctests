@@ -106,7 +106,7 @@ while [[ $CCOUNT -le $CREPS ]]; do
 
     if [ "x$USECMAKE" = "xTRUE" ]; then
 
-        if [ "x$RUNC" == "xTRUE" ]; then
+        if [ "x$RUNCDONTUSEFORTESTS" == "xTRUE" ]; then
             echo "[$CCOUNT | $CREPS] Testing netCDF-C - CMAKE"
         else
             echo "[$CCOUNT | $CREPS] Installing netCDF-C - CMAKE"
@@ -115,7 +115,7 @@ while [[ $CCOUNT -le $CREPS ]]; do
         sleep 2
         mkdir -p build-netcdf-c
         cd build-netcdf-c
-        cmake ${HOME}/netcdf-c -DCMAKE_INSTALL_PREFIX=/usr -DENABLE_HDF4=ON -DENABLE_EXTRA_TESTS=ON -DENABLE_MMAP=ON -DBUILDNAME_PREFIX="docker$BITNESS-$USE_CC" -DBUILDNAME_SUFFIX="$CBRANCH" -DCMAKE_C_COMPILER=$USE_CC $COPTS ; CHECKERR
+        cmake ${HOME}/netcdf-c -DCMAKE_INSTALL_PREFIX=/usr -DENABLE_HDF4=ON -DENABLE_EXTRA_TESTS=OFF -DENABLE_TESTS=OFF -DENABLE_MMAP=ON -DBUILDNAME_PREFIX="docker$BITNESS-$USE_CC" -DBUILDNAME_SUFFIX="$CBRANCH" -DCMAKE_C_COMPILER=$USE_CC $COPTS ; CHECKERR
         make clean
 
         if [ "x$RUNCDONOTRUNEVERFORTHIS" == "xTRUE" ]; then
@@ -195,6 +195,8 @@ cd ${HOME}
 if [ "x$RUNNCO" == "xTRUE" ]; then
 
     cd ${HOME}
-    ./ncpdq_tst.sh
+    cd nco && CC=$USE_CC ./configure --prefix=/usr && make -j 4 && sudo make install
+    cd ${HOME}
+    ./ncpdq_tst.sh fll_val
 
 fi

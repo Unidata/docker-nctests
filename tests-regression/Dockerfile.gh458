@@ -21,8 +21,7 @@ RUN rm -rf ${HDF5_VER}
 ###
 # Install NCO
 ###
-RUN git clone https://github.com/nc/nco.git --single-branch --branch $NCOBRANCH --depth=1 $NCOBRANCH && mv $NCOBRANCH nco
-RUN cd nco && CC=$USE_CC ./configure --prefix=/usr && make && sudo make install
+RUN git clone https://github.com/nco/nco.git --single-branch --branch $NCOBRANCH --depth=1 $NCOBRANCH && mv $NCOBRANCH nco
 
 ###
 # Copy over the dockerfile, scripts and README.
@@ -35,6 +34,8 @@ RUN cd nco && CC=$USE_CC ./configure --prefix=/usr && make && sudo make install
 COPY run_nco_tests.sh ${HOME}/
 COPY ncpdq_tst.sh ${HOME}/
 COPY in.nc ${HOME}/
+COPY foo.nc ${HOME}/
+COPY foo_upk.nc ${HOME}/
 COPY Dockerfile.gh458 ${HOME}/
 
 RUN sudo chown -R ${CUSER}:${CUSER} ${HOME}
@@ -42,4 +43,4 @@ RUN sudo chown -R ${CUSER}:${CUSER} ${HOME}
 ##
 # Run test script on launch.
 ##
-CMD ${HOME}/ncpdq_tst.sh
+CMD ${HOME}/run_nco_tests.sh
