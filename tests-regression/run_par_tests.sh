@@ -108,22 +108,6 @@ FCOUNT=1
 CXXCOUNT=1
 
 ###
-# Copy the proper version of pnetcdf over.
-###
-if [ "x$PNCVER" = "x1.7.0" ]; then
-    PNC=${PNC170_INSTALL}
-else
-    PNC=${PNC161_INSTALL}
-    PNCVER="1.6.1"
-    #echo "Invalid PNCVER: ${PNCVER}"
-    #exit 1
-fi
-
-echo ""
-echo "Using pnetcdf version ${PNCVER}"
-sudo cp -R ${PNC}/* /usr/
-
-###
 # Build & test netcdf-c, then install it so it
 # can be used by the other projects.
 ###
