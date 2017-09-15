@@ -10,8 +10,8 @@
 ###
 # Wily
 ###
-./create_dockerfile.sh templates/Dockerfile.apt.generic "ubuntu:wily" wily-x64
-./create_dockerfile.sh templates/Dockerfile.apt.generic "f69m\/ubuntu32:wily" wily-x86
+./create_dockerfile.sh templates/Dockerfile.apt.generic "ubuntu:xenial" xenial-x64
+./create_dockerfile.sh templates/Dockerfile.apt.generic "tanosi/ubuntu-xenial-i386" xenial-x86
 
 ###
 # Trusty
@@ -22,8 +22,8 @@
 ###
 # Trusty - Parallel
 ###
-./create_dockerfile.sh templates/Dockerfile.apt.openmpi.generic "ubuntu:trusty" trusty-openmpi-x64
-./create_dockerfile.sh templates/Dockerfile.apt.mpich.generic "ubuntu:trusty" trusty-mpich-x64
+./create_dockerfile.sh templates/Dockerfile.apt.openmpi.generic "ubuntu:xenial" xenial-openmpi-x64
+./create_dockerfile.sh templates/Dockerfile.apt.mpich.generic "ubuntu:xenial" xenial-mpich-x64
 
 ###
 # Create Fedora and Centos Dockerfiles
