@@ -56,7 +56,7 @@ USER ciuser
 ##
 ENV HDF4_VER hdf-4.2.13
 ENV HDF4_FILE ${HDF4_VER}.tar.bz2
-RUN wget http://support.hdfgroup.org/ftp/HDF/releases/HDF4.2.12/src/${HDF4_FILE}
+RUN wget http://hdfgroup.org/ftp/HDF/HDF_Current/src/${HDF4_FILE}
 
 RUN tar -jxf ${HDF4_FILE}
 USER root
@@ -72,7 +72,7 @@ ENV HDF5VER 1.8.19
 ENV HDF5_VER hdf5-${HDF5VER}
 ENV HDF5_FILE ${HDF5_VER}.tar.bz2
 
-RUN wget http://support.hdfgroup.org/ftp/HDF5/current18/src/${HDF5_FILE}
+RUN wget http://hdfgroup.org/ftp/HDF5/current18/src/${HDF5_FILE}
 RUN tar -jxf ${HDF5_FILE}
 USER root
 
