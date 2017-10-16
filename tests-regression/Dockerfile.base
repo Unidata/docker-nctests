@@ -90,14 +90,14 @@ RUN sudo apt-get -y install g++ gfortran libtool automake autoconf m4 bison flex
 
 RUN wget http://www.hdfgroup.org/ftp/lib-external/szip/2.1/src/szip-2.1.tar.gz
 RUN wget http://cucis.ece.northwestern.edu/projects/PnetCDF/Release/parallel-netcdf-1.8.1.tar.bz2
-RUN wget https://support.hdfgroup.org/ftp/HDF/releases/HDF4.2.12/src/hdf-4.2.12.tar.bz2
-RUN wget https://support.hdfgroup.org/ftp/HDF5/current18/src/${HDF5_FILE}
+RUN wget https://hdfgroup.org/ftp/HDF/HDF_Current/src/hdf-4.2.13.tar.bz2
+RUN wget https://hdfgroup.org/ftp/HDF5/current18/src/${HDF5_FILE}
 
 ###
 # Uncompress tarballs.
 ###
 
-RUN tar -jxf hdf-4.2.12.tar.bz2
+RUN tar -jxf hdf-4.2.13.tar.bz2
 RUN tar -jxf ${HDF5_FILE}
 RUN tar -zxf szip-2.1.tar.gz
 RUN tar -jxf parallel-netcdf-1.8.1.tar.bz2
