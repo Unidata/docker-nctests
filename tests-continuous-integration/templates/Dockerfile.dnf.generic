@@ -5,6 +5,8 @@
 FROM GENERIC-CONTAINER
 MAINTAINER Ward Fisher <wfisher@ucar.edu>
 
+USER root
+
 ###
 # Create a non-root user for running things this.
 ###
