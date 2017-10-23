@@ -10,7 +10,7 @@ WORKDIR /root
 
 ENV DEBIAN_FRONTEND noninteractive
 
-ENV NCTEST_VERSION 1.4.0 - development
+ENV NCTEST_VERSION 1.4.1 - development
 
 ENV VERSION_FILE VERSION.md
 
@@ -18,7 +18,7 @@ ENV VERSION_FILE VERSION.md
 # Set up a couple environmental variables.
 ###
 
-ENV HDF5VER 1.8.19
+ENV HDF5VER 1.10.1
 ENV HDF5_VER hdf5-${HDF5VER}
 ENV HDF5_FILE ${HDF5_VER}.tar.bz2
 ENV PNCVER 1.8.1
@@ -91,7 +91,7 @@ RUN sudo apt-get -y install g++ gfortran libtool automake autoconf m4 bison flex
 RUN wget http://www.hdfgroup.org/ftp/lib-external/szip/2.1.1/src/szip-2.1.1.tar.gz
 RUN wget http://cucis.ece.northwestern.edu/projects/PnetCDF/Release/parallel-netcdf-1.8.1.tar.bz2
 RUN wget https://hdfgroup.org/ftp/HDF/HDF_Current/src/hdf-4.2.13.tar.bz2
-RUN wget https://hdfgroup.org/ftp/HDF5/current18/src/${HDF5_FILE}
+RUN wget https://hdfgroup.org/ftp/HDF5/current/src/${HDF5_FILE}
 
 ###
 # Uncompress tarballs.
