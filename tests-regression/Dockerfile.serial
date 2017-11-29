@@ -6,8 +6,8 @@ FROM unidata/nctests:base
 ###
 
 
-RUN cd hdf-4.2.12 && ./configure --disable-static --enable-shared --disable-netcdf --disable-fortran --prefix=/usr && make -j 4 && sudo make install
-RUN rm -rf hdf-4.2.12
+RUN cd hdf-4.2.13 && ./configure --disable-static --enable-shared --disable-netcdf --disable-fortran --prefix=/usr && make -j 4 && sudo make install
+RUN rm -rf hdf-4.2.13
 
 
 ###

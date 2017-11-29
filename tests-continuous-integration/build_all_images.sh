@@ -1,12 +1,12 @@
 #!/bin/bash
 
 ###
-# Wily
+# Xenial
 ###
-xterm -geometry 150x20 -bg black -fg white -T "[Ubuntu Wily: 64-bit]" -e "docker build -t unidata/ncci:wily-x64 -f Dockerfile.wily-x64 . ; echo "" && echo '[Press Return to Close]' && read " &
+xterm -geometry 150x20 -bg black -fg white -T "[Ubuntu Xenial: 64-bit]" -e "docker build -t unidata/ncci:xenial-x64 -f Dockerfile.xenial-x64 . ; echo "" && echo '[Press Return to Close]' && read " &
 sleep 1
 
-xterm -geometry 150x20 -bg black -fg white -T "[Ubuntu Wily: 32-bit]" -e "docker build -t unidata/ncci:wily-x86 -f Dockerfile.wily-x86 . ; echo "" &&  echo '[Press Return to Close]' && read " &
+xterm -geometry 150x20 -bg black -fg white -T "[Ubuntu Xenial: 32-bit]" -e "docker build -t unidata/ncci:xenial-x86 -f Dockerfile.xenial-x86 . ; echo "" &&  echo '[Press Return to Close]' && read " &
 sleep 1
 
 ###
@@ -21,9 +21,9 @@ sleep 1
 ###
 # Trusty - Parallel
 ###
-xterm -geometry 150x20 -bg black -fg white -T "[Ubuntu Trusty OpenMPI: 64-bit]" -e "docker build -t unidata/ncci:trusty-openmpi-x64 -f Dockerfile.trusty-openmpi-x64 . ; echo "" && echo '[Press Return to Close]' && read " &
+xterm -geometry 150x20 -bg black -fg white -T "[Ubuntu Xenial OpenMPI: 64-bit]" -e "docker build -t unidata/ncci:xenial-openmpi-x64 -f Dockerfile.xenial-openmpi-x64 . ; echo "" && echo '[Press Return to Close]' && read " &
 
-xterm -geometry 150x20 -bg black -fg white -T "[Ubuntu Trusty MPICH: 64-bit]" -e "docker build -t unidata/ncci:trusty-mpich-x64 -f Dockerfile.trusty-mpich-x64 . ; echo "" && echo '[Press Return to Close]' && read " &
+xterm -geometry 150x20 -bg black -fg white -T "[Ubuntu Xenial MPICH: 64-bit]" -e "docker build -t unidata/ncci:xenial-mpich-x64 -f Dockerfile.xenial-mpich-x64 . ; echo "" && echo '[Press Return to Close]' && read " &
 
 sleep 1
 

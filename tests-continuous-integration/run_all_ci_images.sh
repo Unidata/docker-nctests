@@ -71,11 +71,11 @@ echo ""
 
 
 ###
-# Wily
+# Xenial
 ###
 
-RUN_IMG "unidata/ncci:wily-x64" "wily-x64" "${DOX}" ; sleep 1
-RUN_IMG "unidata/ncci:wily-x86" "wily-x86" "${DOX}" ; sleep 1
+RUN_IMG "unidata/ncci:xenial-x64" "xenial-x64" "${DOX}" ; sleep 1
+RUN_IMG "unidata/ncci:xenial-x86" "xenial-x86" "${DOX}" ; sleep 1
 
 ###
 # Trusty
@@ -88,8 +88,8 @@ RUN_IMG "unidata/ncci:trusty-x86" "trusty-x86" "${DOX}" ; sleep 1
 # Trusty - Parallel
 ###
 
-RUN_IMG "unidata/ncci:trusty-openmpi-x64" "trusty-openmpi-x64" "${DOX}" ; sleep 1
-RUN_IMG "unidata/ncci:trusty-mpich-x64" "trusty-mpich-x64" "${DOX}" ; sleep 1
+RUN_IMG "unidata/ncci:xenial-openmpi-x64" "xenial-openmpi-x64" "${DOX}" ; sleep 1
+RUN_IMG "unidata/ncci:xenial-mpich-x64" "xenial-mpich-x64" "${DOX}" ; sleep 1
 
 ###
 # Fedora
