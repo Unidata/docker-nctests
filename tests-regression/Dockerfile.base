@@ -51,6 +51,7 @@ ENV FREPS 1
 ENV CXXREPS 1
 ENV PREPS 1
 ENV NCOREPS 1
+ENV TESTPROC 1
 
 ###
 # Install common packages.

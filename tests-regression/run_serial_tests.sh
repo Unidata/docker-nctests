@@ -162,13 +162,13 @@ while [[ $CCOUNT -le $CREPS ]]; do
         if [ "x$RUNC" == "xTRUE" ]; then
 
             if [ "x$USEDASH" == "xTRUE" ]; then
-                make Experimental ; CHECKERR
+                ctest -D Experimental -j $TESTPROC ; CHECKERR
                 if [ "x$USE_VALGRIND" == "xTRUE" ]; then
                     make ExperimentalMemCheck
                     make ExperimentalSubmit
                 fi
             else
-                make -j 4 && make test ; CHECKERR
+                make -j 4 && ctest -j $TESTPROC ; CHECKERR
                 if [ "x$USE_VALGRIND" == "xTRUE" ]; then
                     make ExperimentalMemCheck
                 fi
@@ -203,7 +203,7 @@ while [[ $CCOUNT -le $CREPS ]]; do
         make -j 4 ; CHECKERR
         if [ "x$RUNC" == "xTRUE" ]; then
             make check TESTS="" -j 4 ; CHECKERR
-            make check ; CHECKERR
+            make check -j $TESTPROC ; CHECKERR
 
             if [ "x$DISTCHECK" == "xTRUE" ]; then
                 DISTCHECK_CONFIGURE_FLAGS="--enable-hdf4 --enable-extra-tests --enable-mmap $AC_COPTS" make distcheck ; CHECKERR
