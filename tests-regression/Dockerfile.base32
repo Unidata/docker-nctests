@@ -51,6 +51,7 @@ ENV FREPS 1
 ENV CXXREPS 1
 ENV PREPS 1
 ENV NCOREPS 1
+ENV TESTPROC 1
 
 ###
 # Install common packages.
@@ -109,7 +110,7 @@ RUN tar -jxf parallel-netcdf-1.8.1.tar.bz2
 # all of our projects.
 ###
 
-RUN cd szip-2.1.1 && ./configure --prefix=/usr --enable-shared --disable-static && make -j 4 && sudo make install
+RUN cd szip-2.1.1 && ./configure --prefix=/usr --enable-shared --disable-static && make -j 4 && sudo make install -j 4
 RUN rm -rf szip-2.1.1
 
 ##

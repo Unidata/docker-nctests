@@ -129,9 +129,9 @@ while [[ $CCOUNT -le $CREPS ]]; do
 
         if [ "x$RUNC" == "xTRUE" ]; then
             if [ "x$USEDASH" == "xTRUE" ]; then
-                make Experimental ; CHECKERR
+		ctest -D Experimental -j $TESTPROC ; CHECKERR                
             else
-                make -j 4 && make test ; CHECKERR
+                make -j 4 && ctest -j $TESTPROC ; CHECKERR
             fi
         else
             make -j 4 ; CHECKERR
@@ -153,7 +153,7 @@ while [[ $CCOUNT -le $CREPS ]]; do
         make -j 4 ; CHECKERR
         if [ "x$RUNC" == "xTRUE" ]; then
             make check TESTS="" -j 4 ; CHECKERR
-            make check ; CHECKERR
+            make check -j $TESTPROC ; CHECKERR
 
             if [ "x$DISTCHECK" == "xTRUE" ]; then
                 CC=$(which mpicc) DISTCHECK_CONFIGURE_FLAGS="--enable-hdf4 --enable-extra-tests --enable-mmap --enable-pnetcdf --enable-parallel-tests $AC_COPTS" make distcheck ; CHECKERR
