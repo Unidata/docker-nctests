@@ -369,7 +369,7 @@ if [ "x$RUNNCO" == "xTRUE" ]; then
         make check
         NCOCOUNT=$[NCOCOUNT+1]
 
-        if [ "x$NCOMAKETEST" == "xTRUE" ]; then
+        if [ "x$NCOMAKETEST" != "x" ]; then
             export DATA=$HOME/tmp
             mkdir -p $DATA
             echo "Running 'make test'. This may take several moments."
