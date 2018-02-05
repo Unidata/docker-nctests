@@ -369,6 +369,20 @@ if [ "x$RUNNCO" == "xTRUE" ]; then
         make check
         NCOCOUNT=$[NCOCOUNT+1]
 
+        if [ "x$NCOMAKETEST" == "xTRUE" ]; then
+            export DATA=$HOME/tmp
+            mkdir -p $DATA
+            echo "Running 'make test'. This may take several moments."
+            set -e
+            make test &> tst.log
+            X=`grep -i unidata tst.log | wc -l`
+            set +e
+            if [[ $X -gt 0 ]]; then
+                echo "Error Caught in NCO: make test"
+                exit -1
+            fi
+        fi
+
     done
 
 fi
