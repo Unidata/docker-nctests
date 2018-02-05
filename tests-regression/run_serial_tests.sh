@@ -378,6 +378,7 @@ if [ "x$RUNNCO" == "xTRUE" ]; then
             X=`grep -i unidata tst.log | wc -l`
             set +e
             if [[ $X -gt 0 ]]; then
+                cat tst.log
                 echo "Error Caught in NCO: make test"
                 exit -1
             fi
