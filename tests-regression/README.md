@@ -110,13 +110,22 @@ The following environmental variables can be used to control the behavior at run
 * `PREPS` - Default 1.  How many times to repeat the `netcdf4-python` build and tests.
 * `NCOREPS` - Default 1.  How many times to repeat the `NCO` build and tests.
 
-
 ----
 * `USECMAKE` - Default to `TRUE`. When `TRUE`, run `cmake` builds.
 * `USEAC` - Default to `FALSE`. When `TRUE`, run *in-source* `autoconf`-based builds.
 * `DISTCHECK` - Default to `FALSE`.  Requires `USEAC` to be `TRUE`.  Runs `make distcheck` after `make check`.
 
+----
+* `NCOMAKETEST` - Default to `FALSE`. When `TRUE`, run `make test` for the `NCO` package and parse the output for `Unidata`-related output.
+* `TESTPROC` - Default to `1`.  Defines the number of processes to use when building and testing.
+
+----
+----
+
 > Note that `USECMAKE` and `USEAC` may be used concurrently and, when coupled with `CREPS` and other loop control options, we can see if the different build systems interfere with each other.
+
+----
+----
 
 ## Examples
 
