@@ -23,12 +23,13 @@ RUN rm -rf ${HDF5_VER}
 ###
 
 
-COPY Dockerfile.serial ${HOME}/
+COPY Dockerfile.serial.nco ${HOME}/
 # COPY run_serial_tests.sh ${HOME}/
+COPY in.cdl ${HOME}/
 
 RUN sudo chown -R ${CUSER}:${CUSER} ${HOME}
 
 ##
 # Run test script on launch.
 ##
-CMD ${HOME}/run_serial_tests.sh
+CMD ${HOME}/run_serial_nco_tests.sh
