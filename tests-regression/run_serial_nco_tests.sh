@@ -196,6 +196,7 @@ if [ "x$RUNNCO" == "xTRUE" ]; then
     CC=$USE_CC ./configure
     make -j 8
     sudo make install
+    sudo ldconfig
     cd ${HOME}
     ncgen -3 in.cdl -o in.nc
     ncap2 -C -v -O -s 'n2=three_dmn_var_dbl;' in.nc foo.nc
