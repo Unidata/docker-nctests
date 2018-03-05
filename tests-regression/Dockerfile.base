@@ -18,6 +18,8 @@ ENV VERSION_FILE VERSION.md
 # Set up a couple environmental variables.
 ###
 
+ENV CTEST_OUTPUT_ON_FAILURE 1
+
 ENV HDF5VER 1.10.1
 ENV HDF5_VER hdf5-${HDF5VER}
 ENV HDF5_FILE ${HDF5_VER}.tar.bz2
