@@ -13,7 +13,6 @@ apt-get -y install --no-install-recommends sudo
 # Set up a non-root admin to run the tests as.
 ##
 
-
 useradd -ms /bin/bash ${CUSER}
 adduser ${CUSER} sudo
 echo "${CUSER}:${CUSERPWORD}${RANDOM} " | chpasswd

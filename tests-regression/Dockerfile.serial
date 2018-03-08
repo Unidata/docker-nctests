@@ -4,14 +4,21 @@ FROM unidata/nctests:base
 # Copy over a script to provision.
 ###
 
-COPY provision_serial_ubuntu.sh ${HOME}/
-RUN chmod 755 provision_serial_ubuntu.sh
-RUN ${HOME}/provision_serial_ubuntu.sh
+USER root
+ENV HOME /root
+WORKDIR ${HOME}
 
+COPY provision_serial_ubuntu.sh /root
+RUN chmod 755 provision_serial_ubuntu.sh
+RUN cd /root && ls -alh && whoami && ./provision_serial_ubuntu.sh
 
 ###
 # Copy over the dockerfile, scripts and README.
 ###
+
+USER ${CUSER}
+ENV HOME /home/${CUSER}
+WORKDIR ${HOME}
 
 COPY Dockerfile.serial ${HOME}/
 
