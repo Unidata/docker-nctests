@@ -7,7 +7,7 @@
 
 apt-get update
 apt-get -y upgrade
-apt-get -y install sudo
+apt-get -y install --no-install-recommends sudo
 
 ##
 # Set up a non-root admin to run the tests as.
@@ -22,7 +22,7 @@ echo "${CUSER} ALL=NOPASSWD: ALL" >> /etc/sudoers
 ###
 # Install some basics.
 ###
-sudo apt-get -y install g++ gfortran libtool automake autoconf m4 bison flex libcurl4-openssl-dev zlib1g-dev git wget curl libjpeg-dev cmake python cython python-numpy gdb dos2unix antlr libantlr-dev libexpat1-dev libxml2-dev gsl-bin libgsl0-dev udunits-bin libudunits2-0 libudunits2-dev clang zip valgrind python-setuptools
+sudo apt-get -y install --no-install-recommends g++ gfortran libtool automake autoconf m4 bison flex libcurl4-openssl-dev zlib1g-dev git wget curl libjpeg-dev cmake python cython python-numpy gdb dos2unix antlr libantlr-dev libexpat1-dev libxml2-dev gsl-bin libgsl0-dev udunits-bin libudunits2-0 libudunits2-dev clang zip valgrind python-setuptools make
 
 ###
 # Pre-fetch tarballs that we'll need.
@@ -37,10 +37,10 @@ wget https://hdfgroup.org/ftp/HDF5/current/src/${HDF5_FILE}
 # Uncompress tarballs.
 ###
 
-tar -jxf hdf-4.2.13.tar.bz2
-tar -jxf ${HDF5_FILE}
-tar -zxf szip-2.1.1.tar.gz
-tar -jxf parallel-netcdf-1.8.1.tar.bz2
+tar -jxf hdf-4.2.13.tar.bz2 && rm hdf-4.2.13.tar.bz2
+tar -jxf ${HDF5_FILE} && rm ${HDF5_FILE}
+tar -zxf szip-2.1.1.tar.gz && rm szip-2.1.1.tar.gz
+tar -jxf parallel-netcdf-1.8.1.tar.bz2 && rm parallel-netcdf-1.8.1.tar.bz2
 
 ###
 # Build szip, since we will use it for
@@ -55,3 +55,8 @@ rm -rf szip-2.1.1
 ##
 wget https://cmake.org/files/v3.9/cmake-3.9.0.tar.gz
 tar -zxf cmake-3.9.0.tar.gz && cd cmake-3.9.0 && ./configure --prefix=/usr && make -j 4 && sudo make install
+
+##
+# Some cleanup
+##
+rm -rf /var/lib/apt/lists/*
