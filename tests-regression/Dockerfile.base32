@@ -3,7 +3,7 @@
 # so that we can take advantage of the
 # shared layers that docker provides.
 #####
-FROM tanosi/ubuntu-xenial-i386
+FROM ubuntu:xenial
 USER root
 ENV HOME /root
 WORKDIR /root
@@ -54,26 +54,15 @@ ENV CXXREPS 1
 ENV PREPS 1
 ENV NCOREPS 1
 ENV TESTPROC 1
-
-###
-# Install common packages.
-###
-
-RUN apt-get update
-RUN apt-get -y upgrade
-RUN apt-get -y install sudo
-
-##
-# Set up a non-root admin to run the tests as.
-##
-
 ENV CUSER tester
 ENV CUSSERPWORD "password.1234"
 
-RUN useradd -ms /bin/bash ${CUSER}
-RUN adduser ${CUSER} sudo
-RUN echo "${CUSER}:${CUSERPWORD}${RANDOM} " | chpasswd
-RUN echo "${CUSER} ALL=NOPASSWD: ALL" >> /etc/sudoers
+###
+# Run the provision scripot.
+###
+COPY provision_base_ubuntu.sh ${HOME}/
+RUN chmod 755 ${HOME}/provision_base_ubuntu.sh
+RUN ${HOME}/provision_base_ubuntu.sh
 
 #####
 # Configure system and environment.
@@ -83,47 +72,9 @@ ENV HOME /home/${CUSER}
 WORKDIR ${HOME}
 
 ###
-# Install some basics.
-###
-
-RUN sudo apt-get -y install g++ gfortran libtool automake autoconf m4 bison flex libcurl4-openssl-dev zlib1g-dev git wget curl libjpeg-dev cmake python cython python-numpy gdb dos2unix antlr libantlr-dev libexpat1-dev libxml2-dev gsl-bin libgsl0-dev udunits-bin libudunits2-0 libudunits2-dev clang valgrind python-setuptools
-RUN sudo apt-get -y install bzip2 zip
-
-###
-# Pre-fetch tarballs that we'll need.
-###
-
-RUN wget http://www.hdfgroup.org/ftp/lib-external/szip/2.1.1/src/szip-2.1.1.tar.gz
-RUN wget http://cucis.ece.northwestern.edu/projects/PnetCDF/Release/parallel-netcdf-1.8.1.tar.bz2
-RUN wget https://hdfgroup.org/ftp/HDF/HDF_Current/src/hdf-4.2.13.tar.bz2
-RUN wget https://hdfgroup.org/ftp/HDF5/current/src/${HDF5_FILE}
-
-###
-# Uncompress tarballs.
-###
-
-RUN tar -jxf hdf-4.2.13.tar.bz2
-RUN tar -jxf ${HDF5_FILE}
-RUN tar -zxf szip-2.1.1.tar.gz
-RUN tar -jxf parallel-netcdf-1.8.1.tar.bz2
-
-###
-# Build szip, since we will use it for
-# all of our projects.
-###
-
-RUN cd szip-2.1.1 && ./configure --prefix=/usr --enable-shared --disable-static && make -j 4 && sudo make install -j 4
-RUN rm -rf szip-2.1.1
-
-##
-# Install cmake manually
-##
-RUN wget https://cmake.org/files/v3.9/cmake-3.9.0.tar.gz
-RUN tar -zxf cmake-3.9.0.tar.gz && cd cmake-3.9.0 && ./configure --prefix=/usr && make -j 4 && sudo make install
-
-###
 # Add the utility scripts, for portability.
 ###
+
 COPY run_serial_tests.sh ${HOME}/
 COPY run_par_tests.sh ${HOME}/
 COPY run_all_nctest_images.sh ${HOME}/
@@ -133,7 +84,6 @@ COPY squash_all_nctest_images.sh ${HOME}/
 COPY README.md ${HOME}/
 
 RUN echo "Version:\n\tunidata/nctests ($BITNESS) :\t$NCTEST_VERSION\t$(date)" > $VERSION_FILE
-
 
 RUN sudo chown -R tester:tester ${HOME}
 
