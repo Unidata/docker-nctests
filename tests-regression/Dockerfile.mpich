@@ -1,37 +1,19 @@
 FROM unidata/nctests:base
 
-RUN sudo apt-get install -y mpich libmpich-dev
+RUN sudo apt-get update &&  sudo apt-get install -y mpich libmpich-dev && sudo apt-get -y autoclean && rm -rf /var/lib/apt/lists/*
 
 ###
-# Manually install hdf4 so that we can run
-# those tests as well.
+# Copy over provisioning script.
 ###
 
-RUN cd hdf-4.2.13 && CC=`which mpicc` ./configure --disable-static --enable-shared --disable-netcdf --disable-fortran --prefix=/usr && make -j 4 && sudo make install
-RUN rm -rf hdf-4.2.13
-
-###
-# Manually install hdf5 so that we can run
-# those tests as well.
-###
-
-RUN cd ${HDF5_VER} && CFLAGS="-Wno-format-security" CC=`which mpicc` ./configure --disable-static --enable-shared --disable-fortran --enable-hl --enable-parallel --prefix=/usr --with-szlib  && make -j 4 && sudo make install
-RUN rm -rf ${HDF5_VER}
-
-###
-# Manually install pnetcdf so that we can
-# run pnetcdf tests.
-###
-
-RUN cd parallel-netcdf-1.8.1 && CPPFLAGS="-fPIC" CC=`which mpicc` ./configure --prefix=/usr --disable-fortran && make -j 4 -k && sudo make install
+COPY provision_mpich_ubuntu.sh /root/
+RUN sudo ls -alh /root && sudo /root/provision_mpich_ubuntu.sh
 
 ###
 # Copy over the dockerfile, scripts and README.
 ###
 
-
-COPY Dockerfile.serial ${HOME}/
-# COPY run_par_tests.sh ${HOME}/
+COPY Dockerfile.mpich ${HOME}/
 
 ENV PARTYPE -mpich
 
