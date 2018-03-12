@@ -4,15 +4,14 @@ FROM unidata/nctests:base32
 # Copy over a script to provision.
 ###
 
-COPY provision_serial_ubuntu.sh ${HOME}/
-RUN chmod 755 provision_serial_ubuntu.sh
-RUN ${HOME}/provision_serial_ubuntu.sh
+COPY provision_serial_ubuntu.sh /root/
+RUN sudo ls -alh /root &&  sudo /root/provision_serial_ubuntu.sh
 
 ###
 # Copy over the dockerfile, scripts and README.
 ###
 
-COPY Dockerfile.serial ${HOME}/
+COPY Dockerfile.serial32 ${HOME}/
 
 RUN sudo chown -R ${CUSER}:${CUSER} ${HOME}
 
