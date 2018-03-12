@@ -1,4 +1,4 @@
-FROM unidata/nctests:base
+FROM unidata/nctests:base32
 
 RUN sudo apt-get update &&  sudo apt-get install -y mpich libmpich-dev && sudo apt-get -y autoclean && sudo rm -rf /var/lib/apt/lists/*
 
@@ -13,7 +13,7 @@ RUN sudo ls -alh /root && sudo /root/provision_mpich_ubuntu.sh
 # Copy over the dockerfile, scripts and README.
 ###
 
-COPY Dockerfile.mpich ${HOME}/
+COPY Dockerfile.mpich32 ${HOME}/
 
 ENV PARTYPE -mpich
 

@@ -1,50 +1,25 @@
 FROM unidata/nctests:base32
 
-RUN sudo apt-get install -y libopenmpi-dev openmpi-bin
+RUN sudo apt-get update &&  sudo apt-get install -y libopenmpi-dev openmpi-bin && sudo apt-get -y autoclean && sudo rm -rf /var/lib/apt/lists/*
 
 ###
-# Set up some symbolic links, since
-# we are forced to install an old
-# version of gcc/g++/gfortran
+# Copy over provisioning script.
 ###
 
-###
-# Manually install hdf4 so that we can run
-# those tests as well.
-###
-
-RUN cd hdf-4.2.13 && CC=`which mpicc` ./configure --disable-static --enable-shared --disable-netcdf --disable-fortran --prefix=/usr && make -j 4 && sudo make install
-RUN rm -rf hdf-4.2.13
-
-###
-# Manually install hdf5 so that we can run
-# those tests as well.
-###
-
-RUN cd ${HDF5_VER} && CC=`which mpicc` ./configure --disable-static --enable-shared --disable-fortran --enable-hl --enable-parallel --prefix=/usr --with-szlib && make -j 4 && sudo make install
-RUN rm -rf ${HDF5_VER}
-
-
-###
-# Manually install pnetcdf so that we can
-# run pnetcdf tests.
-###
-
-RUN cd parallel-netcdf-1.8.1 && CPPFLAGS="-fPIC" CC=`which mpicc` ./configure --prefix=/usr --disable-fortran && make -j 4 -k && sudo make install
+COPY provision_parallel_ubuntu.sh /root/
+RUN sudo ls -alh /root && sudo /root/provision_parallel_ubuntu.sh
 
 ###
 # Copy over the dockerfile, scripts and README.
 ###
 
-
-COPY Dockerfile.serial ${HOME}/
-# COPY run_par_tests.sh ${HOME}/
+COPY Dockerfile.openmpi ${HOME}/
 
 ENV PARTYPE -openmpi
 
 RUN sudo chown -R ${CUSER}:${CUSER} ${HOME}
 
 ##
-# Run test script on launch.
+# Run test scripts on launch.
 ##
 CMD ${HOME}/run_par_tests.sh

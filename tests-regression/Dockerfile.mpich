@@ -6,8 +6,8 @@ RUN sudo apt-get update &&  sudo apt-get install -y mpich libmpich-dev && sudo a
 # Copy over provisioning script.
 ###
 
-COPY provision_mpich_ubuntu.sh /root/
-RUN sudo ls -alh /root && sudo /root/provision_mpich_ubuntu.sh
+COPY provision_parallel_ubuntu.sh /root/
+RUN sudo ls -alh /root && sudo /root/provision_parallel_ubuntu.sh
 
 ###
 # Copy over the dockerfile, scripts and README.
