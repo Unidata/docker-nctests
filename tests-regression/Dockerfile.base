@@ -3,8 +3,8 @@
 # so that we can take advantage of the
 # shared layers that docker provides.
 #####
-# FROM ubuntu:xenial
-FROM ubuntu:artful
+FROM ubuntu:xenial
+#FROM ubuntu:artful
 USER root
 ENV HOME /root
 WORKDIR /root
