@@ -3,7 +3,7 @@
 # so that we can take advantage of the
 # shared layers that docker provides.
 #####
-FROM tanosi/ubuntu-xenial-i386
+FROM 32bit/ubuntu:16.04
 #FROM wardf/ubuntu32:artful
 USER root
 ENV HOME /root
