@@ -1,0 +1,90 @@
+#####
+# Common stuff goes at the front,
+# so that we can take advantage of the
+# shared layers that docker provides.
+#####
+FROM fedora:27
+USER root
+ENV HOME /root
+WORKDIR /root
+MAINTAINER Ward Fisher <wfisher@ucar.edu>
+
+ENV NCTEST_VERSION 1.5.1 - development
+
+ENV VERSION_FILE VERSION.md
+
+###
+# Set up a couple environmental variables.
+###
+
+ENV CTEST_OUTPUT_ON_FAILURE 1
+
+ENV HDF5VER 1.10.1
+ENV HDF5_VER hdf5-${HDF5VER}
+ENV HDF5_FILE ${HDF5_VER}.tar.bz2
+ENV PNCVER 1.8.1
+##
+# Let the user specify the branches.
+##
+ENV CBRANCH master
+ENV FBRANCH master
+ENV CXXBRANCH master
+ENV PBRANCH master
+ENV NCOBRANCH master
+
+ENV BITNESS 64
+ENV USE_CC gcc
+ENV USE_CXX g++
+
+ENV RUNC TRUE
+ENV RUNF TRUE
+ENV RUNCXX TRUE
+ENV RUNP TRUE
+ENV RUNNCO TRUE
+
+ENV USEDASH FALSE
+
+ENV USEAC FALSE
+ENV USECMAKE TRUE
+
+ENV CREPS 1
+ENV FREPS 1
+ENV CXXREPS 1
+ENV PREPS 1
+ENV NCOREPS 1
+ENV TESTPROC 1
+ENV CUSER tester
+ENV CUSSERPWORD "password.1234"
+
+###
+# Run the provision scripot.
+###
+COPY provision_base_fedora.sh ${HOME}/
+RUN chmod 755 ${HOME}/provision_base_fedora.sh
+RUN ${HOME}/provision_base_fedora.sh
+
+#####
+# Configure system and environment.
+#####
+USER ${CUSER}
+ENV HOME /home/${CUSER}
+WORKDIR ${HOME}
+
+###
+# Add the utility scripts, for portability.
+###
+
+COPY run_serial_tests.sh ${HOME}/
+COPY run_par_tests.sh ${HOME}/
+COPY run_all_nctest_images.sh ${HOME}/
+COPY build_all_nctest_images.sh ${HOME}/
+COPY push_all_nctest_images.sh ${HOME}/
+COPY squash_all_nctest_images.sh ${HOME}/
+COPY README.md ${HOME}/
+
+RUN echo "Version:\n\tunidata/nctests ($BITNESS) :\t$NCTEST_VERSION\t$(date)" > $VERSION_FILE
+
+RUN sudo chown -R tester:tester ${HOME}
+
+RUN dos2unix ${HOME}/run_serial_tests.sh
+RUN dos2unix ${HOME}/run_par_tests.sh
