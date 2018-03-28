@@ -141,6 +141,13 @@ cd ${HOME}
 
 # CREPS is defined as an environmental variable.
 
+###
+# Determine if we are doing memory checks.
+###
+CMEM=""
+if [ "x$ENABLE_C_MEMCHECK" != "x" ]; then
+    CMEM="-fsanitize=address -fno-omit-frame-pointer"
+fi
 
 
 while [[ $CCOUNT -le $CREPS ]]; do
@@ -156,7 +163,7 @@ while [[ $CCOUNT -le $CREPS ]]; do
         sleep 2
         mkdir -p build-netcdf-c
         cd build-netcdf-c
-        cmake ${HOME}/netcdf-c -DCMAKE_INSTALL_PREFIX=/usr -DENABLE_HDF4=ON -DENABLE_EXTRA_TESTS=ON -DENABLE_MMAP=ON -DBUILDNAME_PREFIX="docker$BITNESS-$USE_CC" -DBUILDNAME_SUFFIX="$CBRANCH" -DCMAKE_C_COMPILER=$USE_CC $COPTS ; CHECKERR
+        cmake ${HOME}/netcdf-c -DCMAKE_INSTALL_PREFIX=/usr -DENABLE_HDF4=ON -DENABLE_EXTRA_TESTS=ON -DENABLE_MMAP=ON -DBUILDNAME_PREFIX="docker$BITNESS-$USE_CC" -DBUILDNAME_SUFFIX="$CBRANCH" -DCMAKE_C_COMPILER=$USE_CC $COPTS -DCMAKE_C_FLAGS="${CMEM}"; CHECKERR
         make clean
 
         if [ "x$RUNC" == "xTRUE" ]; then

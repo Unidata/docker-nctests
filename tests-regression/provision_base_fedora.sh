@@ -21,7 +21,7 @@ echo "${CUSER} ALL=NOPASSWD: ALL" >> /etc/sudoers
 # Install common packages.
 ###
 
-dnf -y install m4 git libjpeg-turbo-devel libcurl-devel wget nano libtool bison autoconf curl zlib-devel zip gcc-gfortran gcc-c++ byacc
+dnf -y install m4 git libjpeg-turbo-devel libcurl-devel wget nano libtool bison autoconf curl zlib-devel zip gcc-gfortran gcc-c++ byacc dos2unix bzip2
 
 ###
 # Pre-fetch tarballs that we'll need.
