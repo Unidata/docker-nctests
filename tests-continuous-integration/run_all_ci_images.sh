@@ -78,14 +78,7 @@ RUN_IMG "unidata/ncci:xenial-x64" "xenial-x64" "${DOX}" ; sleep 1
 RUN_IMG "unidata/ncci:xenial-x86" "xenial-x86" "${DOX}" ; sleep 1
 
 ###
-# Trusty
-###
-
-RUN_IMG "unidata/ncci:trusty-x64" "trusty-x64" "${DOX}" ; sleep 1
-RUN_IMG "unidata/ncci:trusty-x86" "trusty-x86" "${DOX}" ; sleep 1
-
-###
-# Trusty - Parallel
+# Xenial - Parallel
 ###
 
 RUN_IMG "unidata/ncci:xenial-openmpi-x64" "xenial-openmpi-x64" "${DOX}" ; sleep 1
@@ -95,9 +88,8 @@ RUN_IMG "unidata/ncci:xenial-mpich-x64" "xenial-mpich-x64" "${DOX}" ; sleep 1
 # Fedora
 ###
 
-RUN_IMG "unidata/ncci:fedora23-x64" "fedora23-x64" "${DOX}" ; sleep 1
-RUN_IMG "unidata/ncci:fedora22-x64" "fedora22-x64" "${DOX}" ; sleep 1
-RUN_IMG "unidata/ncci:fedora21-x64" "fedora21-x64" "${DOX}" ; sleep 1
+RUN_IMG "unidata/ncci:fedora27-x64" "fedora27-x64" "${DOX}" ; sleep 1
+RUN_IMG "unidata/ncci:fedora26-x64" "fedora26-x64" "${DOX}" ; sleep 1
 
 ###
 # Centos
