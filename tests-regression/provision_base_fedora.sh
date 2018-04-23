@@ -33,7 +33,7 @@ dnf -y install m4 git libjpeg-turbo-devel libcurl-devel wget nano libtool bison 
 wget http://www.hdfgroup.org/ftp/lib-external/szip/2.1.1/src/szip-2.1.1.tar.gz
 wget http://cucis.ece.northwestern.edu/projects/PnetCDF/Release/parallel-netcdf-1.8.1.tar.bz2
 wget https://hdfgroup.org/ftp/HDF/HDF_Current/src/hdf-4.2.13.tar.bz2
-wget https://hdfgroup.org/ftp/HDF5/current/src/${HDF5_FILE}
+wget https://support.hdfgroup.org/ftp/HDF5/releases/hdf5-1.10/${HDF5_VER}/src/${HDF5_FILE}
 
 ###
 # Uncompress tarballs.
