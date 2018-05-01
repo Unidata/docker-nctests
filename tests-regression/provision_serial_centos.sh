@@ -23,3 +23,5 @@ tar -jxf /root/hdf5-1.10.2.tar.bz2 && cd /root/hdf5-1.10.2 && ./configure --disa
 
 cd /root
 rm -rf /root/hdf5-1.10.2
+
+sudo ldconfig
