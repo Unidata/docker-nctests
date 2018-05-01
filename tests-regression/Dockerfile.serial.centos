@@ -1,0 +1,21 @@
+FROM unidata/nctests:base.centos
+
+###
+# Copy over a script to provision.
+###
+RUN sudo ldconfig
+COPY provision_serial_centos.sh /root/
+RUN sudo ls -alh /root &&  sudo /root/provision_serial_centos.sh
+
+###
+# Copy over the dockerfile, scripts and README.
+###
+
+COPY Dockerfile.serial.centos ${HOME}/
+
+RUN sudo chown -R ${CUSER}:${CUSER} ${HOME}
+
+##
+# Run test script on launch.
+##
+CMD ${HOME}/run_serial_tests.sh
