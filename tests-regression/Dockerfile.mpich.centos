@@ -1,0 +1,29 @@
+FROM unidata/nctests:base.centos
+
+#RUN sudo apt-get update &&  sudo apt-get install -y libopenmpi-dev openmpi-bin && sudo apt-get -y autoclean && sudo rm -rf /var/lib/apt/lists/*
+
+RUN sudo yum install -y mpich-3.2-devel && sudo ldconfig
+USER root
+RUN echo 'export PATH=/usr/lib64/mpich-3.2/bin:$PATH' >> /etc/bashrc
+USER ${CUSER}
+###
+# Copy over provisioning script.
+###
+
+COPY provision_parallel_centos.sh /root/
+RUN sudo ls -alh /root && sudo /root/provision_parallel_centos.sh
+
+###
+# Copy over the dockerfile, scripts and README.
+###
+
+COPY Dockerfile.mpich.centos ${HOME}/
+
+ENV PARTYPE -centos-mpich
+
+RUN sudo chown -R ${CUSER}:${CUSER} ${HOME}
+
+##
+# Run test scripts on launch.
+##
+CMD ${HOME}/run_par_tests.sh
