@@ -84,8 +84,6 @@ if [ "x$DO64" == "xTRUE" ]; then
         echo "Pushing 64-bit Fedora images."
         docker push unidata/nctests:base.fedora
         docker push unidata/nctests:serial.fedora
-        docker push unidata/nctests:openmpi.fedora
-        docker push unidata/nctests:mpich.fedora
     else
         echo "- Skipping 64-bit Fedora"
     fi
