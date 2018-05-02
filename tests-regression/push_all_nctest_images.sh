@@ -24,7 +24,7 @@ if [ $# -lt 1 ]; then
     exit 0
 fi
 
-while getopts "ix" o; do
+while getopts "ixucf" o; do
     case "${o}" in
         i)
             DO32="TRUE"
