@@ -129,7 +129,7 @@ while [[ $CCOUNT -le $CREPS ]]; do
 
         if [ "x$RUNC" == "xTRUE" ]; then
             if [ "x$USEDASH" == "xTRUE" ]; then
-		ctest -D Experimental -j $TESTPROC ; CHECKERR                
+		ctest -D Experimental -j $TESTPROC ; CHECKERR
             else
                 make -j 4 && ctest -j $TESTPROC ; CHECKERR
             fi
@@ -177,6 +177,8 @@ elif [ "x$USEAC" = "xTRUE" ]; then
 fi
 
 cd ${HOME}
+
+sudo ldconfig
 
 ###
 # Build & test netcdf-fortran

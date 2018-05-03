@@ -235,6 +235,8 @@ fi
 
 cd ${HOME}
 
+sudo ldconfig
+
 ###
 # Build & test netcdf-fortran
 ###
