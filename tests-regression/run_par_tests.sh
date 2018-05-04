@@ -63,7 +63,8 @@ cat VERSION.md
 
 if [ -d "/netcdf-c" ]; then
     echo "Using local netcdf-c repository"
-    git clone /netcdf-c ${HOME}/netcdf-c
+    #git clone /netcdf-c ${HOME}/netcdf-c
+    cp -R /netcdf-c ${HOME}
 else
     echo "Using remote netcdf-c repository"
     git clone http://www.github.com/Unidata/netcdf-c --single-branch --branch $CBRANCH --depth=1 $CBRANCH
@@ -73,7 +74,8 @@ fi
 if [ "x$RUNF" == "xTRUE" ]; then
     if [ -d "/netcdf-fortran" ]; then
         echo "Using local netcdf-fortran repository"
-        git clone /netcdf-fortran ${HOME}/netcdf-fortran
+        #git clone /netcdf-fortran ${HOME}/netcdf-fortran
+        cp -R /netcdf-fortran ${HOME}
     else
         echo "Using remote netcdf-fortran repository"
         git clone http://www.github.com/Unidata/netcdf-fortran --single-branch --branch $FBRANCH --depth=1 $FBRANCH
@@ -87,7 +89,8 @@ if [ "x$RUNCXX" == "xTRUE" ]; then
 
     if [ -d "/netcdf-cxx4" ]; then
         echo "Using local netcdf-cxx4 repository"
-        git clone /netcdf-cxx4 ${HOME}/netcdf-cxx4
+        #git clone /netcdf-cxx4 ${HOME}/netcdf-cxx4
+        cp -R /netcdf-cxx4 ${HOME}
     else
         echo "Using remote netcdf-cxx4 repository"
         git clone http://www.github.com/Unidata/netcdf-cxx4 --single-branch --branch $CXXBRANCH --depth=1 $CXXBRANCH
