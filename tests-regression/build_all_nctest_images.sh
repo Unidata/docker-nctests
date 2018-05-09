@@ -57,29 +57,33 @@ echo ""
 # Do a block of base images only.
 
 if [ "x$DOBASEONLY" == "xTRUE" ]; then
-
+    echo "Building Base Images"
     if [ "x$DO32" == "xTRUE" ]; then
         if [ "x$DOUBUNTU" == "xTRUE" ]; then
+            echo "Building unidata/nctests:base32"
             docker build -t unidata/nctests:base32 -f Dockerfile.base32 . &> ubuntu.base32.log&
-            xterm -T "Ubuntu base" -bg black -fg white -geometry 140x20 -e tail -f ubuntu.base32.log&
+            xterm -T "Ubuntu base32" -bg black -fg white -geometry 140x20 -e tail -f ubuntu.base32.log&
             sleep 1
         fi
     fi
 
     if [ "x$DO64" == "xTRUE" ]; then
         if [ "x$DOUBUNTU" == "xTRUE" ]; then
+            echo "Building unidata/nctests:base"
             docker build -t unidata/nctests:base -f Dockerfile.base . &> ubuntu.base.log&
             xterm -T "Ubuntu base" -bg black -fg white -geometry 140x20 -e tail -f ubuntu.base.log&
             sleep 1
         fi
 
         if [ "x$DOCENTOS" == "xTRUE" ]; then
+            echo "Building unidata/nctests:base.centos"
             docker build -t unidata/nctests:base.centos -f Dockerfile.base.centos . &> base.centos.log&
             xterm -T "Centos base" -bg black -fg white -geometry 140x20 -e tail -f base.centos.log&
             sleep 1
         fi
 
         if [ "x$DOFEDORA" == "xTRUE" ]; then
+            echo "Building unidata/nctests:base.fedora"
             docker build -t unidata/nctests:base.fedora -f Dockerfile.base.fedora . &> base.fedora.log&
             xterm -T "Fedora base" -bg black -fg white -geometry 140x20 -e tail -f base.fedora.log&
             sleep 1
