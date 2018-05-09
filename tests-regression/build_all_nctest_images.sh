@@ -4,12 +4,12 @@ dohelp ()
 {
     echo ""
     echo "Usage: $0 -[ix] -p [image name prefix]"
-    echo -e "\t -i     Build 32-bit images."
-    echo -e "\t -x     Build 64-bit images."
-    echo -e "\t -p     Specify an image name. Default: unidata/nctests"
-    echo -e "\t -u     Build ubuntu images."
-    echo -e "\t -c     Build centos image (64-bit only)."
-    echo -e "\t -f     Build fedora image (64-bit only)."
+    echo -e "\\t -i     Build 32-bit images."
+    echo -e "\\t -x     Build 64-bit images."
+    echo -e "\\t -b     Build base image(s) only."
+    echo -e "\\t -u     Build ubuntu images."
+    echo -e "\\t -c     Build centos image (64-bit only)."
+    echo -e "\\t -f     Build fedora image (64-bit only)."
     echo ""
 }
 
@@ -18,33 +18,21 @@ DO64=""
 DOUBUNTU=""
 DOCENTOS=""
 DOFEDORA=""
+DOBASEONLY=""
 
-##
-# Note that the test Dockerfiles assume unidata/nctests:base[32],
-# so we build that tag too, just in case.
-##
-
-IPREF="unidata/nctests"
 
 if [ $# -lt 1 ]; then
     dohelp
     exit 0
 fi
 
-while getopts "ucfixp:" o; do
+while getopts "ucfixb" o; do
     case "${o}" in
         i)
             DO32="TRUE"
             ;;
         x)
             DO64="TRUE"
-            ;;
-        p)
-            IPREF=${OPTARG}
-            if [ "x$IPREF" == "x" ]; then
-                dohelp
-                exit 0
-            fi
             ;;
         u)
             DOUBUNTU="TRUE"
@@ -55,6 +43,9 @@ while getopts "ucfixp:" o; do
         f)
             DOFEDORA="TRUE"
             ;;
+        b)
+            DOBASEONLY="TRUE"
+            ;;
         *)
             dohelp
             exit 0
@@ -62,6 +53,45 @@ while getopts "ucfixp:" o; do
 done
 
 echo ""
+
+# Do a block of base images only.
+
+if [ "x$DOBASEONLY" == "xTRUE" ]; then
+
+    if [ "x$DO32" == "xTRUE" ]; then
+        if [ "x$DOUBUNTU" == "xTRUE" ]; then
+            docker build -t unidata/nctests:base32 -f Dockerfile.base32 . &> ubuntu.base32.log&
+            xterm -T "Ubuntu base" -bg black -fg white -geometry 140x20 -e tail -f ubuntu.base32.log&
+            sleep 1
+        fi
+    fi
+
+    if [ "x$DO64" == "xTRUE" ]; then
+        if [ "x$DOUBUNTU" == "xTRUE" ]; then
+            docker build -t unidata/nctests:base -f Dockerfile.base . &> ubuntu.base.log&
+            xterm -T "Ubuntu base" -bg black -fg white -geometry 140x20 -e tail -f ubuntu.base.log&
+            sleep 1
+        fi
+
+        if [ "x$DOCENTOS" == "xTRUE" ]; then
+            docker build -t unidata/nctests:base.centos -f Dockerfile.base.centos . &> base.centos.log&
+            xterm -T "Centos base" -bg black -fg white -geometry 140x20 -e tail -f base.centos.log&
+            sleep 1
+        fi
+
+        if [ "x$DOFEDORA" == "xTRUE" ]; then
+            docker build -t unidata/nctests:base.fedora -f Dockerfile.base.fedora . &> base.fedora.log&
+            xterm -T "Fedora base" -bg black -fg white -geometry 140x20 -e tail -f base.fedora.log&
+            sleep 1
+        fi
+
+
+    fi
+
+    exit 0
+fi
+
+
 
 if [ "x$DO32" == "xTRUE" ]; then
 
@@ -71,17 +101,17 @@ if [ "x$DO32" == "xTRUE" ]; then
         docker build -t unidata/nctests:base32 -f Dockerfile.base32 .
 
         echo "Starting Ubuntu Serial32 Image"
-        docker build -t $IPREF:serial32 -f Dockerfile.serial32 . &> ubuntu.serial32.log&
+        docker build -t unidata/nctests:serial32 -f Dockerfile.serial32 . &> ubuntu.serial32.log&
         xterm -T "Ubuntu serial32" -bg black -fg white -geometry 140x20 -e tail -f ubuntu.serial32.log&
         sleep 1
 
         echo "Starting Ubuntu OpenMPI32 Image"
-        docker build -t $IPREF:openmpi32 -f Dockerfile.openmpi32 . &> ubuntu.openmpi32.log&
+        docker build -t unidata/nctests:openmpi32 -f Dockerfile.openmpi32 . &> ubuntu.openmpi32.log&
         xterm -T "Ubuntu openmpi32" -bg black -fg white -geometry 140x20 -e tail -f ubuntu.openmpi32.log&
         sleep 1
 
         echo "Starting Ubuntu MPICH32 Image"
-        docker build -t $IPREF:mpich32 -f Dockerfile.mpich32 . &> ubuntu.mpich32.log&
+        docker build -t unidata/nctests:mpich32 -f Dockerfile.mpich32 . &> ubuntu.mpich32.log&
         xterm -T "Ubuntu mpich32" -bg black -fg white -geometry 140x20 -e tail -f ubuntu.mpich32.log&
         sleep 1
     else
@@ -97,21 +127,21 @@ if [ "x$DO64" == "xTRUE" ]; then
     if [ "x$DOUBUNTU" == "xTRUE" ]; then
         echo "Building 64-bit Ubuntu images."
         echo "Building Centos Base Image"
-        docker build -t $IPREF:base -f Dockerfile.base .
+        docker build -t unidata/nctests:base -f Dockerfile.base .
         docker build -t unidata/nctests:base -f Dockerfile.base .
 
         echo "Starting Ubuntu Serial Image"
-        docker build -t $IPREF:serial -f Dockerfile.serial . &> ubuntu.serial.log&
+        docker build -t unidata/nctests:serial -f Dockerfile.serial . &> ubuntu.serial.log&
         xterm -T "Ubuntu serial" -bg black -fg white -geometry 140x20 -e tail -f ubuntu.serial.log&
         sleep 1
 
         echo "Starting Ubuntu OpenMPI Ubuntu Image"
-        docker build -t $IPREF:openmpi -f Dockerfile.openmpi . &> ubuntu.openmpi.log&
+        docker build -t unidata/nctests:openmpi -f Dockerfile.openmpi . &> ubuntu.openmpi.log&
         xterm -T "Ubuntu openmpi" -bg black -fg white -geometry 140x20 -e tail -f ubuntu.openmpi.log&
         sleep 1
 
         echo "Starting Ubuntu MPICH Ubuntuy Image"
-        docker build -t $IPREF:mpich -f Dockerfile.mpich . &> ubuntu.mpich.log&
+        docker build -t unidata/nctests:mpich -f Dockerfile.mpich . &> ubuntu.mpich.log&
         xterm -T "Ubuntu mpich" -bg black -fg white -geometry 140x20 -e tail -f ubuntu.mpich.log&
         sleep 1
     else
@@ -124,17 +154,17 @@ if [ "x$DO64" == "xTRUE" ]; then
         docker build -t unidata/nctests:base.centos -f Dockerfile.base.centos .
 
         echo "Starting Centos Serial Image"
-        docker build -t $IPREF:serial.centos -f Dockerfile.serial.centos . &> centos.serial.log&
+        docker build -t unidata/nctests:serial.centos -f Dockerfile.serial.centos . &> centos.serial.log&
         xterm -T "Centos serial" -bg black -fg white -geometry 140x20 -e tail -f centos.serial.log&
         sleep 1
 
         echo "Starting Centos OpenMPI Image"
-        docker build -t $IPREF:openmpi.centos -f Dockerfile.openmpi.centos . &> centos.openmpi.log&
+        docker build -t unidata/nctests:openmpi.centos -f Dockerfile.openmpi.centos . &> centos.openmpi.log&
         xterm -T "Centos openmpi" -bg black -fg white -geometry 140x20 -e tail -f centos.openmpi.log&
         sleep 1
 
         echo "Starting Centos MPICH Image"
-        docker build -t $IPREF:mpich.centos -f Dockerfile.mpich.centos . &> centos.mpich.log&
+        docker build -t unidata/nctests:mpich.centos -f Dockerfile.mpich.centos . &> centos.mpich.log&
         xterm -T "Centos mpich" -bg black -fg white -geometry 140x20 -e tail -f centos.mpich.log&
         sleep 1
     else
@@ -147,7 +177,7 @@ if [ "x$DO64" == "xTRUE" ]; then
         docker build -t unidata/nctests:base.fedora -f Dockerfile.base.fedora .
 
         echo "Starting Fedora Serial Image"
-        docker build -t $IPREF:serial.fedora -f Dockerfile.serial.fedora . &> fedora.serial.log&
+        docker build -t unidata/nctests:serial.fedora -f Dockerfile.serial.fedora . &> fedora.serial.log&
         xterm -T "Fedora serial" -bg black -fg white -geometry 140x20 -e tail -f fedora.serial.log&
         sleep 1
     else
