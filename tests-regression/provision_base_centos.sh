@@ -37,6 +37,7 @@ tar -zxf szip-2.1.1.tar.gz && rm szip-2.1.1.tar.gz
 ###
 
 cd szip-2.1.1 && ./configure --prefix=/usr --enable-shared --disable-static && make -j 4 && sudo make install -j 4
+cd ..
 rm -rf szip-2.1.1
 
 ##
