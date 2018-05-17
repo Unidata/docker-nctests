@@ -24,15 +24,6 @@ echo "${CUSER} ALL=NOPASSWD: ALL" >> /etc/sudoers
 sudo apt-get -y install --no-install-recommends bzip2 g++ gfortran libtool automake autoconf m4 bison flex libcurl4-openssl-dev zlib1g-dev git wget curl libjpeg-dev cmake python-dev cython python-numpy gdb dos2unix antlr libantlr-dev libexpat1-dev libxml2-dev gsl-bin libgsl0-dev udunits-bin libudunits2-0 libudunits2-dev clang zip valgrind python-setuptools make build-essential less unzip patch
 
 ###
-# Pre-fetch tarballs that we'll need.
-###
-
-wget http://www.hdfgroup.org/ftp/lib-external/szip/2.1.1/src/szip-2.1.1.tar.gz
-wget http://cucis.ece.northwestern.edu/projects/PnetCDF/Release/parallel-netcdf-1.8.1.tar.bz2
-wget https://hdfgroup.org/ftp/HDF/HDF_Current/src/hdf-4.2.13.tar.bz2
-wget https://support.hdfgroup.org/ftp/HDF5/releases/hdf5-1.10/${HDF5_VER}/src/${HDF5_FILE}
-
-###
 # Uncompress tarballs.
 ###
 

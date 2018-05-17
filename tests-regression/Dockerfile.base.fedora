@@ -9,7 +9,7 @@ ENV HOME /root
 WORKDIR /root
 MAINTAINER Ward Fisher <wfisher@ucar.edu>
 
-ENV NCTEST_VERSION 1.6.3 - development
+ENV NCTEST_VERSION 1.6.4 - development
 
 ENV VERSION_FILE VERSION.md
 
@@ -55,6 +55,12 @@ ENV NCOREPS 1
 ENV TESTPROC 1
 ENV CUSER tester
 ENV CUSSERPWORD "password.1234"
+
+###
+# Copy over local tarballs.
+###
+COPY hdf5-1.10.2.tar.bz2 szip-2.1.1.tar.gz parallel-netcdf-1.8.1.tar.bz2 hdf-4.2.13.tar.bz2 cmake-3.9.0.tar.gz ${HOME}/
+
 
 ###
 # Run the provision scripot.
