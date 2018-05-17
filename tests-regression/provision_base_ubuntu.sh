@@ -40,8 +40,7 @@ rm -rf szip-2.1.1
 ##
 # Install cmake manually
 ##
-wget https://cmake.org/files/v3.9/cmake-3.9.0.tar.gz
-tar -zxf cmake-3.9.0.tar.gz && cd cmake-3.9.0 && ./configure --prefix=/usr && make -j 4 && sudo make install
+tar -zxf cmake-3.11.2.tar.gz && cd cmake-3.11.2 && ./configure --prefix=/usr && make -j 4 && sudo make install
 
 ##
 # Some cleanup
