@@ -22,4 +22,4 @@ RUN sudo chown -R ${CUSER}:${CUSER} ${HOME}
 ##
 # Run test scripts on launch.
 ##
-CMD ${HOME}/run_par_tests.sh
+CMD bash -l -e ${HOME}/run_par_tests.sh

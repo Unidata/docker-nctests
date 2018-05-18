@@ -18,4 +18,4 @@ RUN sudo chown -R ${CUSER}:${CUSER} ${HOME}
 ##
 # Run test script on launch.
 ##
-CMD ${HOME}/run_serial_tests.sh
+CMD bash -l -e ${HOME}/run_serial_tests.sh
