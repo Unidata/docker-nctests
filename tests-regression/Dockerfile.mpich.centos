@@ -5,6 +5,7 @@ FROM unidata/nctests:base.centos
 RUN sudo yum install -y mpich-3.2-devel && sudo ldconfig
 USER root
 RUN echo 'export PATH=/usr/lib64/mpich-3.2/bin:$PATH' >> /etc/bashrc
+RUN echo 'export PATH=/usr/lib64/mpich-3.2/bin:$PATH' >> /etc/profile
 USER ${CUSER}
 ###
 # Copy over provisioning script.
@@ -26,4 +27,4 @@ RUN sudo chown -R ${CUSER}:${CUSER} ${HOME}
 ##
 # Run test scripts on launch.
 ##
-CMD ${HOME}/run_par_tests.sh
+CMD bash -l -e ${HOME}/run_par_tests.sh
