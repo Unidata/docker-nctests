@@ -6,10 +6,12 @@ dohelp ()
     echo "Usage: $0 -[ix] -p [image name prefix]"
     echo -e "\\t -i     Build 32-bit images."
     echo -e "\\t -x     Build 64-bit images."
-    echo -e "\\t -b     Build base image(s) only."
     echo -e "\\t -u     Build ubuntu images."
     echo -e "\\t -c     Build centos image (64-bit only)."
     echo -e "\\t -f     Build fedora image (64-bit only)."
+    echo -e ""
+    echo -e "\\t -b     Build base image(s) only."
+    echo ""
     echo ""
 }
 
