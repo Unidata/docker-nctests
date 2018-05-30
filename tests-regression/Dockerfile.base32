@@ -3,8 +3,7 @@
 # so that we can take advantage of the
 # shared layers that docker provides.
 #####
-FROM 32bit/ubuntu:16.04
-#FROM wardf/ubuntu32:artful
+FROM wardf/ubuntu32:bionic
 USER root
 ENV HOME /root
 WORKDIR /root
