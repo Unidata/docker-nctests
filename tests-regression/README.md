@@ -56,7 +56,7 @@ When the image runs, it will check for the existence of `/netcdf-c`, `/netcdf-fo
 
 > Note: Because it is cloning from a 'local' directory, it is important that you have that local directory already on the branch you want to analyze.  You will still need to set the appropriate Environmental Variable, however, if you want the build to be properly labelled for the CDash Dashboard.
 
-## Environmental Variables
+## Environmental Variables/Options
 
 The following environmental variables can be used to control the behavior at runtime.
 
@@ -64,6 +64,7 @@ The following environmental variables can be used to control the behavior at run
 * `USEDASH` - Set to any non-`TRUE` value to disable using the remote dashboard.
 * `HELP` - If non-zero, the `help` information will be printed to standard out.
 
+### Branch Control
 ----
 * `CBRANCH` - Git branch for `netcdf-c`
 * `FBRANCH` - Git branch for `netcdf-fortran`
@@ -71,12 +72,7 @@ The following environmental variables can be used to control the behavior at run
 * `PBRANCH` - Git branch for `netcdf4-python`
 * `NCOBRANCH` - Git branch for `NCO`. Default: `4.5.4`.
 
-----
-* `PNCVER` - Version of `parallel-netcdf to use`.
-    * **Parallel Tests Only**
-    * `1.6.1` - Version 1.6.1 **Default**
-    * `1.7.0` - Version 1.7.0
-
+### Compiler Option
 ----
 * `USE_CC` - `C` language compiler to use.
 	* `gcc` - Default
@@ -87,22 +83,24 @@ The following environmental variables can be used to control the behavior at run
 
 > Note that these options are currently only honored by the `serial` and `serial32` images.  How they function with the parallel images is TBD.
 
+### CFlags for CMake, autotools-based builds.
 ----
 * `COPTS` - CMake options for `netcdf-c`
 * `FOPTS` - CMake options for `netcdf-fortran`
 * `CXXOPTS` - CMake options for `netcdf-cxx4`
-
-----
 * `AC_COPTS` - Autoconf options for `netcdf-c`
 * `AC_FOPTS` - Autoconf options for `netcdf-fortran`
 * `AC_CXXOPTS` - Autoconf options for `netcdf-cxx4`
 
+### Which Tests to run
 ----
+* `RUNC` - Set to `OFF`, `FALSE`, anything but `TRUE`, to disable running `netcdf-c` tests. NetCDF-C is still downloaded, compiled and installed.
 * `RUNF` - Set to `OFF`, `FALSE`, anything but `TRUE`, to disable running `netcdf-fortran` tests.
 * `RUNCXX` - Set to `OFF`, `FALSE`, anything but `TRUE`, to disable running `netcdf-cxx4` tests.
 * `RUNP` - Set to `OFF`, `FALSE`, anything but `TRUE`, to disable running `netcdf4-python` tests.
 * `RUNNCO` - Set to `OFF`, `FALSE`, anything but `TRUE`, to disable running `NCO` tests.
 
+### Repeat tests
 ----
 * `CREPS` - Default 1.  How many times to repeat the `netcdf-c` build and tests.
 * `FREPS` - Default 1.  How many times to repeat the `netcdf-fortran` build and tests.
@@ -110,22 +108,21 @@ The following environmental variables can be used to control the behavior at run
 * `PREPS` - Default 1.  How many times to repeat the `netcdf4-python` build and tests.
 * `NCOREPS` - Default 1.  How many times to repeat the `NCO` build and tests.
 
+> Note that `USECMAKE` and `USEAC` may be used concurrently and, when coupled with `CREPS` and other loop control options, we can see if the different build systems interfere with each other.
+
+### Build Systems to use
 ----
 * `USECMAKE` - Default to `TRUE`. When `TRUE`, run `cmake` builds.
 * `USEAC` - Default to `FALSE`. When `TRUE`, run *in-source* `autoconf`-based builds.
 * `DISTCHECK` - Default to `FALSE`.  Requires `USEAC` to be `TRUE`.  Runs `make distcheck` after `make check`.
 
-----
-* `NCOMAKETEST` - Default to `FALSE`. When `TRUE`, run `make test` for the `NCO` package and parse the output for `Unidata`-related output.
-* `TESTPROC` - Default to `1`.  Defines the number of processes to use when building and testing.
 
+### Advanced Options
 ----
-----
-
-> Note that `USECMAKE` and `USEAC` may be used concurrently and, when coupled with `CREPS` and other loop control options, we can see if the different build systems interfere with each other.
-
-----
-----
+* `NCOMAKETEST` - **ADVANCED** Default to `FALSE`. When `TRUE`, run `make test` for the `NCO` package and parse the output for `Unidata`-related output.
+* `TESTPROC` - **ADVANCED** Default to `1`.  Defines the number of processes to use when building and testing.
+* `USE_LOCAL_CP` - **ADVANCED** Default to `FALSE`.  Uses `cp` instead of `git clone`.  This is required in particular circumstances and when a test image uses an older version of `git` that will not work with shallow copies.
+* `ENABLE_C_MEMCHECK` - **ADVANCED** **NetCDF-C only** Turns on the following options when running the C tests: `-fsanitize=address -fno-omit-frame-pointer`
 
 ## Examples
 
