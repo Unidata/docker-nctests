@@ -33,8 +33,8 @@ rm -rf /root/hdf5-1.10.2
 # run pnetcdf tests.
 ###
 
-tar -jxf /root/parallel-netcdf-1.8.1.tar.bz2 && cd /root/parallel-netcdf-1.8.1 && CPPFLAGS=-fPIC CC=$(which mpicc) ./configure --prefix=/usr --disable-fortran && make -j 4 -k && sudo make install
+tar -zxf /root/parallel-netcdf-1.10.0.tar.gz && cd /root/parallel-netcdf-1.10.0 && CPPFLAGS=-fPIC CC=$(which mpicc) ./configure --prefix=/usr --disable-fortran && make -j 4 -k && sudo make install
 
 cd /root
-rm -rf parallel-netcdf-1.8.1
+rm -rf parallel-netcdf-1.10.0
 sudo ldconfig

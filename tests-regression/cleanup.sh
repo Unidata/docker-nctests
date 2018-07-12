@@ -1,5 +1,5 @@
 #!/bin/bash
 
 echo "Removing Log Files."
-rm *.log
+rm -rf *.log
 echo "Finished"
