@@ -23,7 +23,7 @@ ENV CTEST_OUTPUT_ON_FAILURE 1
 ENV HDF5VER 1.10.2
 ENV HDF5_VER hdf5-${HDF5VER}
 ENV HDF5_FILE ${HDF5_VER}.tar.bz2
-ENV PNCVER 1.8.1
+ENV PNCVER 1.9.0
 ##
 # Let the user specify the branches.
 ##
