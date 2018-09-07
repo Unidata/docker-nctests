@@ -25,21 +25,6 @@ echo "${CUSER} ALL=NOPASSWD: ALL" >> /etc/sudoers
 
 yum -y install m4 git libjpeg-turbo-devel libcurl-devel wget nano libtool bison autoconf curl zlib-devel zip gcc-gfortran gcc-c++ byacc dos2unix bzip2 flex python2 python2-numpy python2-Cython antlr python2-setuptools python-devel make which file numpy python-setuptools antlr-C++
 
-###
-# Uncompress tarballs.
-###
-
-tar -zxf szip-2.1.1.tar.gz && rm szip-2.1.1.tar.gz
-
-###
-# Build szip, since we will use it for
-# all of our projects.
-###
-
-cd szip-2.1.1 && ./configure --prefix=/usr --enable-shared --disable-static && make -j 4 && sudo make install -j 4
-cd ..
-rm -rf szip-2.1.1
-
 ##
 # Install cmake manually
 ##

@@ -60,7 +60,7 @@ ENV CUSSERPWORD "password.1234"
 ###
 # Copy over local tarballs.
 ###
-COPY hdf5-1.10.3.tar.bz2 szip-2.1.1.tar.gz parallel-netcdf-1.9.0.tar.gz hdf-4.2.13.tar.bz2 cmake-3.11.2.tar.gz ${HOME}/
+COPY hdf5-1.10.3.tar.bz2  parallel-netcdf-1.9.0.tar.gz hdf-4.2.13.tar.bz2 cmake-3.11.2.tar.gz ${HOME}/
 
 
 ###
