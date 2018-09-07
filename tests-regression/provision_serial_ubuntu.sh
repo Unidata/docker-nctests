@@ -19,7 +19,7 @@ rm -rf /root/hdf-4.2.13
 # those tests as well.
 ###
 
-tar -jxf /root/hdf5-1.10.2.tar.bz2 && cd /root/hdf5-1.10.2 && ./configure --disable-static --enable-shared --disable-fortran --enable-hl --prefix=/usr --with-szlib && make -j 4 && sudo make install
+tar -jxf /root/hdf5-1.10.3.tar.bz2 && cd /root/hdf5-1.10.3 && ./configure --disable-static --enable-shared --disable-fortran --enable-hl --prefix=/usr --with-szlib && make -j 4 && sudo make install
 
 cd /root
-rm -rf /root/hdf5-1.10.2
+rm -rf /root/hdf5-1.10.3
