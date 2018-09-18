@@ -1,8 +1,14 @@
-version: '3'
+version: '3.7'
 
 services:
   base.ubuntu:
+    image: unidata/nctests:base
     build:
-      image: unidata/nctests:base
-      context: .
       dockerfile: Dockerfile.base
+      context: ./
+
+  base.serial:
+    image: unidata/nctests:serial
+    build:
+      dockerfile: Dockerfile.serial
+      context: ./
