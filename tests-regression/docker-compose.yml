@@ -1,23 +1,7 @@
-serial:
-  build: .
-  dockerfile: Dockerfile.serial
+version: '3'
 
-openmpi:
-  build: .
-  dockerfile: Dockerfile.openmpi
-
-mpich:
-  build: .
-  dockerfile: Dockerfile.mpich
-
-serial32:
-  build: .
-  dockerfile: Dockerfile.serial32
-
-openmpi32:
-  build: .
-  dockerfile: Dockerfile.openmpi32
-
-mpich32:
-  build: .
-  dockerfile: Dockerfile.mpich32
+services:
+  base.ubuntu:
+    image: unidata/nctests:base
+    context: .
+    dockerfile: Dockerfile.base
