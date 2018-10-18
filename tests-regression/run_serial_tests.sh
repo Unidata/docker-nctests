@@ -160,7 +160,7 @@ cd ${HOME}
 # Determine if we are doing memory checks.
 ###
 CMEM=""
-if [ "x$ENABLE_C_MEMCHECK" != "x" ]; then
+if [ "x$ENABLE_C_MEMCHECK" == "xTRUE" ]; then
     CMEM="-fsanitize=address -fno-omit-frame-pointer"
 fi
 
