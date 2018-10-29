@@ -21,10 +21,10 @@ rm -rf /root/hdf-4.2.13
 ###
 
 CFLAGS="-Wno-format-security"
-tar -jxf /root/hdf5-1.10.3.tar.bz2 && cd /root/hdf5-1.10.3 && CC=mpicc ./configure --disable-static --enable-shared --disable-fortran --enable-hl --prefix=/usr --with-szlib --enable-parallel && make -j 4 && sudo make install
+tar -jxf /root/hdf5-1.10.4.tar.bz2 && cd /root/hdf5-1.10.3 && CC=mpicc ./configure --disable-static --enable-shared --disable-fortran --enable-hl --prefix=/usr --with-szlib --enable-parallel && make -j 4 && sudo make install
 
 cd /root
-rm -rf /root/hdf5-1.10.3
+rm -rf /root/hdf5-1.10.4
 
 ###
 # Manually install pnetcdf so that we can
