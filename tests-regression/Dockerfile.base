@@ -10,7 +10,7 @@ ENV HOME /root
 WORKDIR /root
 MAINTAINER Ward Fisher <wfisher@ucar.edu>
 
-ENV NCTEST_VERSION 1.7.1 - development
+ENV NCTEST_VERSION 1.7.2 - development
 
 ENV VERSION_FILE VERSION.md
 
@@ -20,9 +20,6 @@ ENV VERSION_FILE VERSION.md
 
 ENV CTEST_OUTPUT_ON_FAILURE 1
 
-ENV HDF5VER 1.10.4
-ENV HDF5_VER hdf5-${HDF5VER}
-ENV HDF5_FILE ${HDF5_VER}.tar.bz2
 ENV PNCVER 1.9.0
 ##
 # Let the user specify the branches.
@@ -60,7 +57,8 @@ ENV CUSSERPWORD "password.1234"
 ###
 # Copy over local tarballs.
 ###
-COPY hdf5-1.10.4.tar.bz2 parallel-netcdf-1.9.0.tar.gz hdf-4.2.13.tar.bz2 cmake-3.11.2.tar.gz ${HOME}/
+COPY hdf5-1.8.21.tar.bz2 hdf5-1.10.3.tar.bz2 hdf5-1.10.4.tar.bz2 ${HOME}/
+COPY hdf-4.2.13.tar.bz2 cmake-3.11.2.tar.gz parallel-netcdf-1.9.0.tar.gz ${HOME}/
 
 
 ###
