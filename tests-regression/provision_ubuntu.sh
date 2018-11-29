@@ -49,10 +49,8 @@ for HDFVER in $(cat ${HOME}/hdf5_version.txt); do
     HDFFILE="hdf5-${HDFVER}.tar.bz2"
     tar -jxf ${HDFFILE} && cd "hdf5-${HDFVER}" && ./configure --disable-static --enable-shared --disable-fortran --enable-hl --prefix=/environments/serial/"${HDFVER}" --with-szlib && make -j 4 && sudo make install
 
-    make clean
-
-    echo "Installing Parallel HDF5 Version: ${HDFVER}"
-     ./configure --disable-static --enable-shared  --disable-fortran --enable-hl --prefix=/environments/parallel/"${HDFVER}" --with-szlib --enable-parallel && make -j 4 && sudo make install
+#    echo "Installing Parallel HDF5 Version: ${HDFVER}"
+#     ./configure --disable-static --enable-shared  --disable-fortran --enable-hl --prefix=/environments/parallel/"${HDFVER}" --with-szlib --enable-parallel && make -j 4 && sudo make install
 
     cd /root
     rm -rf hdf5-${HDFVER}
