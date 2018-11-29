@@ -3,12 +3,12 @@
 # so that we can take advantage of the
 # shared layers that docker provides.
 #####
-FROM ubuntu:bionic
-#FROM ubuntu:artful
+FROM wardf/ubuntu32:bionic
 USER root
 ENV HOME /root
 WORKDIR /root
-MAINTAINER Ward Fisher <wfisher@ucar.edu>
+
+ENV DEBIAN_FRONTEND noninteractive
 
 ENV NCTEST_VERSION 1.7.2 - development
 
@@ -21,6 +21,7 @@ ENV VERSION_FILE VERSION.md
 ENV CTEST_OUTPUT_ON_FAILURE 1
 
 ENV PNCVER 1.9.0
+
 ##
 # Let the user specify the branches.
 ##
@@ -30,7 +31,7 @@ ENV CXXBRANCH master
 ENV PBRANCH master
 ENV NCOBRANCH master
 
-ENV BITNESS 64
+ENV BITNESS 32
 ENV USE_CC gcc
 ENV USE_CXX g++
 
@@ -61,15 +62,15 @@ ENV TESTTYPE "parallel"
 # Copy over local tarballs.
 ###
 COPY hdf5-1.8.20.tar.bz2 hdf5-1.10.3.tar.bz2 hdf5-1.10.4.tar.bz2 ${HOME}/
-COPY hdf-4.2.13.tar.bz2 cmake-3.13.1.tar.gz parallel-netcdf-1.9.0.tar.gz ${HOME}/
+COPY parallel-netcdf-1.9.0.tar.gz hdf-4.2.13.tar.bz2 cmake-3.13.1.tar.gz ${HOME}/
 COPY hdf5_version.txt ${HOME}/
 
 ###
-# Run the provision script.
+# Run the provision scripot.
 ###
-COPY provision_parallel_ubuntu.sh ${HOME}/
-RUN chmod 755 ${HOME}/provision_parallel_ubuntu.sh
-RUN ${HOME}/provision_parallel_ubuntu.sh
+COPY provision_serial_ubuntu.sh ${HOME}/
+RUN chmod 755 ${HOME}/provision_serial_ubuntu.sh
+RUN ${HOME}/provision_serial_ubuntu.sh
 
 #####
 # Configure system and environment.
