@@ -44,10 +44,15 @@ tar -jxf hdf-4.2.13.tar.bz2 && cd hdf-4.2.13 && ./configure --disable-static --e
 
 for HDFVER in $(cat ${HOME}/hdf5_version.txt); do
 
-    echo "Installing HDF5 Version: ${HDFVER}"
+    echo "Installing Serial HDF5 Version: ${HDFVER}"
     sleep 1
     HDFFILE="hdf5-${HDFVER}.tar.bz2"
     tar -jxf ${HDFFILE} && cd "hdf5-${HDFVER}" && ./configure --disable-static --enable-shared --disable-fortran --enable-hl --prefix=/environments/serial/"${HDFVER}" --with-szlib && make -j 4 && sudo make install
+
+    make clean
+
+    echo "Installing Parallel HDF5 Version: ${HDFVER}"
+     ./configure --disable-static --enable-shared  --disable-fortran --enable-hl --prefix=/environments/parallel/"${HDFVER}" --with-szlib --enable-parallel && make -j 4 && sudo make install
 
     cd /root
     rm -rf hdf5-${HDFVER}
