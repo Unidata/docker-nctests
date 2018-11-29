@@ -65,9 +65,9 @@ COPY hdf5_version.txt ${HOME}/
 ###
 # Run the provision script.
 ###
-COPY provision_base_ubuntu.sh ${HOME}/
-RUN chmod 755 ${HOME}/provision_base_ubuntu.sh
-RUN ${HOME}/provision_base_ubuntu.sh
+COPY provision_ubuntu.sh ${HOME}/
+RUN chmod 755 ${HOME}/provision_ubuntu.sh
+RUN ${HOME}/provision_ubuntu.sh
 
 #####
 # Configure system and environment.
