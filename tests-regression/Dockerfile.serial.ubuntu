@@ -53,16 +53,17 @@ ENV NCOREPS 1
 ENV TESTPROC 1
 ENV CUSER tester
 ENV CUSSERPWORD "password.1234"
+ENV HDF5VER "1.10.4"
 
 ###
 # Copy over local tarballs.
 ###
-COPY hdf5-1.8.21.tar.bz2 hdf5-1.10.3.tar.bz2 hdf5-1.10.4.tar.bz2 ${HOME}/
+COPY hdf5-1.8.20.tar.bz2 hdf5-1.10.3.tar.bz2 hdf5-1.10.4.tar.bz2 ${HOME}/
 COPY hdf-4.2.13.tar.bz2 cmake-3.11.2.tar.gz parallel-netcdf-1.9.0.tar.gz ${HOME}/
-
+COPY hdf5_version.txt ${HOME}/
 
 ###
-# Run the provision scripot.
+# Run the provision script.
 ###
 COPY provision_base_ubuntu.sh ${HOME}/
 RUN chmod 755 ${HOME}/provision_base_ubuntu.sh
@@ -85,6 +86,7 @@ COPY run_all_nctest_images.sh ${HOME}/
 COPY build_all_nctest_images.sh ${HOME}/
 COPY push_all_nctest_images.sh ${HOME}/
 COPY squash_all_nctest_images.sh ${HOME}/
+COPY hdf5_version.txt ${HOME}/
 COPY README.md ${HOME}/
 
 RUN echo "Version:\n\tunidata/nctests ($BITNESS) :\t$NCTEST_VERSION\t$(date)" > $VERSION_FILE
@@ -93,3 +95,9 @@ RUN sudo chown -R tester:tester ${HOME}
 
 RUN dos2unix ${HOME}/run_serial_tests.sh
 RUN dos2unix ${HOME}/run_par_tests.sh
+
+###
+# Run test script on launch
+###
+
+CMD bash -l -e ${HOME}/run_serial_tests.sh

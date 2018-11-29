@@ -32,24 +32,24 @@ sudo apt-get -y install --no-install-recommends bzip2 g++ gfortran libtool autom
 ##
 # Install cmake manually
 ##
-tar -zxf cmake-3.11.2.tar.gz && cd cmake-3.11.2 && ./configure --prefix=/usr && make -j 4 && sudo make install
+tar -zxf cmake-3.11.2.tar.gz && cd cmake-3.11.2 && ./configure --prefix=/usr && make -j 4 && sudo make install && cd ..
 
 ###
 # Manually install hdf4 so that we can run
 # those tests as well.
 ###
 
-tar -jxf /root/hdf-4.2.13.tar.bz2 && cd /root/hdf-4.2.13 && ./configure --disable-static --enable-shared --disable-netcdf --disable-fortran --prefix=/usr && make -j 4 && sudo make install
+tar -jxf hdf-4.2.13.tar.bz2 && cd hdf-4.2.13 && ./configure --disable-static --enable-shared --disable-netcdf --disable-fortran --prefix=/usr && make -j 4 && sudo make install && cd ..
 
 
-for HDFVER in $(cat hdf5_versions.txt); do
+for HDFVER in $(cat ${HOME}/hdf5_version.txt); do
 
     echo "Installing HDF5 Version: ${HDFVER}"
     sleep 1
     HDFFILE="hdf5-${HDFVER}.tar.bz2"
-    tar -jxf /root/$HDFFILE && cd /root/"hdf5-${HDFVER}" && ./configure --disable-static --enable-shared --disable-fortran --enable-hl --prefix=/environments/serial/"${HDFVER}" --with-szlib && make -j 4 && sudo make install
+    tar -jxf ${HDFFILE} && cd "hdf5-${HDFVER}" && ./configure --disable-static --enable-shared --disable-fortran --enable-hl --prefix=/environments/serial/"${HDFVER}" --with-szlib && make -j 4 && sudo make install
 
     cd /root
-    rm -rf /root/hdf5-${HDFVER}
+    rm -rf hdf5-${HDFVER}
 
 done
