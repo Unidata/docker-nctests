@@ -47,6 +47,31 @@ CHECKERR() {
 cat VERSION.md
 
 ###
+# Set up environment
+###
+
+
+
+HDF5DIR=/environments/${TESTTYPE}/${HDF5VER}
+if [ ! -d ${HDF5DIR} ]; then
+    echo ""
+    echo "ERROR: HDF5 Version ${HDF5VER} doesn't exit. Options are:"
+    echo "-----------------------"
+    sudo cat hdf5_version.txt
+    echo ""
+    exit 1
+fi
+
+export CPPFLAGS+="-I${HDF5DIR}/include"
+export CFLAGS+="-I${HDF5DIR}/include"
+export LDFLAGS+="-L${HDF5DIR}/lib"
+export LD_LIBRARY_PATH+="${HDF5DIR}/lib"
+export DYLD_LIBRARY_PATH+="${HDF5DIR}/lib"
+export PATH+="${TARGDIR}/bin:$PATH"
+export CMAKE_PREFIX_PATH+="${HDF5DIR}"
+
+
+###
 # Check out all the projects.
 #
 # If the project file has been mapped to a directory
