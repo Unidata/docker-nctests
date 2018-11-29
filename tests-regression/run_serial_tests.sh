@@ -50,7 +50,7 @@ cat VERSION.md
 
 
 
-HDF5DIR=/environments/serial/${HDF5VER}
+HDF5DIR=/environments/${TESTTYPE}/${HDF5VER}
 if [ ! -d ${HDF5DIR} ]; then
     echo ""
     echo "ERROR: HDF5 Version ${HDF5VER} doesn't exit. Options are:"
