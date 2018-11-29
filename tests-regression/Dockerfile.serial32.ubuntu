@@ -62,7 +62,7 @@ ENV TESTTYPE "serial"
 # Copy over local tarballs.
 ###
 COPY hdf5-1.8.20.tar.bz2 hdf5-1.10.3.tar.bz2 hdf5-1.10.4.tar.bz2 ${HOME}/
-COPY parallel-netcdf-1.9.0.tar.gz hdf-4.2.13.tar.bz2 cmake-3.11.2.tar.gz ${HOME}/
+COPY parallel-netcdf-1.9.0.tar.gz hdf-4.2.13.tar.bz2 cmake-3.13.1.tar.gz ${HOME}/
 COPY hdf5_version.txt ${HOME}/
 
 ###

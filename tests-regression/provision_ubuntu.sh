@@ -32,7 +32,7 @@ sudo apt-get -y install --no-install-recommends bzip2 g++ gfortran libtool autom
 ##
 # Install cmake manually
 ##
-tar -zxf cmake-3.11.2.tar.gz && cd cmake-3.11.2 && ./configure --prefix=/usr && make -j 4 && sudo make install && cd ..
+tar -zxf cmake-3.13.1.tar.gz && cd cmake-3.13.1 && ./configure --prefix=/usr && make -j 4 && sudo make install && cd ..
 
 ###
 # Manually install hdf4 so that we can run
