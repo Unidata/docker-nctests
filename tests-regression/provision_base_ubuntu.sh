@@ -30,7 +30,7 @@ sudo apt-get -y install --no-install-recommends bzip2 g++ gfortran libtool autom
 ##
 # Install cmake manually
 ##
-tar -zxf cmake-3.11.2.tar.gz && cd cmake-3.11.2 && ./configure --prefix=/usr && make -j 4 && sudo make install
+tar -zxf cmake-3.13.3.tar.gz && cd cmake-3.13.3 && ./configure --prefix=/usr && make -j 4 && sudo make install
 
 ##
 # Some cleanup
