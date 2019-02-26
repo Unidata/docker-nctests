@@ -33,8 +33,8 @@ rm -rf /root/hdf5-1.10.4
 # run pnetcdf tests.
 ###
 
-tar -zxf /root/parallel-netcdf-1.9.0.tar.gz && cd /root/parallel-netcdf-1.9.0 && CPPFLAGS=-fPIC CC=mpicc ./configure --prefix=/usr --disable-fortran --enable-relax-coord-bound && make -j 4 -k && make install
+tar -zxf /root/pnetcdf-1.11.0.tar.gz && cd /root/pnetcdf-1.11.0 && CPPFLAGS=-fPIC CC=mpicc ./configure --prefix=/usr --disable-fortran --enable-relax-coord-bound && make -j 4 -k && make install
 
 cd /root
-rm -rf parallel-netcdf-1.9.0
+rm -rf pnetcdf-1.11.0
 sudo ldconfig

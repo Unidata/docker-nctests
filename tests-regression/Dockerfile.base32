@@ -10,7 +10,7 @@ WORKDIR /root
 
 ENV DEBIAN_FRONTEND noninteractive
 
-ENV NCTEST_VERSION 1.7.2 - development
+ENV NCTEST_VERSION 1.7.3 - development
 
 ENV VERSION_FILE VERSION.md
 
@@ -60,7 +60,7 @@ ENV CUSSERPWORD "password.1234"
 ###
 # Copy over local tarballs.
 ###
-COPY hdf5-1.10.4.tar.bz2  parallel-netcdf-1.9.0.tar.gz hdf-4.2.13.tar.bz2 cmake-3.13.3.tar.gz ${HOME}/
+COPY hdf5-1.10.4.tar.bz2  pnetcdf-1.11.0.tar.gz hdf-4.2.13.tar.bz2 cmake-3.13.3.tar.gz ${HOME}/
 
 
 ###
