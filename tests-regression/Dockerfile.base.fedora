@@ -3,7 +3,7 @@
 # so that we can take advantage of the
 # shared layers that docker provides.
 #####
-FROM fedora:27
+FROM fedora:29
 USER root
 ENV HOME /root
 WORKDIR /root
