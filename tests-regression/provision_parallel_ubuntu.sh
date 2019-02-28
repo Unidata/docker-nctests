@@ -9,10 +9,10 @@ cd /root
 # those tests as well.
 ###
 
-tar -jxf /root/hdf-4.2.13.tar.bz2 && cd /root/hdf-4.2.13 && CC=mpicc ./configure --disable-static --enable-shared --disable-netcdf --disable-fortran --prefix=/usr && make -j 4 && sudo make install
+tar -jxf /root/hdf-4.2.14.tar.bz2 && cd /root/hdf-4.2.14 && CC=mpicc ./configure --disable-static --enable-shared --disable-netcdf --disable-fortran --prefix=/usr && make -j 4 && sudo make install
 
 cd /root
-rm -rf /root/hdf-4.2.13
+rm -rf /root/hdf-4.2.14
 
 
 ###
