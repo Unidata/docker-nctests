@@ -41,6 +41,10 @@ CHECKERR() {
 
 }
 
+if [ "x$SERIALBUILD" != "x" ]; then
+    TESTPROC="1"
+fi
+
 ###
 # Print out version.
 ###
@@ -129,6 +133,15 @@ cd ${HOME}
 
 # CREPS is defined as an environmental variable.
 
+###
+# Determine if we are doing memory checks.
+###
+CMEM=""
+if [ "x$ENABLE_C_MEMCHECK" == "xTRUE" ]; then
+    CMEM="-fsanitize=address -fno-omit-frame-pointer"
+fi
+
+
 while [[ $CCOUNT -le $CREPS ]]; do
 
     if [ "x$USECMAKE" = "xTRUE" ]; then
@@ -144,10 +157,10 @@ while [[ $CCOUNT -le $CREPS ]]; do
             if [ "x$USEDASH" == "xTRUE" ]; then
 		ctest -D Experimental -j $TESTPROC ; CHECKERR
             else
-                make -j 4 && ctest -j $TESTPROC ; CHECKERR
+                make -j $TESTPROC && ctest -j $TESTPROC ; CHECKERR
             fi
         else
-            make -j 4 ; CHECKERR
+            make -j $TESTPROC ; CHECKERR
         fi
         cd ${HOME}
         echo ""
@@ -163,9 +176,9 @@ while [[ $CCOUNT -le $CREPS ]]; do
         fi
         CC=mpicc ./configure --enable-hdf4 --enable-extra-tests --enable-mmap --enable-pnetcdf --enable-parallel-tests --prefix=/usr "$AC_COPTS"
         make clean
-        make -j 4 ; CHECKERR
+        make -j $TESTPROC ; CHECKERR
         if [ "x$RUNC" == "xTRUE" ]; then
-            make check TESTS="" -j 4 ; CHECKERR
+            make check TESTS="" -j $TESTPROC ; CHECKERR
             make check -j $TESTPROC ; CHECKERR
 
             if [ "x$DISTCHECK" == "xTRUE" ]; then
@@ -186,7 +199,7 @@ if [ "x$USECMAKE" = "xTRUE" ]; then
     sudo make install
 elif [ "x$USEAC" = "xTRUE" ]; then
     cd netcdf-c
-    sudo make install
+    sudo make install -j $TESTPROC
 fi
 
 cd ${HOME}
@@ -210,10 +223,10 @@ if [ "x$RUNF" == "xTRUE" ]; then
             cmake ${HOME}/netcdf-fortran -DBUILDNAME_PREFIX="docker$BITNESS-parallel$PARTYPE" -DBUILDNAME_SUFFIX="$FBRANCH" -DTEST_PARALLEL=OFF -DCMAKE_Fortran_COMPILER=$(which mpif90) $FOPTS
 
             if [ "x$USEDASH" == "xTRUE" ]; then
-                make Experimental ; CHECKERR
-
+                ctest -j $TESTPROC -D Experimental
             else
-                make && make test ; CHECKERR
+                make -j $TESTPROC
+                ctest -j $TESTPROC ; CHECKERR
             fi
             make clean
             cd ${HOME}
@@ -229,12 +242,12 @@ if [ "x$RUNF" == "xTRUE" ]; then
                 autoreconf -if
             fi
             CC=mpicc FC=`which mpif90` F90=`which mpif90` F77=`which mpif77` ./configure --enable-parallel-tests "$AC_FOPTS"
-            make ; CHECKERR
-            make check TESTS=""
-            make check ; CHECKERR
+            make -j $TESTPROC ; CHECKERR
+            make check TESTS="" -j $TESTPROC
+            make check -j $TESTPROC ; CHECKERR
 
             if [ "x$DISTCHECK" == "xTRUE" ]; then
-                DISTCHECK_CONFIGURE_FLAGS="$AC_FOPTS" make distcheck ; CHECKERR
+                DISTCHECK_CONFIGURE_FLAGS="$AC_FOPTS" make distcheck -j $TESTPROC; CHECKERR
             fi
 
             make clean
@@ -262,9 +275,9 @@ if [ "x$RUNCXX" == "xTRUE" ]; then
             cmake ${HOME}/netcdf-cxx4 -DBUILDNAME_PREFIX="docker$BITNESS-parallel$PARTYPE" -DBUILDNAME_SUFFIX="$CXXBRANCH" -DCMAKE_CXX_COMPILER=$(which mpic++) $CXXOPTS
 
             if [ "x$USEDASH" == "xTRUE" ]; then
-                make Experimental
+                ctest -j $TESTPROC -D Experimental
             else
-                make -j 4 && make test
+                make -j $TESTPROC && ctest -j ${TESTPROC}; CHECKERR
             fi
             make clean
             cd ${HOME}
@@ -280,8 +293,8 @@ if [ "x$RUNCXX" == "xTRUE" ]; then
                 autoreconf -if
             fi
             ./configure "$AC_CXXOPTS"
-            make -j 4
-            make check TESTS="" -j 4
+            make -j ${TESTPROC}
+            make check TESTS="" -j ${TESTPROC}
             make check ; CHECKERR
 
             if [ "x$DISTCHECK" == "xTRUE" ]; then
