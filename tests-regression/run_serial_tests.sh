@@ -37,10 +37,6 @@ CHECKERR() {
 
 }
 
-if [ "x$SERIALBUILD" != "x" ]; then
-    TESTPROC="1"
-fi
-
 ###
 # Print out version.
 ###
@@ -259,9 +255,11 @@ sudo ldconfig
 ###
 # Build & test netcdf-fortran
 ###
-
 if [ "x$RUNF" == "xTRUE" ]; then
 
+  if [ "x$FORTRAN_SERIAL_BUILD" != "x" ]; then
+      TESTPROC_FORTRAN="1"
+  fi
 
     while [[ $FCOUNT -le $FREPS ]]; do
 
@@ -273,10 +271,10 @@ if [ "x$RUNF" == "xTRUE" ]; then
             cd build-netcdf-fortran
             cmake ${HOME}/netcdf-fortran -DBUILDNAME_PREFIX="docker$BITNESS-$USE_CC" -DBUILDNAME_SUFFIX="$FBRANCH" -DCMAKE_C_COMPILER=$USE_CC $FOPTS
             if [ "x$USEDASH" == "xTRUE" ]; then
-                ctest -j $TESTPROC -D Experimental
+                ctest -j $TESTPROC_FORTRAN -D Experimental
             else
-                make -j $TESTPROC
-                ctest -j $TESTPROC ; CHECKERR
+                make -j $TESTPROC_FORTRAN ; CHECKERR
+                ctest -j $TESTPROC_FORTRAN ; CHECKERR
             fi
             make clean
             cd ${HOME}
@@ -292,12 +290,12 @@ if [ "x$RUNF" == "xTRUE" ]; then
                 autoreconf -if
             fi
             CC=$USE_CC ./configure "$AC_FOPTS"
-            make -j $TESTPROC ; CHECKERR
-            make check TESTS="" -j $TESTPROC
-            make check -j $TESTPROC ; CHECKERR
+            make -j $TESTPROC_FORTRAN ; CHECKERR
+            make check TESTS="" -j $TESTPROC_FORTRAN
+            make check -j $TESTPROC_FORTRAN ; CHECKERR
 
             if [ "x$DISTCHECK" == "xTRUE" ]; then
-                DISTCHECK_CONFIGURE_FLAGS="$AC_FOPTS" make distcheck -j $TESTPROC ; CHECKERR
+                DISTCHECK_CONFIGURE_FLAGS="$AC_FOPTS" make distcheck -j $TESTPROC_FORTRAN ; CHECKERR
             fi
 
             make clean

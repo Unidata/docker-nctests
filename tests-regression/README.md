@@ -120,9 +120,11 @@ The following environmental variables can be used to control the behavior at run
 ### Advanced Options
 ----
 * `NCOMAKETEST` - **ADVANCED** Default to `FALSE`. When `TRUE`, run `make test` for the `NCO` package and parse the output for `Unidata`-related output.
-* `TESTPROC` - **ADVANCED** Default to `1`.  Defines the number of processes to use when building and testing.
+* `TESTPROC` - **ADVANCED** Default to `1`.  Defines the number of processors to use when building and testing.
+* `TESTPROC_FORTRAN` - **ADVANCED** Default to `1`. Defines the number of processors to use when building and testing.
 * `USE_LOCAL_CP` - **ADVANCED** Default to `FALSE`.  Uses `cp` instead of `git clone`.  This is required in particular circumstances and when a test image uses an older version of `git` that will not work with shallow copies.
 * `ENABLE_C_MEMCHECK` - **ADVANCED** **NetCDF-C only** Turns on the following options when running the C tests: `-fsanitize=address -fno-omit-frame-pointer`
+* `FORTRAN_SERIAL_BUILD` - **ADVANCED** **NetCDF-Fortran only** Forces `TESTPROC` to `1` for netCDF-Fortran.
 
 ## Examples
 

@@ -41,10 +41,6 @@ CHECKERR() {
 
 }
 
-if [ "x$SERIALBUILD" != "x" ]; then
-    TESTPROC="1"
-fi
-
 ###
 # Print out version.
 ###
@@ -209,10 +205,12 @@ sudo ldconfig
 ###
 # Build & test netcdf-fortran
 ###
-
-
 if [ "x$RUNF" == "xTRUE" ]; then
     while [[ $FCOUNT -le $FREPS ]]; do
+
+      if [ "x$FORTRAN_SERIAL_BUILD" != "x" ]; then
+          TESTPROC_FORTRAN="1"
+      fi
 
         if [ "x$USECMAKE" = "xTRUE" ]; then
             echo "[$FCOUNT | $FREPS] Testing netCDF-Fortran - CMAKE"
@@ -223,10 +221,10 @@ if [ "x$RUNF" == "xTRUE" ]; then
             cmake ${HOME}/netcdf-fortran -DBUILDNAME_PREFIX="docker$BITNESS-parallel$PARTYPE" -DBUILDNAME_SUFFIX="$FBRANCH" -DTEST_PARALLEL=OFF -DCMAKE_Fortran_COMPILER=$(which mpif90) $FOPTS
 
             if [ "x$USEDASH" == "xTRUE" ]; then
-                ctest -j $TESTPROC -D Experimental
+                ctest -j $TESTPROC_FORTRAN -D Experimental
             else
-                make -j $TESTPROC
-                ctest -j $TESTPROC ; CHECKERR
+                make -j $TESTPROC_FORTRAN
+                ctest -j $TESTPROC_FORTRAN ; CHECKERR
             fi
             make clean
             cd ${HOME}
@@ -242,12 +240,12 @@ if [ "x$RUNF" == "xTRUE" ]; then
                 autoreconf -if
             fi
             CC=mpicc FC=`which mpif90` F90=`which mpif90` F77=`which mpif77` ./configure --enable-parallel-tests "$AC_FOPTS"
-            make -j $TESTPROC ; CHECKERR
-            make check TESTS="" -j $TESTPROC
-            make check -j $TESTPROC ; CHECKERR
+            make -j $TESTPROC_FORTRAN ; CHECKERR
+            make check TESTS="" -j $TESTPROC_FORTRAN
+            make check -j $TESTPROC_FORTRAN ; CHECKERR
 
             if [ "x$DISTCHECK" == "xTRUE" ]; then
-                DISTCHECK_CONFIGURE_FLAGS="$AC_FOPTS" make distcheck -j $TESTPROC; CHECKERR
+                DISTCHECK_CONFIGURE_FLAGS="$AC_FOPTS" make distcheck -j $TESTPROC_FORTRAN ; CHECKERR
             fi
 
             make clean
