@@ -37,6 +37,10 @@ CHECKERR() {
 
 }
 
+if [ "x$SERIALBUILD" != "x" ]; then
+    TESTPROC="1"
+fi
+
 ###
 # Print out version.
 ###
@@ -190,7 +194,7 @@ while [[ $CCOUNT -le $CREPS ]]; do
                     make ExperimentalSubmit
                 fi
             else
-                make -j 4 && ctest -j $TESTPROC ; CHECKERR
+                make -j $TESTPROC && ctest -j $TESTPROC ; CHECKERR
                 if [ "x$USE_VALGRIND" == "xTRUE" ]; then
                     make ExperimentalMemCheck
                 fi
@@ -199,7 +203,7 @@ while [[ $CCOUNT -le $CREPS ]]; do
 
 
         else
-            make -j 4 ; CHECKERR
+            make -j $TESTPROC ; CHECKERR
         fi
         cd ${HOME}
         echo ""
@@ -222,9 +226,9 @@ while [[ $CCOUNT -le $CREPS ]]; do
         fi
         CC=$USE_CC ./configure --prefix=/usr --enable-hdf4 --enable-extra-tests --enable-mmap "$AC_COPTS"
         make clean
-        make -j 4 ; CHECKERR
+        make -j $TESTPROC ; CHECKERR
         if [ "x$RUNC" == "xTRUE" ]; then
-            make check TESTS="" -j 4 ; CHECKERR
+            make check TESTS="" -j $TESTPROC ; CHECKERR
             make check -j $TESTPROC ; CHECKERR
 
             if [ "x$DISTCHECK" == "xTRUE" ]; then
@@ -245,7 +249,7 @@ if [ "x$USECMAKE" = "xTRUE" ]; then
     sudo make install
 elif [ "x$USEAC" = "xTRUE" ]; then
     cd netcdf-c
-    sudo make install
+    sudo make install -j $TESTPROC
 fi
 
 cd ${HOME}
@@ -269,9 +273,10 @@ if [ "x$RUNF" == "xTRUE" ]; then
             cd build-netcdf-fortran
             cmake ${HOME}/netcdf-fortran -DBUILDNAME_PREFIX="docker$BITNESS-$USE_CC" -DBUILDNAME_SUFFIX="$FBRANCH" -DCMAKE_C_COMPILER=$USE_CC $FOPTS
             if [ "x$USEDASH" == "xTRUE" ]; then
-                make Experimental ; CHECKERR
+                ctest -j $TESTPROC -D Experimental
             else
-                make && make test ; CHECKERR
+                make -j $TESTPROC
+                ctest -j $TESTPROC ; CHECKERR
             fi
             make clean
             cd ${HOME}
@@ -287,12 +292,12 @@ if [ "x$RUNF" == "xTRUE" ]; then
                 autoreconf -if
             fi
             CC=$USE_CC ./configure "$AC_FOPTS"
-            make ; CHECKERR
-            make check TESTS=""
-            make check ; CHECKERR
+            make -j $TESTPROC ; CHECKERR
+            make check TESTS="" -j $TESTPROC
+            make check -j $TESTPROC ; CHECKERR
 
             if [ "x$DISTCHECK" == "xTRUE" ]; then
-                DISTCHECK_CONFIGURE_FLAGS="$AC_FOPTS" make distcheck ; CHECKERR
+                DISTCHECK_CONFIGURE_FLAGS="$AC_FOPTS" make distcheck -j $TESTPROC ; CHECKERR
             fi
 
             make clean
@@ -321,9 +326,9 @@ if [ "x$RUNCXX" == "xTRUE" ]; then
             cd build-netcdf-cxx4
             cmake ${HOME}/netcdf-cxx4 -DBUILDNAME_PREFIX="docker$BITNESS-$USE_CXX" -DBUILDNAME_SUFFIX="$CXXBRANCH" -DCMAKE_CXX_COMPILER=$USE_CXX $CXXOPTS
             if [ "x$USEDASH" == "xTRUE" ]; then
-                make Experimental
+                ctest -j $TESTPROC -D Experimental
             else
-                make -j 4 && make test
+                make -j $TESTPROC && ctest -j ${TESTPROC}; CHECKERR
             fi
             make clean
             cd ${HOME}
@@ -339,12 +344,12 @@ if [ "x$RUNCXX" == "xTRUE" ]; then
                 autoreconf -if
             fi
             CXX=$USE_CXX ./configure "$AC_CXXOPTS"
-            make -j 4
-            make check TESTS="" -j 4
+            make -j ${TESTPROC}; CHECKERR
+            make check TESTS="" -j ${TESTPROC}; CHECKERR
             make check ; CHECKERR
 
             if [ "x$DISTCHECK" == "xTRUE" ]; then
-                DISTCHECK_CONFIGURE_FLAGS="$AC_CXXOPTS" make distcheck ; CHECKERR
+                DISTCHECK_CONFIGURE_FLAGS="$AC_CXXOPTS" make distcheck -j $TESTPROC ; CHECKERR
             fi
 
             make clean
