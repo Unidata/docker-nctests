@@ -326,7 +326,7 @@ if [ "x$RUNCXX" == "xTRUE" ]; then
             if [ "x$USEDASH" == "xTRUE" ]; then
                 ctest -j $TESTPROC -D Experimental
             else
-                make -j $TESTPROC && ctest -j ${TESTPROC}; CHECKERR
+                make -j $TESTPROC && ctest ; CHECKERR
             fi
             make clean
             cd ${HOME}
@@ -343,11 +343,11 @@ if [ "x$RUNCXX" == "xTRUE" ]; then
             fi
             CXX=$USE_CXX ./configure "$AC_CXXOPTS"
             make -j ${TESTPROC}; CHECKERR
-            make check TESTS="" -j ${TESTPROC}; CHECKERR
+            make check TESTS="" -j ${TESTPROC_CXX}; CHECKERR
             make check ; CHECKERR
 
             if [ "x$DISTCHECK" == "xTRUE" ]; then
-                DISTCHECK_CONFIGURE_FLAGS="$AC_CXXOPTS" make distcheck -j $TESTPROC ; CHECKERR
+                DISTCHECK_CONFIGURE_FLAGS="$AC_CXXOPTS" make distcheck ; CHECKERR
             fi
 
             make clean

@@ -273,9 +273,10 @@ if [ "x$RUNCXX" == "xTRUE" ]; then
             cmake ${HOME}/netcdf-cxx4 -DBUILDNAME_PREFIX="docker$BITNESS-parallel$PARTYPE" -DBUILDNAME_SUFFIX="$CXXBRANCH" -DCMAKE_CXX_COMPILER=$(which mpic++) $CXXOPTS
 
             if [ "x$USEDASH" == "xTRUE" ]; then
-                ctest -j $TESTPROC -D Experimental
+                ctest -D Experimental ; CHECKERR
             else
-                make -j $TESTPROC && ctest -j ${TESTPROC}; CHECKERR
+                make ; CHECKERR
+                make test ; CHECKERR
             fi
             make clean
             cd ${HOME}
