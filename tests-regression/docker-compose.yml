@@ -1,14 +1,15 @@
 version: '3.7'
 
 services:
-  base.ubuntu:
-    image: unidata/nctests:base
-    build:
-      dockerfile: Dockerfile.base
-      context: ./
-
-  base.serial:
+  regression-testing:
     image: unidata/nctests:serial
-    build:
-      dockerfile: Dockerfile.serial
-      context: ./
+    environment:
+      - USEDASH=TRUE
+      - TESTPROC=100
+    deploy:
+      replicas: 1
+    networks:
+      - regressnet
+
+networks:
+  regressnet:
