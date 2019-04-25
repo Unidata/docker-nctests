@@ -6,7 +6,8 @@ Two versions are required, and an `/output` directory must be mapped.
 
 ## Options
 
+* `DIST`: Specify what distribution to use.  Options are `nc` (default), `nf`, `cxx4`.
+
 ## Usage
 
     $ docker run -it -e OLDVER="OLDBRANCH" -e NEWVER="NEWBRANCH" -v $(pwd):/output unidata/ncabi
-
