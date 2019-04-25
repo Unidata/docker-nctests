@@ -23,32 +23,9 @@ RUN apt-get -y upgrade
 RUN apt-get install -y man nano curl git emacs wget gcc g++ gfortran clang gdb autoconf automake make libtool m4 bison flex zlib1g-dev libjpeg-dev libcurl4-openssl-dev python zip elfutils libelf-dev dos2unix cmake
 
 ###
-# Install hdf4, hdf5 manually.
-###
+ENV NCVER=v4.6.3
+RUN git clone http://github.com/Unidata/netcdf-c && cd netcdf-c && git checkout ${NCVER} && mkdir build && cd build && cmake .. -DENABLE_TESTS=OFF -DCMAKE_INSTALL_PREFIX=/usr && make -j 100 && make install
 
-#
-# HDF4
-#
-#ENV HDF4_VER hdf-4.2.12
-#ENV HDF4_FILE ${HDF4_VER}.tar.bz2
-#RUN wget http://www.hdfgroup.org/ftp/HDF/HDF_Current/src/${HDF4_FILE}
-#RUN tar -jxf ${HDF4_FILE}
-
-#RUN cd ${HDF4_VER} && ./configure --disable-static --enable-shared --disable-netcdf --disable-fortran --prefix=/usr && make install -j 4
-#RUN rm -rf ${HDF4_VER}
-
-##
-# HDF5
-##
-#ENV HDF5VER 1.8.18
-#ENV HDF5_VER hdf5-${HDF5VER}
-#ENV HDF5_FILE ${HDF5_VER}.tar.bz2
-
-#RUN wget https://support.hdfgroup.org/ftp/HDF5/current18/src/${HDF5_FILE}
-#RUN tar -jxf ${HDF5_FILE}
-
-#RUN cd ${HDF5_VER} && ./configure --disable-static --enable-shared --disable-fortran --enable-hl --prefix=/usr && make install -j 4
-#RUN rm -rf ${HDF5_VER}
 
 ###
 # Install lvc-maintained abi information.
@@ -60,7 +37,7 @@ RUN cd lvc-installer && make install prefix=/usr target=abi-tracker
 # Copy over some files.
 ###
 
-COPY run_c_abi_diff.sh /root/
+COPY run_c_abi_diff.sh run_cxx_abi.diff.sh run_f_abi_diff.sh run_abi.sh /root/
 RUN dos2unix /root/run_c_abi_diff.sh
 
 COPY README.md /root/
@@ -70,4 +47,4 @@ RUN dos2unix /root/README.md
 # Run script.
 ###
 
-CMD /root/run_c_abi_diff.sh
+CMD /root/run_abi.sh
