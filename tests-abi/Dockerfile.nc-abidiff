@@ -24,7 +24,7 @@ RUN apt-get -y upgrade
 RUN apt-get install -y man nano curl git emacs wget gcc g++ gfortran clang gdb autoconf automake make libtool m4 bison flex zlib1g-dev libjpeg-dev libcurl4-openssl-dev python zip elfutils libelf-dev dos2unix cmake
 
 ###
-ENV NCVER=v4.6.3
+ENV NCVER=v4.7.0
 RUN git clone http://github.com/Unidata/netcdf-c && cd netcdf-c && git checkout ${NCVER} && mkdir build && cd build && cmake .. -DENABLE_TESTS=OFF -DCMAKE_INSTALL_PREFIX=/usr && make -j 100 && make install
 RUN rm -rf netcdf-c
 
