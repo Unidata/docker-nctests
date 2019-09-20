@@ -147,16 +147,14 @@ while [[ $CCOUNT -le $CREPS ]]; do
         sleep 2
         mkdir -p build-netcdf-c
         cd build-netcdf-c
-        cmake ${HOME}/netcdf-c -DCMAKE_INSTALL_PREFIX=/usr -DENABLE_HDF4=ON -DENABLE_EXTRA_TESTS=ON -DENABLE_MMAP=ON -DBUILDNAME_PREFIX="docker$BITNESS-parallel$PARTYPE" -DBUILDNAME_SUFFIX="$CBRANCH" -DCMAKE_C_COMPILER=mpicc -DENABLE_PNETCDF=ON -DENABLE_PARALLEL_TESTS=ON $COPTS
+        cmake ${HOME}/netcdf-c -DCMAKE_INSTALL_PREFIX=/usr -DENABLE_HDF4=ON -DENABLE_EXTRA_TESTS=ON -DENABLE_MMAP=ON -DBUILDNAME_PREFIX="docker$BITNESS-parallel$PARTYPE" -DBUILDNAME_SUFFIX="$CBRANCH" -DCMAKE_C_COMPILER=mpicc -DENABLE_PNETCDF=ON -DENABLE_PARALLEL_TESTS="${RUN_TESTS}" -DENABLE_TESTS="${RUNC}" $COPTS
 
         if [ "x$RUNC" == "xTRUE" ]; then
             if [ "x$USEDASH" == "xTRUE" ]; then
-		ctest -D Experimental -j $TESTPROC ; CHECKERR
+		        ctest -D Experimental -j $TESTPROC ; CHECKERR
             else
                 make -j $TESTPROC && ctest -j $TESTPROC ; CHECKERR
             fi
-        else
-            make -j $TESTPROC ; CHECKERR
         fi
         cd ${HOME}
         echo ""
@@ -192,10 +190,11 @@ done
 
 if [ "x$USECMAKE" = "xTRUE" ]; then
     cd build-netcdf-c
-    sudo make install
+    make -j ${TESTPROC} ; CHECKERR
+    sudo make install ; CHECKERR
 elif [ "x$USEAC" = "xTRUE" ]; then
     cd netcdf-c
-    sudo make install -j $TESTPROC
+    sudo make install -j $TESTPROC ; CHECKERR
 fi
 
 cd ${HOME}
@@ -239,7 +238,7 @@ if [ "x$RUNF" == "xTRUE" ]; then
             if [ ! -f "configure" ]; then
                 autoreconf -if
             fi
-            CC=mpicc FC=`which mpif90` F90=`which mpif90` F77=`which mpif77` ./configure --enable-parallel-tests "$AC_FOPTS"
+            CC=mpicc FC=`which mpifort` F90=`which mpifort` F77=`which mpifort` ./configure --enable-parallel-tests "$AC_FOPTS"
             make -j $TESTPROC_FORTRAN ; CHECKERR
             make check TESTS="" -j $TESTPROC_FORTRAN
             make check -j $TESTPROC_FORTRAN ; CHECKERR

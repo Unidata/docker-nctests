@@ -178,7 +178,7 @@ while [[ $CCOUNT -le $CREPS ]]; do
         sleep 2
         mkdir -p build-netcdf-c
         cd build-netcdf-c
-        cmake ${HOME}/netcdf-c -DCMAKE_INSTALL_PREFIX=/usr -DENABLE_HDF4=ON -DENABLE_EXTRA_TESTS=ON -DENABLE_MMAP=ON -DBUILDNAME_PREFIX="docker$BITNESS-$USE_CC" -DBUILDNAME_SUFFIX="$CBRANCH" -DCMAKE_C_COMPILER=$USE_CC $COPTS -DCMAKE_C_FLAGS="${CMEM}"; CHECKERR
+        cmake ${HOME}/netcdf-c -DCMAKE_INSTALL_PREFIX=/usr -DENABLE_HDF4=ON -DENABLE_EXTRA_TESTS=ON -DENABLE_MMAP=ON -DBUILDNAME_PREFIX="docker$BITNESS-$USE_CC" -DBUILDNAME_SUFFIX="$CBRANCH" -DCMAKE_C_COMPILER=$USE_CC $COPTS -DCMAKE_C_FLAGS="${CMEM}" -D ENABLE_TESTS="${RUNC}"; CHECKERR
         make clean
 
         if [ "x$RUNC" == "xTRUE" ]; then
@@ -196,10 +196,6 @@ while [[ $CCOUNT -le $CREPS ]]; do
                 fi
             fi
 
-
-
-        else
-            make -j $TESTPROC ; CHECKERR
         fi
         cd ${HOME}
         echo ""
@@ -242,6 +238,7 @@ done
 
 if [ "x$USECMAKE" = "xTRUE" ]; then
     cd build-netcdf-c
+    make -j "${TESTPROC}"
     sudo make install
 elif [ "x$USEAC" = "xTRUE" ]; then
     cd netcdf-c
