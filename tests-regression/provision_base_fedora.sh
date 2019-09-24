@@ -28,7 +28,7 @@ dnf -y install m4 git libjpeg-turbo-devel libcurl-devel wget nano libtool bison 
 ##
 # Install cmake manually
 ##
-tar -zxf cmake-3.13.3.tar.gz && cd cmake-3.13.3 && ./configure --prefix=/usr && make -j 4 && sudo make install
+tar -zxf cmake-3.15.3.tar.gz && cd cmake-3.15.3 && ./configure --prefix=/usr && make -j 4 && sudo make install
 
 ##
 # Some cleanup

@@ -61,7 +61,7 @@ ENV CUSSERPWORD "password.1234"
 ###
 # Copy over local tarballs.
 ###
-COPY hdf5-1.10.5.tar.bz2 pnetcdf-1.11.0.tar.gz hdf-4.2.14.tar.bz2 cmake-3.13.3.tar.gz ${HOME}/
+COPY hdf5-1.10.5.tar.bz2 pnetcdf-1.11.0.tar.gz hdf-4.2.14.tar.bz2 cmake-3.15.3.tar.gz ${HOME}/
 
 
 ###
