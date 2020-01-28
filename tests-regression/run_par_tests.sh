@@ -296,7 +296,7 @@ if [ "x$RUNCXX" == "xTRUE" ]; then
             make check ; CHECKERR
 
             if [ "x$DISTCHECK" == "xTRUE" ]; then
-                DISTCHECK_CONFIGURE_FLAGS="$AC_CXXOPTS" make distcheck ; CHECKERR
+                DISTCHECK_CONFIGURE_FLAGS="$AC_CXXOPTS" CC=$(which mpicc) CXX=$(which mpic++) make distcheck ; CHECKERR
             fi
 
             make clean
