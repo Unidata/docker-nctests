@@ -7,7 +7,7 @@ cd /root
 # those tests as well.
 ###
 
-tar -jxf /root/hdf-4.2.14.tar.bz2 && cd /root/hdf-4.2.14 && ./configure --disable-static --enable-shared --disable-netcdf --disable-fortran --prefix=/usr && make -j 4 && sudo make install
+tar -jxf /root/hdf-4.2.14.tar.bz2 && cd /root/hdf-4.2.14 && ./configure --disable-static --enable-shared --disable-netcdf --disable-fortran --prefix=/usr && make -j 8 && sudo make install
 
 
 cd /root
@@ -19,7 +19,7 @@ rm -rf /root/hdf-4.2.14
 # those tests as well.
 ###
 
-tar -jxf /root/hdf5-1.10.6.tar.bz2 && cd /root/hdf5-1.10.6 && ./configure --disable-static --enable-shared --disable-fortran --enable-hl --prefix=/usr --with-szlib && make -j 4 && sudo make install
+tar -jxf /root/hdf5-1.10.6.tar.bz2 && cd /root/hdf5-1.10.6 && ./configure --disable-static --enable-shared --disable-fortran --enable-hl --prefix=/usr --with-szlib && make -j 8 && sudo make install
 
 cd /root
 rm -rf /root/hdf5-1.10.6

@@ -11,7 +11,7 @@ export PATH=/usr/lib64/mpich-3.2/bin:$PATH
 # those tests as well.
 ###
 
-tar -jxf /root/hdf-4.2.14.tar.bz2 && cd /root/hdf-4.2.14 && CC=mpicc ./configure --disable-static --enable-shared --disable-netcdf --disable-fortran --prefix=/usr && make -j 4 && make install
+tar -jxf /root/hdf-4.2.14.tar.bz2 && cd /root/hdf-4.2.14 && CC=mpicc ./configure --disable-static --enable-shared --disable-netcdf --disable-fortran --prefix=/usr && make -j 8 && make install
 
 cd /root
 rm -rf /root/hdf-4.2.14
@@ -23,7 +23,7 @@ rm -rf /root/hdf-4.2.14
 ###
 
 CFLAGS="-Wno-format-security"
-tar -jxf /root/hdf5-1.10.6.tar.bz2 && cd /root/hdf5-1.10.6 && CC=mpicc ./configure --disable-static --enable-shared --disable-fortran --enable-hl --prefix=/usr --with-szlib --enable-parallel && make -j 4 && make install
+tar -jxf /root/hdf5-1.10.6.tar.bz2 && cd /root/hdf5-1.10.6 && CC=mpicc ./configure --disable-static --enable-shared --disable-fortran --enable-hl --prefix=/usr --with-szlib --enable-parallel && make -j 8 && make install
 
 cd /root
 rm -rf /root/hdf5-1.10.6
@@ -33,7 +33,7 @@ rm -rf /root/hdf5-1.10.6
 # run pnetcdf tests.
 ###
 
-tar -zxf /root/pnetcdf-1.11.0.tar.gz && cd /root/pnetcdf-1.11.0 && CPPFLAGS=-fPIC CC=mpicc ./configure --prefix=/usr --disable-fortran --enable-relax-coord-bound && make -j 4 -k && make install
+tar -zxf /root/pnetcdf-1.11.0.tar.gz && cd /root/pnetcdf-1.11.0 && CPPFLAGS=-fPIC CC=mpicc ./configure --prefix=/usr --disable-fortran --enable-relax-coord-bound && make -j 8 -k && make install
 
 cd /root
 rm -rf pnetcdf-1.11.0
