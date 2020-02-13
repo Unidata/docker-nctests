@@ -10,7 +10,7 @@ WORKDIR /root
 
 ENV DEBIAN_FRONTEND noninteractive
 
-ENV NCTEST_VERSION 1.8.4 - development
+ENV NCTEST_VERSION 1.9.0 - development
 
 ENV VERSION_FILE VERSION.md
 
@@ -20,7 +20,7 @@ ENV VERSION_FILE VERSION.md
 
 ENV CTEST_OUTPUT_ON_FAILURE 1
 
-ENV HDF5VER 1.10.5
+ENV HDF5VER 1.10.6
 ENV HDF5_VER hdf5-${HDF5VER}
 ENV HDF5_FILE ${HDF5_VER}.tar.bz2
 ENV PNCVER 1.11.0
@@ -61,7 +61,7 @@ ENV CUSSERPWORD "password.1234"
 ###
 # Copy over local tarballs.
 ###
-COPY hdf5-1.10.5.tar.bz2  pnetcdf-1.11.0.tar.gz hdf-4.2.14.tar.bz2 cmake-3.15.3.tar.gz ${HOME}/
+COPY hdf5-1.10.6.tar.bz2  pnetcdf-1.11.0.tar.gz hdf-4.2.14.tar.bz2 cmake-3.16.4.tar.gz ${HOME}/
 
 
 ###
