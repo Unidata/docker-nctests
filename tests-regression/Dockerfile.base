@@ -3,8 +3,7 @@
 # so that we can take advantage of the
 # shared layers that docker provides.
 #####
-FROM ubuntu:bionic
-#FROM ubuntu:artful
+FROM ubuntu:eoan
 USER root
 ENV HOME /root
 WORKDIR /root
