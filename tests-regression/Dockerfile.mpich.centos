@@ -2,10 +2,10 @@ FROM unidata/nctests:base.centos
 
 #RUN sudo apt-get update &&  sudo apt-get install -y libopenmpi-dev openmpi-bin && sudo apt-get -y autoclean && sudo rm -rf /var/lib/apt/lists/*
 
-RUN sudo yum install -y mpich-3.2-devel && sudo ldconfig
+RUN sudo yum install -y mpich-devel mpich redhat-rpm-config && sudo ldconfig
 USER root
-RUN echo 'export PATH=/usr/lib64/mpich-3.2/bin:$PATH' >> /etc/bashrc
-RUN echo 'export PATH=/usr/lib64/mpich-3.2/bin:$PATH' >> /etc/profile
+RUN echo 'export PATH=/usr/lib64/mpich/bin:$PATH' >> /etc/bashrc
+RUN echo 'export PATH=/usr/lib64/mpich/bin:$PATH' >> /etc/profile
 USER ${CUSER}
 ###
 # Copy over provisioning script.
