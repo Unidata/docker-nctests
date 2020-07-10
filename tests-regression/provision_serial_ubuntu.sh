@@ -26,7 +26,7 @@ HDF5VER=1.8.21
 tar -jxf /root/hdf5-${HDF5VER}.tar.bz2 && cd /root/hdf5-${HDF5VER} && ./configure --disable-static --enable-shared --disable-fortran --enable-hl --prefix=/environments/${HDF5VER} --with-szlib && make -j 8 && sudo make install
 
 cd /root
-rm -rf /root/hdf5-1.10.6
+rm -rf /root/hdf5-1.8.21
 
 
 # HDF5 1.10.6

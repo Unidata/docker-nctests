@@ -57,10 +57,12 @@ ENV TESTPROC_FORTRAN 1
 ENV CUSER tester
 ENV CUSSERPWORD "password.1234"
 
+ENV H5VER="1.10.6"
+
 ###
 # Copy over local tarballs.
 ###
-COPY hdf5-1.10.6.tar.bz2  pnetcdf-1.11.0.tar.gz hdf-4.2.15.tar.bz2 cmake-3.16.4.tar.gz ${HOME}/
+COPY hdf5-1.8.21.tar.bz2 hdf5-1.10.6.tar.bz2 pnetcdf-1.11.0.tar.gz hdf-4.2.15.tar.bz2 cmake-3.16.4.tar.gz ${HOME}/
 
 
 ###
