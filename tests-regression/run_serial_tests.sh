@@ -26,6 +26,21 @@ if [ "x$VERSION" != "x" ]; then
 fi
 
 
+###
+# Configure Environmental Variables"
+###
+
+export TARGDIR="/environments/${H5VER}"
+
+echo "Using TARGDIR=${TARGDIR}"
+
+export CPPFLAGS="-I${TARGDIR}/include"
+export CFLAGS="-I${TARGDIR}/include"
+export LDFLAGS="-L${TARGDIR}/lib"
+export LD_LIBRARY_PATH="${TARGDIR}/lib"
+export PATH="${TARGDIR}/bin:$PATH"
+export CMAKE_PREFIX_PATH="${TARGDIR}"
+
 CHECKERR() {
 
     RES=$?
@@ -41,6 +56,7 @@ CHECKERR() {
 # Print out version.
 ###
 cat VERSION.md
+echo "Using HDF5 version: ${H5VER}"
 
 ###
 # Check out all the projects.

@@ -10,7 +10,7 @@ WORKDIR /root
 
 ENV DEBIAN_FRONTEND noninteractive
 
-ENV NCTEST_VERSION 1.9.2 - development
+ENV NCTEST_VERSION 1.9.3 - development
 
 ENV VERSION_FILE VERSION.md
 
