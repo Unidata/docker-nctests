@@ -72,6 +72,12 @@ The following environmental variables can be used to control the behavior at run
 * `PBRANCH` - Git branch for `netcdf4-python`
 * `NCOBRANCH` - Git branch for `NCO`. Default: `4.5.4`.
 
+### Select HDF5 Version to Use
+
+* `H5VER` - Set to the version you want to use. Default: `1.10.6`
+  * Introduced in version `1.9.3`.
+  * Pass `-e HELP=TRUE` to the container at runtime to see which HDF5 versions are available.
+
 ### Compiler Option
 ----
 * `USE_CC` - `C` language compiler to use.

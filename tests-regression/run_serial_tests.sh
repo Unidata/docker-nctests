@@ -4,10 +4,15 @@ set -e
 
 trap "echo TRAPed signal" HUP INT QUIT KILL TERM
 
+
+
 if [ "x$HELP" != "x" ]; then
     cat README.md
     echo ""
     cat VERSION.md
+    echo ""
+    echo "HDF5 Versions Available:"
+    ls /environments/
     echo ""
     exit
 fi
@@ -16,6 +21,10 @@ if [ "x$CMD" = "xhelp" ]; then
     cat README.md
     echo ""
     cat VERSION.md
+    echo ""
+    echo "HDF5 Versions Available:"
+    ls /environments/
+    echo ""
     exit
 fi
 
@@ -57,7 +66,8 @@ CHECKERR() {
 ###
 cat VERSION.md
 echo "Using HDF5 version: ${H5VER}"
-
+echo ""
+sleep 3
 ###
 # Check out all the projects.
 #
