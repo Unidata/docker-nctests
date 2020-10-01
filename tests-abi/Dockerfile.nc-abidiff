@@ -34,9 +34,14 @@ RUN rm -rf netcdf-c
 
 ###
 # Install lvc-maintained abi information.
+# Install abi-dumper individually,
+# see https://github.com/lvc/abi-dumper/issues/21
+# for more information.
 ###
 RUN git clone http://github.com/lvc/installer lvc-installer
 RUN cd lvc-installer && make install prefix=/usr target=abi-tracker
+RUN git clone https://github.com/lvc/abi-dumper abi-dumper
+RUN cd abi-dumper && make install prefix=/usr
 
 ###
 # Copy over some files.
