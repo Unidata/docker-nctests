@@ -32,28 +32,21 @@ TOPDIR=$(pwd)
 OLDBUILD="build-$OLDVER"
 NEWBUILD="build-$NEWVER"
 
-TDIR="netcdf-c"
+TDIR="$OLDVER"
 
-if [ -d "/netcdf-c" ]; then
-    cp -R /netcdf-c .
-else
-    git clone http://github.com/Unidata/netcdf-c $TDIR
-fi
-
-cd $TDIR
-mkdir $OLDBUILD
-mkdir $NEWBUILD
-
-pushd $OLDBUILD
-git checkout $OLDVER
+git clone -b $OLDVER --depth=1 https://github.com/Unidata/netcdf-c $TDIR
+pushd $TDIR
+mkdir build && cd build
 cmake .. -DCMAKE_C_FLAGS="-g -Og" -DENABLE_TESTS=OFF
 make -j 4
 abi-dumper liblib/libnetcdf.so -o /output/ABI-C-$OLDVER.dump -lver $OLDVER
 git reset --hard
 popd
 
-pushd $NEWBUILD
-git checkout $NEWVER
+TDIR="$NEWVER"
+git clone -b $NEWVER --depth=1 https://github.com/Unidata/netcdf-c $TDIR
+pushd $TDIR
+mkdir build && cd build
 cmake .. -DCMAKE_C_FLAGS="-g -Og" -DENABLE_TESTS=OFF
 make -j 4
 abi-dumper liblib/libnetcdf.so -o /output/ABI-C-$NEWVER.dump -lver $NEWVER
