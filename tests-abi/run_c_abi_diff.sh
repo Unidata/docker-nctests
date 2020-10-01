@@ -36,7 +36,6 @@ TDIR="netcdf-c"
 
 if [ -d "/netcdf-c" ]; then
     cp -R /netcdf-c .
-    mv netcdf-c $TDIR
 else
     git clone http://github.com/Unidata/netcdf-c $TDIR
 fi
