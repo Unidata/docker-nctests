@@ -21,7 +21,7 @@ rm -rf /root/hdf-4.2.15
 ###
 
 CFLAGS="-Wno-format-security"
-tar -jxf /root/hdf5-1.10.7.tar.bz2 && cd /root/hdf5-1.10.7 && CC=mpicc ./configure --disable-static --enable-shared --disable-fortran --enable-hl --prefix=/usr --with-szlib --enable-parallel && make -j 8 && sudo make install
+tar -jxf /root/hdf5-1.10.7.tar.bz2 && cd /root/hdf5-1.10.7 && autoreconf -if && CC=mpicc ./configure --disable-static --enable-shared --disable-fortran --enable-hl --prefix=/usr --with-szlib --enable-parallel && make -j 8 && sudo make install
 
 cd /root
 rm -rf /root/hdf5-1.10.7
