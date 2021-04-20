@@ -147,7 +147,7 @@ while [[ $CCOUNT -le $CREPS ]]; do
         sleep 2
         mkdir -p build-netcdf-c
         cd build-netcdf-c
-        cmake ${HOME}/netcdf-c -DCMAKE_INSTALL_PREFIX=/usr -DENABLE_HDF4=ON -DENABLE_EXTRA_TESTS=ON -DENABLE_MMAP=ON -DBUILDNAME_PREFIX="docker$BITNESS-parallel$PARTYPE" -DBUILDNAME_SUFFIX="$CBRANCH" -DCMAKE_C_COMPILER=mpicc -DENABLE_PNETCDF=ON -DENABLE_PARALLEL_TESTS="${RUNC}" -DENABLE_TESTS="${RUNC}" $COPTS
+        cmake ${HOME}/netcdf-c -DCMAKE_INSTALL_PREFIX=/usr -DENABLE_HDF4=OFF -DENABLE_EXTRA_TESTS=ON -DENABLE_MMAP=ON -DBUILDNAME_PREFIX="docker$BITNESS-parallel$PARTYPE" -DBUILDNAME_SUFFIX="$CBRANCH" -DCMAKE_C_COMPILER=mpicc -DENABLE_PNETCDF=ON -DENABLE_PARALLEL_TESTS="${RUNC}" -DENABLE_TESTS="${RUNC}" $COPTS
 
         if [ "x$RUNC" == "xTRUE" ]; then
             if [ "x$USEDASH" == "xTRUE" ]; then
@@ -168,7 +168,7 @@ while [[ $CCOUNT -le $CREPS ]]; do
         if [ ! -f "configure" ]; then
             autoreconf -if
         fi
-        CC=mpicc ./configure --enable-hdf4 --enable-extra-tests --enable-mmap --enable-pnetcdf --enable-parallel-tests --prefix=/usr "$AC_COPTS"
+        CC=mpicc ./configure --disable-hdf4 --enable-extra-tests --enable-mmap --enable-pnetcdf --enable-parallel-tests --prefix=/usr "$AC_COPTS"
         make clean
         make -j $TESTPROC ; CHECKERR
         if [ "x$RUNC" == "xTRUE" ]; then
@@ -176,7 +176,7 @@ while [[ $CCOUNT -le $CREPS ]]; do
             make check -j $TESTPROC ; CHECKERR
 
             if [ "x$DISTCHECK" == "xTRUE" ]; then
-                CC=mpicc DISTCHECK_CONFIGURE_FLAGS="--enable-hdf4 --enable-extra-tests --enable-mmap --enable-pnetcdf --enable-parallel-tests $AC_COPTS" make distcheck ; CHECKERR
+                CC=mpicc DISTCHECK_CONFIGURE_FLAGS="--disable-hdf4 --enable-extra-tests --enable-mmap --enable-pnetcdf --enable-parallel-tests $AC_COPTS" make distcheck ; CHECKERR
             fi
 
         fi

@@ -204,7 +204,7 @@ while [[ $CCOUNT -le $CREPS ]]; do
         sleep 2
         mkdir -p build-netcdf-c
         cd build-netcdf-c
-        cmake ${HOME}/netcdf-c -DCMAKE_INSTALL_PREFIX=/usr -DENABLE_HDF4=ON -DENABLE_EXTRA_TESTS=ON -DENABLE_MMAP=ON -DBUILDNAME_PREFIX="docker$BITNESS-$USE_CC" -DBUILDNAME_SUFFIX="$CBRANCH" -DCMAKE_C_COMPILER=$USE_CC $COPTS -DCMAKE_C_FLAGS="${CMEM}" -D ENABLE_TESTS="${RUNC}"; CHECKERR
+        cmake ${HOME}/netcdf-c -DCMAKE_INSTALL_PREFIX=/usr -DENABLE_HDF4=OFF -DENABLE_EXTRA_TESTS=ON -DENABLE_MMAP=ON -DBUILDNAME_PREFIX="docker$BITNESS-$USE_CC" -DBUILDNAME_SUFFIX="$CBRANCH" -DCMAKE_C_COMPILER=$USE_CC $COPTS -DCMAKE_C_FLAGS="${CMEM}" -D ENABLE_TESTS="${RUNC}"; CHECKERR
         make clean
 
         if [ "x$RUNC" == "xTRUE" ]; then
@@ -242,7 +242,7 @@ while [[ $CCOUNT -le $CREPS ]]; do
         if [ ! -f "configure" ]; then
             autoreconf -if
         fi
-        CC=$USE_CC ./configure --prefix=/usr --enable-hdf4 --enable-extra-tests --enable-mmap $AC_COPTS
+        CC=$USE_CC ./configure --prefix=/usr --disable-hdf4 --enable-extra-tests --enable-mmap $AC_COPTS
         make clean
         make -j $TESTPROC ; CHECKERR
         if [ "x$RUNC" == "xTRUE" ]; then
@@ -250,7 +250,7 @@ while [[ $CCOUNT -le $CREPS ]]; do
             make check -j $TESTPROC ; CHECKERR
 
             if [ "x$DISTCHECK" == "xTRUE" ]; then
-                DISTCHECK_CONFIGURE_FLAGS="--enable-hdf4 --enable-extra-tests --enable-mmap $AC_COPTS" make distcheck ; CHECKERR
+                DISTCHECK_CONFIGURE_FLAGS="--disable-hdf4 --enable-extra-tests --enable-mmap $AC_COPTS" make distcheck ; CHECKERR
             fi
 
         fi
