@@ -74,7 +74,7 @@ The following environmental variables can be used to control the behavior at run
 
 ### Select HDF5 Version to Use
 
-* `H5VER` - Set to the version you want to use. Default: `1.10.6`
+* `H5VER` - Set to the version you want to use. Default: `1.10.7`
   * Introduced in version `1.9.3`.
   * Pass `-e HELP=TRUE` to the container at runtime to see which HDF5 versions are available.
 
