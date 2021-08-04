@@ -104,7 +104,7 @@ if [ "x$DO32" == "xTRUE" ]; then
     if [ "x$DOUBUNTU" == "xTRUE" ]; then
         echo "Building 32-bit Ubuntu images."
         echo "Building Base Image"
-        docker build -t unidata/nctests:base32 -f Dockerfile.base32 . --no-cache
+        docker build -t unidata/nctests:base32 -f Dockerfile.base32 .
 
         echo "Starting Ubuntu Serial32 Image"
         docker build -t unidata/nctests:serial32 -f Dockerfile.serial32 . --no-cache &> ubuntu.serial32.log&
@@ -133,8 +133,7 @@ if [ "x$DO64" == "xTRUE" ]; then
     if [ "x$DOUBUNTU" == "xTRUE" ]; then
         echo "Building 64-bit Ubuntu images."
         echo "Building Centos Base Image"
-        docker build -t unidata/nctests:base -f Dockerfile.base . --no-cache
-        docker build -t unidata/nctests:base -f Dockerfile.base . --no-cache
+        docker build -t unidata/nctests:base -f Dockerfile.base .
 
         echo "Starting Ubuntu Serial Image"
         docker build -t unidata/nctests:serial -f Dockerfile.serial . --no-cache  &> ubuntu.serial.log&
@@ -157,7 +156,7 @@ if [ "x$DO64" == "xTRUE" ]; then
     if [ "x$DOCENTOS" == "xTRUE" ]; then
         echo "Building 64-bit Centos images."
         echo "Building Centos Base Image"
-        docker build -t unidata/nctests:base.centos -f Dockerfile.base.centos . --no-cache
+        docker build -t unidata/nctests:base.centos -f Dockerfile.base.centos .
 
         echo "Starting Centos Serial Image"
         docker build -t unidata/nctests:serial.centos -f Dockerfile.serial.centos . --no-cache &> centos.serial.log&
@@ -180,7 +179,7 @@ if [ "x$DO64" == "xTRUE" ]; then
     if [ "x$DOFEDORA" == "xTRUE" ]; then
         echo "Building 64-bit Fedora images."
         echo "Building Fedora Base Image"
-        docker build -t unidata/nctests:base.fedora -f Dockerfile.base.fedora . --no-cache
+        docker build -t unidata/nctests:base.fedora -f Dockerfile.base.fedora .
 
         echo "Starting Fedora Serial Image"
         docker build -t unidata/nctests:serial.fedora -f Dockerfile.serial.fedora . --no-cache  &> fedora.serial.log&
