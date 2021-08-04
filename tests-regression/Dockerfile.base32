@@ -3,7 +3,8 @@
 # so that we can take advantage of the
 # shared layers that docker provides.
 #####
-FROM wardf/ubuntu32:eoan
+#FROM wardf/ubuntu32:eoan
+FROM i386/debian:latest
 USER root
 ENV HOME /root
 WORKDIR /root
