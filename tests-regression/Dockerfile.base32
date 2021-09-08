@@ -29,7 +29,7 @@ ENV PNCVER 1.11.0
 ##
 # Let the user specify the branches.
 ##
-ENV CBRANCH master
+ENV CBRANCH main
 ENV FBRANCH master
 ENV CXXBRANCH master
 ENV PBRANCH master

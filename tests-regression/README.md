@@ -40,7 +40,7 @@ NCO integration adds additional regression testing.
 
 
 
-You can specify an alternative branch for `netcdf-c` than `master` using the following syntax.
+You can specify an alternative branch for `netcdf-c` than `main` using the following syntax.
 
     $ docker run -e CBRANCH="branch name" unidata/nctests:serial
 

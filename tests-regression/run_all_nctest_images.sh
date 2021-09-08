@@ -30,7 +30,7 @@ dohelp ()
     echo "Usage: $0 -[ix]"
     echo -e "\t -i     Run 32-bit tests."
     echo -e "\t -x     Run 64-bit tests."
-    echo -e "\t -b     Specify a branch. Default is 'master'"
+    echo -e "\t -b     Specify a branch. Default is 'main'"
     echo -e "\t -r     Number of times to repeat the tests. Default is '1'"
     echo -e "\t -a     Enable Autoconf-based builds, disable cmake-based builds."
     echo ""
@@ -38,7 +38,7 @@ dohelp ()
 
 DO32=""
 DO64=""
-BRANCH="master"
+BRANCH="main"
 MREPS=1
 DOAC="OFF"
 DOCMAKE="TRUE"
