@@ -66,3 +66,53 @@ services:
     build:
       context: .
       dockerfile: Dockerfile.openmpi32
+
+ ###
+ # Centos 64-bit
+ ###
+ centos_base:
+   image: unidata/nctests:base.centos
+   build:
+     context: .
+     dockerfile: Dockerfile.base.centos
+
+  centos_serial:
+    image: unidata/nctests:serial.centos
+    depends_on:
+      - centos_base
+    build:
+      context: .
+      dockerfile: Dockerfile.serial.centos
+
+  centos_mpich:
+    image: unidata/nctests:mpich.centos
+    depends_on:
+      - centos_base
+    build:
+      context: .
+      dockerfile: Dockerfile.mpich.centos
+
+  centos_openmpi:
+    image: unidata/nctest:openmpi.centos
+    depends_on:
+      - centos_base
+    build:
+      context: .
+      dockerfile: Dockerfile.openmpi.centos
+
+  ###
+  # Fedora 64-bit
+  ###
+  fedora_base:
+    image: unidata/nctests:base.fedora
+    build:
+      context: .
+      dockerfile: Dockerfile.base.fedora
+
+  fedora_serial:
+    image: unidata/nctests:serial.fedora
+    depends_on:
+      - fedora_base
+    build:
+      context: .
+      dockerfile: Dockerfile.serial.fedora
