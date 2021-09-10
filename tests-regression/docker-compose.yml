@@ -1,33 +1,68 @@
 version: '3.7'
 
 services:
+  ###
+  # Ubuntu 64-bit
+  ###
   ubuntu_base:
     image: unidata/nctests:base
     build:
       context: .
       dockerfile: Dockerfile.base
 
-
   ubuntu_serial:
     image: unidata/nctests:serial
+    depends_on:
+      - ubuntu_base
     build:
       context: .
       dockerfile: Dockerfile.serial
-    depends_on:
-     - ubuntu_base
 
   ubuntu_mpich:
     image: unidata/nctests:mpich
+    depends_on:
+      - ubuntu_base
     build:
       context: .
       dockerfile: Dockerfile.mpich
+
+  ubuntu_openmpi:
+    image: unidata/nctests:openmpi
     depends_on:
       - ubuntu_base
+    build:
+      context: .
+      dockerfile: Dockerfile.openmpi
 
-
-
+  ###
+  # Ubuntu 32-bit
+  ###
   ubuntu_base32:
     image: unidata/nctests:base32
     build:
       context: .
       dockerfile: Dockerfile.base32
+
+  ubuntu_serial32:
+    image: unidata/nctests:serial32
+    depends_on:
+      - ubuntu_base32
+    build:
+      context: .
+      dockerfile: Dockerfile.serial32
+
+  ubuntu_mpich32:
+    image: unidata/nctests:mpich32
+    depends_on:
+      - ubuntu_base32
+    build:
+      context: .
+      dockerfile: Dockerfile.mpich32
+
+  ubuntu_openmpi32:
+    image: unidata/nctests:openmpi32
+    depends_on:
+      - ubuntu_base32
+    build:
+      context: .
+      dockerfile: Dockerfile.openmpi32
