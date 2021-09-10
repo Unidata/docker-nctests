@@ -70,7 +70,7 @@ services:
  ###
  # Centos 64-bit
  ###
- centos_base:
+  centos_base:
    image: unidata/nctests:base.centos
    build:
      context: .
