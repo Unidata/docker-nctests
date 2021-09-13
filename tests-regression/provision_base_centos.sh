@@ -28,7 +28,7 @@ yum -y install m4 git libjpeg-turbo-devel libcurl-devel wget nano libtool bison 
 ##
 # Install cmake manually
 ##
-tar -zxf cmake-3.16.4.tar.gz && cd cmake-3.16.4 && ./configure --prefix=/usr && make -j 8 && sudo make install
+tar -zxf cmake-3.21.2.tar.gz && cd cmake-3.21.2 && ./configure --prefix=/usr && make -j 8 && sudo make install
 
 ##
 # Some cleanup
