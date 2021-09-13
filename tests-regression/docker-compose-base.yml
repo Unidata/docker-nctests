@@ -1,0 +1,38 @@
+version: '3.7'
+
+services:
+  ###
+  # Ubuntu 64-bit
+  ###
+  ubuntu_base:
+    image: unidata/nctests:base
+    build:
+      context: .
+      dockerfile: Dockerfile.base
+
+  ###
+  # Ubuntu 32-bit
+  ###
+  ubuntu_base32:
+    image: unidata/nctests:base32
+    build:
+      context: .
+      dockerfile: Dockerfile.base32
+
+ ###
+ # Centos 64-bit
+ ###
+  centos_base:
+   image: unidata/nctests:base.centos
+   build:
+     context: .
+     dockerfile: Dockerfile.base.centos
+
+  ###
+  # Fedora 64-bit
+  ###
+  fedora_base:
+    image: unidata/nctests:base.fedora
+    build:
+      context: .
+      dockerfile: Dockerfile.base.fedora
