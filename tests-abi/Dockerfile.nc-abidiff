@@ -24,7 +24,7 @@ RUN apt-get -y upgrade
 RUN apt-get install -y man nano curl git emacs wget gcc g++ gfortran clang gdb autoconf automake make libtool m4 bison flex zlib1g-dev libjpeg-dev libcurl4-openssl-dev python zip elfutils libelf-dev dos2unix cmake
 
 ###
-RUN tar -jxf hdf5-1.10.6.tar.bz2 && cd hdf5-1.10.6 && ./configure --prefix=/usr --disable-static --enable-shared --enable-hl && make -j 4 && make install -j 4
+RUN tar -jxf hdf5-1.10.7.tar.bz2 && cd hdf5-1.10.7 && ./configure --prefix=/usr --disable-static --enable-shared --enable-hl && make -j 4 && make install -j 4
 
 ###
 ENV NCVER=v4.7.4
