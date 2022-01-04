@@ -3,13 +3,13 @@
 # so that we can take advantage of the
 # shared layers that docker provides.
 #####
-FROM ubuntu:groovy
+FROM ubuntu:focal
 USER root
 ENV HOME /root
 WORKDIR /root
 MAINTAINER Ward Fisher <wfisher@ucar.edu>
 
-ENV NCTEST_VERSION 1.9.4 - development
+ENV NCTEST_VERSION 1.9.5 - development
 
 ENV VERSION_FILE VERSION.md
 
@@ -68,6 +68,11 @@ COPY hdf5-1.8.21.tar.bz2 hdf5-1.10.7.tar.bz2 pnetcdf-1.11.0.tar.gz hdf-4.2.15.ta
 ###
 # Run the provision scripot.
 ###
+ARG DEBIAN_FRONTEND=noninteractive
+ENV TZ=America/Denver
+RUN apt-get update
+RUN apt-get install -y tzdata
+
 COPY provision_base_ubuntu.sh ${HOME}/
 RUN chmod 755 ${HOME}/provision_base_ubuntu.sh
 RUN ${HOME}/provision_base_ubuntu.sh
