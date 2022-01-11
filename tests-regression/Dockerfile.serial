@@ -4,8 +4,9 @@ FROM unidata/nctests:base
 # Copy over a script to provision.
 ###
 
+USER root
 COPY provision_serial_ubuntu.sh /root/
-RUN sudo ls -alh /root &&  sudo /root/provision_serial_ubuntu.sh
+RUN ls -alh /root &&  /root/provision_serial_ubuntu.sh
 
 ###
 # Copy over the dockerfile, scripts and README.
@@ -13,8 +14,9 @@ RUN sudo ls -alh /root &&  sudo /root/provision_serial_ubuntu.sh
 
 COPY Dockerfile.serial ${HOME}/
 
-RUN sudo chown -R ${CUSER}:${CUSER} ${HOME}
+RUN chown -R ${CUSER}:${CUSER} ${HOME}
 
+user ${CUSER}
 ##
 # Run test script on launch.
 ##

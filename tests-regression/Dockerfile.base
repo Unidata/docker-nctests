@@ -98,7 +98,9 @@ COPY README.md ${HOME}/
 
 RUN echo "Version:\n\tunidata/nctests ($BITNESS) :\t$NCTEST_VERSION\t$(date)" > $VERSION_FILE
 
-RUN sudo chown -R tester:tester ${HOME}
+USER root
+RUN chown -R tester:tester ${HOME}
+USER ${CUSER}
 
 RUN dos2unix ${HOME}/run_serial_tests.sh
 RUN dos2unix ${HOME}/run_par_tests.sh
