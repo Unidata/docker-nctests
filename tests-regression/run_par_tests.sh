@@ -13,6 +13,9 @@ if [ "x$HELP" != "x" ]; then
     echo ""
     cat VERSION.md
     echo ""
+    echo "HDF5 Versions Available (H5VER):"
+    ls /environments/
+    echo ""
     exit
 fi
 
@@ -21,7 +24,7 @@ if [ "x$CMD" = "xhelp" ]; then
     echo ""
     cat VERSION.md
     echo ""
-    echo "HDF5 Versions Available:"
+    echo "HDF5 Versions Available (H5VER):"
     ls /environments/
     echo ""
     exit
