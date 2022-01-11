@@ -21,6 +21,9 @@ if [ "x$CMD" = "xhelp" ]; then
     echo ""
     cat VERSION.md
     echo ""
+    echo "HDF5 Versions Available:"
+    ls /environments/
+    echo ""
     exit
 fi
 
@@ -29,6 +32,22 @@ if [ "x$VERSION" != "x" ]; then
     echo ""
     exit
 fi
+
+###
+# Configure Environmental Variables"
+###
+
+export TARGDIR="/environments/${H5VER}"
+
+echo "Using TARGDIR=${TARGDIR}"
+
+export CPPFLAGS="-I${TARGDIR}/include"
+export CFLAGS="-I${TARGDIR}/include"
+export LDFLAGS="-L${TARGDIR}/lib"
+export LD_LIBRARY_PATH="${TARGDIR}/lib"
+export PATH="${TARGDIR}/bin:$PATH"
+export CMAKE_PREFIX_PATH="${TARGDIR}"
+
 
 CHECKERR() {
 
@@ -45,6 +64,9 @@ CHECKERR() {
 # Print out version.
 ###
 cat VERSION.md
+echo "Using HDF5 version: ${H5VER}"
+echo ""
+sleep 3
 
 ###
 # Check out all the projects.
@@ -147,7 +169,7 @@ while [[ $CCOUNT -le $CREPS ]]; do
         sleep 2
         mkdir -p build-netcdf-c
         cd build-netcdf-c
-        cmake ${HOME}/netcdf-c -DCMAKE_INSTALL_PREFIX=/usr -DENABLE_HDF4=OFF -DENABLE_EXTRA_TESTS=ON -DENABLE_MMAP=ON -DBUILDNAME_PREFIX="docker$BITNESS-parallel$PARTYPE" -DBUILDNAME_SUFFIX="$CBRANCH" -DCMAKE_C_COMPILER=mpicc -DENABLE_PNETCDF=ON -DENABLE_PARALLEL_TESTS="${RUNC}" -DENABLE_TESTS="${RUNC}" $COPTS
+        cmake ${HOME}/netcdf-c -DCMAKE_INSTALL_PREFIX=/usr -DENABLE_HDF4=OFF -DENABLE_EXTRA_TESTS=ON -DENABLE_MMAP=ON -DBUILDNAME_PREFIX="docker$BITNESS-parallel$PARTYPE" -DBUILDNAME_SUFFIX="$CBRANCH" -DCMAKE_C_COMPILER=mpicc -DENABLE_PNETCDF=ON -DENABLE_PARALLEL_TESTS="${RUNC}" -DENABLE_TESTS="${RUNC}" $COPTS -DCMAKE_C_FLAGS="${CMEM}"
 
         if [ "x$RUNC" == "xTRUE" ]; then
             if [ "x$USEDASH" == "xTRUE" ]; then

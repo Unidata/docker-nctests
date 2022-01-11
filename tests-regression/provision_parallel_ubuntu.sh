@@ -19,12 +19,37 @@ rm -rf /root/hdf-4.2.15
 # Manually install hdf5 so that we can run
 # those tests as well.
 ###
-
 CFLAGS="-Wno-format-security"
-tar -jxf /root/hdf5-1.10.7.tar.bz2 && cd /root/hdf5-1.10.7 && autoreconf -if && CC=mpicc ./configure --disable-static --enable-shared --disable-fortran --enable-hl --prefix=/usr --with-szlib --enable-parallel && make -j 8 && sudo make install
+
+#
+# 1.8.21
+#
+HDF5VER=1.8.21
+tar -jxf /root/hdf5-${HDF5VER}.tar.bz2 && cd /root/hdf5-${HDF5VER} && autoreconf -if && CC=mpicc ./configure --disable-static --enable-shared --disable-fortran --enable-hl --prefix=/environments/${HDF5VER} --with-szlib --enable-parallel && make -j 8 && sudo make install
 
 cd /root
-rm -rf /root/hdf5-1.10.7
+rm -rf /root/hdf5-${HDF5VER}
+
+
+#
+# 1.10.7
+#
+HDF5VER=1.10.7
+tar -jxf /root/hdf5-${HDF5VER}.tar.bz2 && cd /root/hdf5-${HDF5VER} && autoreconf -if && CC=mpicc ./configure --disable-static --enable-shared --disable-fortran --enable-hl --prefix=/environments/${HDF5VER} --with-szlib --enable-parallel && make -j 8 && sudo make install
+
+cd /root
+rm -rf /root/hdf5-${HDF5VER}
+
+#
+# 1.12.1
+#
+HDF5VER=1.12.1
+tar -jxf /root/hdf5-${HDF5VER}.tar.bz2 && cd /root/hdf5-${HDF5VER} && autoreconf -if && CC=mpicc ./configure --disable-static --enable-shared --disable-fortran --enable-hl --prefix=/environments/${HDF5VER} --with-szlib --enable-parallel && make -j 8 && sudo make install
+
+cd /root
+rm -rf /root/hdf5-${HDF5VER}
+
+
 
 ###
 # Manually install pnetcdf so that we can
