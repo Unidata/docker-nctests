@@ -32,9 +32,9 @@ rm -rf /root/hdf5-${HDF5VER}
 
 
 #
-# 1.10.7
+# 1.10.8
 #
-HDF5VER=1.10.7
+HDF5VER=1.10.8
 tar -jxf /root/hdf5-${HDF5VER}.tar.bz2 && cd /root/hdf5-${HDF5VER} && autoreconf -if && CC=mpicc ./configure --disable-static --enable-shared --disable-fortran --enable-hl --prefix=/environments/${HDF5VER} --with-szlib --enable-parallel && make -j 8 && sudo make install
 
 cd /root
