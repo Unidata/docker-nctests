@@ -3,13 +3,13 @@
 # so that we can take advantage of the
 # shared layers that docker provides.
 #####
-FROM ubuntu:focal
+FROM ubuntu
 USER root
 ENV HOME /root
 WORKDIR /root
 MAINTAINER Ward Fisher <wfisher@ucar.edu>
 
-ENV NCTEST_VERSION 1.9.8 - development
+ENV NCTEST_VERSION 1.9.9 - development
 
 ENV VERSION_FILE VERSION.md
 
