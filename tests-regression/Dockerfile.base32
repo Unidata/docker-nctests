@@ -12,7 +12,7 @@ MAINTAINER Ward Fisher <wfisher@ucar.edu>
 
 ENV DEBIAN_FRONTEND noninteractive
 
-ENV NCTEST_VERSION 1.9.9 - development
+ENV NCTEST_VERSION 1.9.10 - development
 
 ENV VERSION_FILE VERSION.md
 

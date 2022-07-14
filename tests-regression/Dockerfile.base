@@ -9,7 +9,7 @@ ENV HOME /root
 WORKDIR /root
 MAINTAINER Ward Fisher <wfisher@ucar.edu>
 
-ENV NCTEST_VERSION 1.9.9 - development
+ENV NCTEST_VERSION 1.9.10 - development
 
 ENV VERSION_FILE VERSION.md
 
