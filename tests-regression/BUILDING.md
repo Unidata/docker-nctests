@@ -14,3 +14,4 @@ You can build the images as follows via `docker compose`
 
     $ docker compose -f docker-compose-base.yml build
     $ docker compose -f docker-compose-tests.yml build
+
