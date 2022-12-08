@@ -7,7 +7,6 @@ dohelp ()
     echo -e "\t -i     Push 32-bit images."
     echo -e "\t -x     Push 64-bit images."
     echo -e "\t -u     Push ubuntu images."
-    echo -e "\t -c     Push centos image (64-bit only)."
     echo -e "\t -f     Push fedora image (64-bit only)."
 
     echo ""
@@ -34,9 +33,6 @@ while getopts "ixucf" o; do
             ;;
         u)
             DOUBUNTU="TRUE"
-            ;;
-        c)
-            DOCENTOS="TRUE"
             ;;
         f)
             DOFEDORA="TRUE"
@@ -68,16 +64,6 @@ if [ "x$DO64" == "xTRUE" ]; then
         docker push unidata/nctests:mpich
     else
         echo "- Skipping 64-bit Ubuntu"
-    fi
-
-    if [ "x$DOCENTOS" == "xTRUE" ]; then
-        echo "Pushing 64-bit Centos images."
-        docker push unidata/nctests:base.centos
-        docker push unidata/nctests:serial.centos
-        docker push unidata/nctests:openmpi.centos
-        docker push unidata/nctests:mpich.centos
-    else
-        echo "- Skipping 64-bit Centos"
     fi
 
     if [ "x$DOFEDORA" == "xTRUE" ]; then

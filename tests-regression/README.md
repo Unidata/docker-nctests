@@ -23,8 +23,20 @@ The docker containers will let you use the following compilers:
 * `gcc` and `g++`
 * `clang` and `clang++`
 
-These are controlled via the `USE_CC` and `USE_CXX` options.
+These are controlled via the `USE_CC` and `USE_CXX` environmental variables.
 
+## Containers
+
+The following containers/systems are available:
+
+* Ubuntu (32/64-bit)
+    * serial
+    * openmpi
+    * mpich
+* Fedora (64-bit)
+    * serial
+    * openmpi
+    *mpich
 
 ### NetCDF Operators (NCO)
 

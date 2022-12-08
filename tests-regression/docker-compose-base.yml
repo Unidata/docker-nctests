@@ -19,15 +19,6 @@ services:
       context: .
       dockerfile: Dockerfile.base32
 
- ###
- # Centos 64-bit
- ###
-  centos_base:
-   image: unidata/nctests:base.centos
-   build:
-     context: .
-     dockerfile: Dockerfile.base.centos
-
   ###
   # Fedora 64-bit
   ###

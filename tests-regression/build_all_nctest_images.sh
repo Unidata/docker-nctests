@@ -7,7 +7,6 @@ dohelp ()
     echo -e "\\t -i     Build 32-bit images."
     echo -e "\\t -x     Build 64-bit images."
     echo -e "\\t -u     Build ubuntu images."
-    echo -e "\\t -c     Build centos image (64-bit only)."
     echo -e "\\t -f     Build fedora image (64-bit only)."
     echo -e ""
     echo -e "\\t -b     Build base image(s) only."
@@ -18,7 +17,6 @@ dohelp ()
 DO32=""
 DO64=""
 DOUBUNTU=""
-DOCENTOS=""
 DOFEDORA=""
 DOBASEONLY=""
 
@@ -38,9 +36,6 @@ while getopts "ucfixb" o; do
             ;;
         u)
             DOUBUNTU="TRUE"
-            ;;
-        c)
-            DOCENTOS="TRUE"
             ;;
         f)
             DOFEDORA="TRUE"
@@ -74,13 +69,6 @@ if [ "x$DOBASEONLY" == "xTRUE" ]; then
             echo "Building unidata/nctests:base"
             docker build -t unidata/nctests:base -f Dockerfile.base . --no-cache &> ubuntu.base.log&
             xterm -T "Ubuntu base" -bg black -fg white -geometry 140x20 -e tail -f ubuntu.base.log&
-            sleep 1
-        fi
-
-        if [ "x$DOCENTOS" == "xTRUE" ]; then
-            echo "Building unidata/nctests:base.centos"
-            docker build -t unidata/nctests:base.centos -f Dockerfile.base.centos . --no-cache &> base.centos.log&
-            xterm -T "Centos base" -bg black -fg white -geometry 140x20 -e tail -f base.centos.log&
             sleep 1
         fi
 
@@ -132,7 +120,7 @@ if [ "x$DO64" == "xTRUE" ]; then
 
     if [ "x$DOUBUNTU" == "xTRUE" ]; then
         echo "Building 64-bit Ubuntu images."
-        echo "Building Centos Base Image"
+        echo "Building Ubuntu Base Image"
         docker build -t unidata/nctests:base -f Dockerfile.base .
 
         echo "Starting Ubuntu Serial Image"
@@ -151,29 +139,6 @@ if [ "x$DO64" == "xTRUE" ]; then
         sleep 1
     else
         echo "- Skipping 64-bit Ubuntu"
-    fi
-
-    if [ "x$DOCENTOS" == "xTRUE" ]; then
-        echo "Building 64-bit Centos images."
-        echo "Building Centos Base Image"
-        docker build -t unidata/nctests:base.centos -f Dockerfile.base.centos .
-
-        echo "Starting Centos Serial Image"
-        docker build -t unidata/nctests:serial.centos -f Dockerfile.serial.centos . --no-cache &> centos.serial.log&
-        xterm -T "Centos serial" -bg black -fg white -geometry 140x20 -e tail -f centos.serial.log&
-        sleep 1
-
-        echo "Starting Centos OpenMPI Image"
-        docker build -t unidata/nctests:openmpi.centos -f Dockerfile.openmpi.centos . --no-cache &> centos.openmpi.log&
-        xterm -T "Centos openmpi" -bg black -fg white -geometry 140x20 -e tail -f centos.openmpi.log&
-        sleep 1
-
-        echo "Starting Centos MPICH Image"
-        docker build -t unidata/nctests:mpich.centos -f Dockerfile.mpich.centos . --no-cache &> centos.mpich.log&
-        xterm -T "Centos mpich" -bg black -fg white -geometry 140x20 -e tail -f centos.mpich.log&
-        sleep 1
-    else
-        echo "- Skipping 64-bit Centos"
     fi
 
     if [ "x$DOFEDORA" == "xTRUE" ]; then

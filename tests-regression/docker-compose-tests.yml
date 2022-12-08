@@ -6,24 +6,24 @@ services:
   ###
   ubuntu_serial:
     image: unidata/nctests:serial
-    depends_on:
-      - ubuntu_base
+#    depends_on:
+#      - ubuntu_base
     build:
       context: .
       dockerfile: Dockerfile.serial
 
   ubuntu_mpich:
     image: unidata/nctests:mpich
-    depends_on:
-      - ubuntu_base
+#    depends_on:
+#      - ubuntu_base
     build:
       context: .
       dockerfile: Dockerfile.mpich
 
   ubuntu_openmpi:
     image: unidata/nctests:openmpi
-    depends_on:
-      - ubuntu_base
+#    depends_on:
+#      - ubuntu_base
     build:
       context: .
       dockerfile: Dockerfile.openmpi
@@ -33,62 +33,37 @@ services:
   ###
   ubuntu_serial32:
     image: unidata/nctests:serial32
-    depends_on:
-      - ubuntu_base32
+#    depends_on:
+#      - ubuntu_base32
     build:
       context: .
       dockerfile: Dockerfile.serial32
 
   ubuntu_mpich32:
     image: unidata/nctests:mpich32
-    depends_on:
-      - ubuntu_base32
+#    depends_on:
+#      - ubuntu_base32
     build:
       context: .
       dockerfile: Dockerfile.mpich32
 
   ubuntu_openmpi32:
     image: unidata/nctests:openmpi32
-    depends_on:
-      - ubuntu_base32
+#    depends_on:
+#      - ubuntu_base32
     build:
       context: .
       dockerfile: Dockerfile.openmpi32
 
- ###
- # Centos 64-bit
- ###
-  centos_serial:
-    image: unidata/nctests:serial.centos
-    depends_on:
-      - centos_base
-    build:
-      context: .
-      dockerfile: Dockerfile.serial.centos
 
-  centos_mpich:
-    image: unidata/nctests:mpich.centos
-    depends_on:
-      - centos_base
-    build:
-      context: .
-      dockerfile: Dockerfile.mpich.centos
-
-  centos_openmpi:
-    image: unidata/nctest:openmpi.centos
-    depends_on:
-      - centos_base
-    build:
-      context: .
-      dockerfile: Dockerfile.openmpi.centos
 
   ###
   # Fedora 64-bit
   ###
   fedora_serial:
     image: unidata/nctests:serial.fedora
-    depends_on:
-      - fedora_base
+#    depends_on:
+#      - fedora_base
     build:
       context: .
       dockerfile: Dockerfile.serial.fedora
