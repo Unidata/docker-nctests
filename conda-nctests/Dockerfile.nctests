@@ -1,0 +1,79 @@
+#####
+# Common stuff goes at the front,
+# so that we can take advantage of the
+# shared layers that docker provides.
+#####
+FROM continuumio/anaconda3
+USER root
+ENV HOME /root
+ENV ARTDIR /working
+WORKDIR ${ARTDIR}
+MAINTAINER Ward Fisher <wfisher@ucar.edu>
+
+ENV NCTEST_VERSION 1.9.12 - development
+
+ENV VERSION_FILE VERSION.md
+
+###
+# Set up a couple environmental variables.
+###
+
+ENV CTEST_OUTPUT_ON_FAILURE 1
+
+ENV HDF5VER 1.12.2
+ENV HDF5_VER hdf5-${HDF5VER}
+ENV HDF5_FILE ${HDF5_VER}.tar.bz2
+ENV PNCVER 1.11.0
+##
+# Let the user specify the branches.
+##
+ENV CBRANCH main
+ENV FBRANCH main
+ENV CXXBRANCH master
+ENV PBRANCH master
+ENV NCOBRANCH master
+
+ENV BITNESS 64
+ENV USE_CC gcc
+ENV USE_CXX g++
+
+ENV RUNC TRUE
+ENV RUNF TRUE
+ENV RUNCXX TRUE
+ENV RUNP FALSE
+ENV RUNNCO TRUE
+
+ENV USEDASH FALSE
+
+ENV USEAC FALSE
+ENV USECMAKE TRUE
+
+ENV CREPS 1
+ENV FREPS 1
+ENV CXXREPS 1
+ENV PREPS 1
+ENV NCOREPS 1
+ENV TESTPROC 1
+ENV TESTPROC_FORTRAN 1
+
+
+ENV H5VER="1.12.2"
+
+###
+# Copy over files and scripts.
+###
+COPY run_conda_based_tests.sh ${HOME}/
+
+##
+# Install some system packages
+##
+RUN apt update
+RUN apt full-upgrade -y
+RUN apt install gcc clang -y
+
+###
+# Start conda-based testing
+###
+WORKDIR ${ARTDIR}
+RUN alias ls='ls --color'
+CMD bash -l -e ${HOME}/run_conda_based_tests.sh
