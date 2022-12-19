@@ -22,6 +22,7 @@ ENV HDF5VER 1.12.2
 ENV HDF5_VER hdf5-${HDF5VER}
 ENV HDF5_FILE ${HDF5_VER}.tar.bz2
 ENV PNCVER 1.11.0
+
 ##
 # Let the user specify the branches.
 ##
@@ -36,10 +37,10 @@ ENV USE_CC gcc
 ENV USE_CXX g++
 
 ENV RUNC TRUE
-ENV RUNF TRUE
-ENV RUNCXX TRUE
+ENV RUNF FALSE
+ENV RUNCXX FALSE
 ENV RUNP FALSE
-ENV RUNNCO TRUE
+ENV RUNNCO FALSE
 
 ENV USEDASH FALSE
 
@@ -52,7 +53,7 @@ ENV TESTPROC 1
 # Copy over files and scripts.
 ###
 COPY run_conda_based_tests.sh ${HOME}/
-COPY Dockerfile.nctests ${HOME}/
+COPY Dockerfile.netcdf-tests ${HOME}/
 COPY README.md ${HOME}/
 
 ##

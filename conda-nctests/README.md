@@ -2,7 +2,7 @@
 
 ## Building
 
-    $ docker build -t unidata/netcdf-test -f Dockerfile.nctests .
+    $ docker build -t unidata/netcdf-test -f Dockerfile.netcdf-test .
 
 ## Usage
 
@@ -27,3 +27,4 @@ If you want artifacts to be generated in a way that's easily accessible, you'll 
 
 ## Examples
 
+    $ docker run --rm -it -e TESTPROC=8 -v $(pwd)/artifacts:/artifacts unidata/netcdf-test 
