@@ -1,7 +1,12 @@
 #!/bin/bash
 
-set -e
 set -x
+
+if [ "x$DOHELP" != "x" ]; then
+    cat ${HOME}/README.md
+    exit 0
+fi
+
 
 ##
 # Set some environmental variables
@@ -10,16 +15,40 @@ export CFLAGS="-I${CONDA_PREFIX}/include"
 export LDFLAGS="-L${CONDA_PREFIX}/lib"
 export LD_LIBRARY_PATH="${CONDA_PREFIX}/lib"
 export CC=${USE_CC}
-
-conda install -c conda-forge ncurses hdf5 autoconf cmake bison automake libtool make zip unzip -y
-
 TARGSUFFIX="$(pwd)/$(date +%m%d%y%H%M%S)"
 mkdir -p ${TARGSUFFIX}
 TARG_SRC_CDIR="${TARGSUFFIX}/netcdf-c-src"
 TARG_BUILD_CDIR="${TARGSUFFIX}/netcdf-c-build"
 
-mkdir -p ${TARG_BUILD_CDIR}
+##
+# Install some conda packages
+##
+conda install -c conda-forge ncurses hdf5 autoconf cmake bison automake libtool make zip unzip -y
 
+##
+# Set some more environmental Variables
+##
+
+
+##
+# NetCDF-C Process
+##
+
+#
+# Autoconf-based tests
+#  - Out of directory build for autoconf-based tools, and also do distcheck.
+#
+
+mkdir -p ${TARG_BUILD_CDIR}
 git clone https://www.github.com/Unidata/netcdf-c --single-branch --branch ${CBRANCH} --depth 1 ${TARG_SRC_CDIR}
-cd ${TARG_SRC_CDIR} && autoreconf -if && cd ${TARG_BUILD_CDIR} && ${TARG_SRC_CDIR}/configure  && make check -j 12 TESTS="" && make check -j 12
-cd ${TARG_BUILD_CDIR} && make distcheck -j 12
+cd ${TARG_SRC_CDIR} && autoreconf -if && cd ${TARG_BUILD_CDIR} && ${TARG_SRC_CDIR}/configure  && make check -j ${TESTPROC} TESTS="" && make check -j ${TESTPROC}
+
+if [ "x${DISTCHECK_C}" != "x" ]; then
+    cd ${TARG_BUILD_CDIR} && make distcheck -j ${TESTPROC}
+fi
+
+#
+# End Autoconf
+#
+
+echo "!!!!! TODO: CREATE SUMMARY OUTPUT FILE !!!!!"

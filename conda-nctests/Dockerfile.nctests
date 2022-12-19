@@ -6,13 +6,11 @@
 FROM continuumio/anaconda3
 USER root
 ENV HOME /root
-ENV ARTDIR /working
+ENV ARTDIR /artifacts
 WORKDIR ${ARTDIR}
-MAINTAINER Ward Fisher <wfisher@ucar.edu>
+LABEL author="Ward Fisher <wfisher@ucar.edu>"
 
-ENV NCTEST_VERSION 1.9.12 - development
-
-ENV VERSION_FILE VERSION.md
+ENV NCTEST_VERSION 0.0.1 - development
 
 ###
 # Set up a couple environmental variables.
@@ -48,28 +46,21 @@ ENV USEDASH FALSE
 ENV USEAC FALSE
 ENV USECMAKE TRUE
 
-ENV CREPS 1
-ENV FREPS 1
-ENV CXXREPS 1
-ENV PREPS 1
-ENV NCOREPS 1
 ENV TESTPROC 1
-ENV TESTPROC_FORTRAN 1
-
-
-ENV H5VER="1.12.2"
 
 ###
 # Copy over files and scripts.
 ###
 COPY run_conda_based_tests.sh ${HOME}/
+COPY Dockerfile.nctests ${HOME}/
+COPY README.md ${HOME}/
 
 ##
 # Install some system packages
 ##
 RUN apt update
 RUN apt full-upgrade -y
-RUN apt install gcc clang -y
+RUN apt install gcc clang mpich libmpich12 -y
 
 ###
 # Start conda-based testing
