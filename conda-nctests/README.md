@@ -2,7 +2,7 @@
 
 ## Building
 
-    $ docker build -t unidata/netcdf-test -f Dockerfile.netcdf-test .
+    $ docker build -t unidata/netcdf-tests -f Dockerfile.netcdf-tests .
 
 ## Usage
 
