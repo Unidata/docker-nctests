@@ -11,7 +11,8 @@ fi
 # Function to copy artifacts from /workdir to  /artifacts
 ##
 publish_artifacts () {
-    ARTTARG=${ARTDIR}/${TARGSUFFIX}
+    ARTTARG=${ARTDIR}/${TKEY}-artifacts
+    mkdir -p ${ARTTARG}
     # Were the artifacts generated? If not, skip
     if [ "x${DISTCHECK_C}" != "x" ]; then
         echo "Copying archive artifacts to ${ARTTARG}"
@@ -27,7 +28,8 @@ export CFLAGS="-I${CONDA_PREFIX}/include"
 export LDFLAGS="-L${CONDA_PREFIX}/lib"
 export LD_LIBRARY_PATH="${CONDA_PREFIX}/lib"
 export CC=${USE_CC}
-TARGSUFFIX="$(pwd)/$(date +%m%d%y%H%M%S)"
+TKEY="$(date +%m%d%y%H%M%S)"
+TARGSUFFIX="$(pwd)/${TKEY}-working"
 mkdir -p "${TARGSUFFIX}"
 TARG_SRC_CDIR="${TARGSUFFIX}"/netcdf-c-src
 TARG_BUILD_CDIR="${TARGSUFFIX}"/netcdf-c-build
