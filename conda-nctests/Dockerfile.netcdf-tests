@@ -6,6 +6,9 @@
 FROM continuumio/anaconda3
 USER root
 ENV HOME /root
+# Where the work takes place
+ENV WORKDIR /working
+# Where the artifacts end up
 ENV ARTDIR /artifacts
 WORKDIR ${ARTDIR}
 LABEL author="Ward Fisher <wfisher@ucar.edu>"
@@ -61,11 +64,11 @@ COPY README.md ${HOME}/
 ##
 RUN apt update
 RUN apt full-upgrade -y
-RUN apt install gcc clang mpich libmpich12 -y
+RUN apt install gcc clang mpich libmpich12 doxygen graphviz -y
 
 ###
 # Start conda-based testing
 ###
-WORKDIR ${ARTDIR}
+WORKDIR ${WORKDIR}
 RUN alias ls='ls --color'
 CMD bash -l -e ${HOME}/run_conda_based_tests.sh
