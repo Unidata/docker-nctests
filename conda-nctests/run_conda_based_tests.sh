@@ -25,21 +25,26 @@ publish_artifacts () {
 ##
 # Set some environmental variables
 ##
-export CFLAGS="-I${CONDA_PREFIX}/include"
-export LDFLAGS="-L${CONDA_PREFIX}/lib"
-export LD_LIBRARY_PATH="${CONDA_PREFIX}/lib"
-export CC=${USE_CC}
+
+
 TKEY="$(date +%m%d%y%H%M%S)"
 TARGSUFFIX="$(pwd)/${TKEY}-artifacts"
+TARGINSTALL="${TARGSUFFIX}"
+
 mkdir -p "${TARGSUFFIX}"
 TARG_SRC_CDIR="${TARGSUFFIX}"/netcdf-c-src
 TARG_BUILD_AC_CDIR="${TARGSUFFIX}"/netcdf-c-ac-build
 TARG_BUILD_CMAKE_CDIR="${TARGSUFFIX}"/netcdf-c-cmake-build
 
+export CFLAGS="-I${CONDA_PREFIX}/include -I${TARGINSTALL}/include"
+export LDFLAGS="-L${CONDA_PREFIX}/lib -L${TARGINSTALL}/lib"
+export LD_LIBRARY_PATH="${CONDA_PREFIX}/lib:${TARGINSTALL}/lib"
+export CC=${USE_CC}
+
 ##
 # Install some conda packages
 ##
-conda install -c conda-forge ncurses hdf5 autoconf cmake bison automake libtool make zip unzip -y
+conda install -c conda-forge hdf5 -y
 
 ##
 # Set some more environmental Variables
@@ -64,7 +69,7 @@ if [ "x${USEAC}" = "xTRUE" ] || [ "x${USEAC}" = "xON" ]; then
 
     mkdir -p "${TARG_BUILD_AC_CDIR}"
    
-    cd "${TARG_SRC_CDIR}" && autoreconf -if && cd "${TARG_BUILD_AC_CDIR}" && CC="${USE_CC}" "${TARG_SRC_CDIR}"/configure  && make check -j "${TESTPROC}" TESTS="" && make check -j "${TESTPROC}"
+    cd "${TARG_SRC_CDIR}" && autoreconf -if && cd "${TARG_BUILD_AC_CDIR}" && CC="${USE_CC}" "${TARG_SRC_CDIR}"/configure --prefix="${TARGINSTALL}" && make check -j "${TESTPROC}" TESTS="" && make check -j "${TESTPROC}" && make install -j "${TESTPROC}"
 
     if [ "x${DISTCHECK_C}" != "x" ]; then
         cd "${TARG_BUILD_AC_CDIR}" && make distcheck -j "${TESTPROC}"
