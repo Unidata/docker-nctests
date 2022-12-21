@@ -13,7 +13,7 @@ ENV ARTDIR /artifacts
 WORKDIR ${ARTDIR}
 LABEL author="Ward Fisher <wfisher@ucar.edu>"
 
-ENV NCTEST_VERSION 0.0.1 - development
+ENV NCTEST_VERSION 0.0.2 - development
 
 ###
 # Set up a couple environmental variables.
