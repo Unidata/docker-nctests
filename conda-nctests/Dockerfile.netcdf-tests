@@ -7,7 +7,7 @@ FROM continuumio/anaconda3
 USER root
 ENV HOME /root
 # Where the work takes place
-ENV WORKDIR /working
+ENV WORKDIR /artifacts
 # Where the artifacts end up
 ENV ARTDIR /artifacts
 WORKDIR ${ARTDIR}
@@ -35,20 +35,29 @@ ENV CXXBRANCH master
 ENV PBRANCH master
 ENV NCOBRANCH master
 
+##
+# Which build systems to run?
+##
+ENV USEAC TRUE
+ENV USECMAKE TRUE
+
+## 
+# Compiler and Bitness labels.
+##
+
 ENV BITNESS 64
 ENV USE_CC gcc
 ENV USE_CXX g++
 
+##
+# Which tests/systems to run
+##
 ENV RUNC TRUE
 ENV RUNF FALSE
 ENV RUNCXX FALSE
 ENV RUNP FALSE
 ENV RUNNCO FALSE
 
-ENV USEDASH FALSE
-
-ENV USEAC FALSE
-ENV USECMAKE TRUE
 
 ENV TESTPROC 1
 

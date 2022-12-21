@@ -2,8 +2,13 @@
 
 ## Building
 
+### Docker Build
+
     $ docker build -t unidata/netcdf-tests -f Dockerfile.netcdf-tests .
 
+### Docker Buildx (multi-arch)
+
+    $ time docker buildx build --push --platform linux/arm64/v8,linux/amd64 -t unidata/netcdf-tests -f Dockerfile.netcdf-tests .
 ## Usage
 
 ### Artifacts
