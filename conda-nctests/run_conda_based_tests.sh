@@ -3,30 +3,58 @@
 set -e
 # set -x
 
+
+#####
+# Function to create an environment script that
+# can be sourced, if need be.
+#####
+create_env_file () {
+    ENVFILE="${TARGSUFFIX}"/env.sh
+    echo "Creating ${ENVFILE}"
+    echo -e "# Created $(ddate)" > "${ENVFILE}"
+    echo "" >> "${ENVFILE}"
+    echo -e "export CFLAGS=\"${CFLAGS}\"" >> "${ENVFILE}"
+    echo -e "export LDFLAGS=\"${LDFLAGS}\"" >> "${ENVFILE}"
+    echo -e "export LD_LIBRARY_PATH=\"${LD_LIBRARY_PATH}\"" >> "${ENVFILE}"
+    echo -e "export CC=\"${USE_CC}\"" >> "${ENVFILE}"
+    echo -e ""
+    echo -e "export TARG_SRC_CDIR=\"${TARG_SRC_CDIR}\"" >> "${ENVFILE}"
+    echo -e "export TARG_BUILD_AC_CDIR=\"${TARG_BUILD_AC_CDIR}\"" >> "${ENVFILE}"
+    echo -e "export TARG_BUILD_CMAKE_CDIR=\"${TARG_BUILD_CMAKE_CDIR}\"" >> "${ENVFILE}"
+    echo -e "" >> "${ENVFILE}"
+
+}   
+
+#####
+# End create_env_file()
+#####
+
+#####
+# Function to copy artifacts from /workdir to  /artifacts
+#####
+publish_artifacts () {
+    echo "Generating Artifacts"
+    # Were the AC-based artifacts generated? If not, skip
+    if [ "${USEAC}" = "TRUE" ] || [ "${USEAC}" = "ON" ]; then
+        if [ "${DISTCHECK_C}" = "TRUE" ] || [ "${DISTCHECK_C}" = "ON" ]; then
+            echo "Copying archive artifacts to ${TARGSUFFIX}"
+            cp "${TARG_BUILD_AC_CDIR}"/*.tar.gz "${TARG_BUILD_AC_CDIR}"/*.zip "${TARGSUFFIX}"/
+        elif [ "${DIST_C}" = "TRUE" ] || [ "${DIST_C}" = "ON" ]; then
+            echo "Copying archive artifacts to ${TARGSUFFIX}"
+            cp "${TARG_BUILD_AC_CDIR}"/*.tar.gz "${TARG_BUILD_AC_CDIR}"/*.zip "${TARGSUFFIX}"/
+        fi
+    fi
+
+}
+#####
+# End publish_artifacts()
+#####
+
 if [ "$DOHELP" != "" ]; then
     cat "${HOME}"/README.md
     exit 0
 fi
 
-##
-# Function to copy artifacts from /workdir to  /artifacts
-##
-publish_artifacts () {
-    ARTTARG=${ARTDIR}/${TKEY}-artifacts
-    mkdir -p "${ARTTARG}"
-    echo "Generating Artifacts"
-    # Were the AC-based artifacts generated? If not, skip
-    if [ "${USEAC}" = "TRUE" ] || [ "${USEAC}" = "ON" ]; then
-        if [ "${DISTCHECK_C}" = "TRUE" ] || [ "${DISTCHECK_C}" = "ON" ]; then
-            echo "Copying archive artifacts to ${ARTTARG}"
-            cp "${TARG_BUILD_AC_CDIR}"/*.tar.gz "${TARG_BUILD_AC_CDIR}"/*.zip "${ARTTARG}"/
-        elif [ "${DIST_C}" = "TRUE" ] || [ "${DIST_C}" = "ON" ]; then
-            echo "Copying archive artifacts to ${ARTTARG}"
-            cp "${TARG_BUILD_AC_CDIR}"/*.tar.gz "${TARG_BUILD_AC_CDIR}"/*.zip "${ARTTARG}"/
-        fi
-    fi
-
-}
 
 ##
 # Set some environmental variables
@@ -47,6 +75,11 @@ export LDFLAGS="-L${CONDA_PREFIX}/lib -L${TARGINSTALL}/lib"
 export LD_LIBRARY_PATH="${LD_LIBRARY_PATH}:${CONDA_PREFIX}/lib:${TARGINSTALL}/lib"
 export PATH="${TARGINSTALL}/bin:${PATH}"
 export CC=${USE_CC}
+
+##
+# Create the diagnostic env file, just in case we need it.
+##
+create_env_file
 
 ##
 # Install some conda packages
@@ -115,6 +148,6 @@ fi
 # in the function itself
 ##
 publish_artifacts
-
+create_env_file
 
 echo "!!!!! TODO: CREATE SUMMARY OUTPUT FILE !!!!!"
