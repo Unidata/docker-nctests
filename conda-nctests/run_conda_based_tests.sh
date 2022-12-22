@@ -11,12 +11,13 @@ set -e
 create_env_file () {
     ENVFILE="${TARGSUFFIX}"/env.sh
     echo "Creating ${ENVFILE}"
-    echo -e "# Created $(ddate)" > "${ENVFILE}"
+    echo -e "# Created $(date)" > "${ENVFILE}"
     echo "" >> "${ENVFILE}"
     echo -e "export CFLAGS=\"${CFLAGS}\"" >> "${ENVFILE}"
     echo -e "export LDFLAGS=\"${LDFLAGS}\"" >> "${ENVFILE}"
     echo -e "export LD_LIBRARY_PATH=\"${LD_LIBRARY_PATH}\"" >> "${ENVFILE}"
     echo -e "export CC=\"${USE_CC}\"" >> "${ENVFILE}"
+    echo -e "export PATH=\"${PATH}\":\${PATH}" >> "${ENVFILE}"
     echo -e ""
     echo -e "export TARG_SRC_CDIR=\"${TARG_SRC_CDIR}\"" >> "${ENVFILE}"
     echo -e "export TARG_BUILD_AC_CDIR=\"${TARG_BUILD_AC_CDIR}\"" >> "${ENVFILE}"
