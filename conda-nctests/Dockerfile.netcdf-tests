@@ -80,10 +80,10 @@ RUN apt install gcc clang mpich libmpich12 doxygen graphviz -y
 # Fiddling around in the system
 # 
 RUN ln -s /bin/sed /usr/bin/sed
+RUN echo "alias ls='ls --color'" >> ${HOME}/.bashrc
 
 ###
 # Start conda-based testing
 ###
 WORKDIR ${WORKDIR}
-RUN alias ls='ls --color'
 CMD bash -l -e ${HOME}/run_conda_based_tests.sh
