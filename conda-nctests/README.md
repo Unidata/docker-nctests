@@ -21,7 +21,10 @@ If you want artifacts to be generated in a way that's easily accessible, you'll 
 
 ### Source Code
 
+#### NetCDF-C
+
 * `CBRANCH` - Branch of `netCDF-C` to test. **Default value: main**
+* `DIST_C` - Generate C source-code artifacts. **Default value: ON**
 * `DISTCHECK_C` - Whether to perform `make distcheck` on the C library.  **Default value: OFF**
 
 ### Resources

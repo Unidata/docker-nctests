@@ -3,7 +3,7 @@
 # so that we can take advantage of the
 # shared layers that docker provides.
 #####
-FROM continuumio/anaconda3
+FROM continuumio/miniconda3
 
 USER root
 ENV HOME /root
@@ -14,7 +14,7 @@ ENV ARTDIR /artifacts
 WORKDIR ${ARTDIR}
 LABEL author="Ward Fisher <wfisher@ucar.edu>"
 
-ENV NCTEST_VERSION 0.0.2 - development
+ENV NCTEST_VERSION 0.0.3 - development
 
 ###
 # Set up a couple environmental variables.
@@ -75,6 +75,11 @@ COPY README.md ${HOME}/
 RUN apt update
 RUN apt full-upgrade -y
 RUN apt install gcc clang mpich libmpich12 doxygen graphviz -y
+
+#
+# Fiddling around in the system
+# 
+RUN ln -s /bin/sed /usr/bin/sed
 
 ###
 # Start conda-based testing
