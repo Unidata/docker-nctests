@@ -31,6 +31,44 @@ create_env_file () {
 #####
 
 #####
+# Create html tree
+# o Append entry to top-level index.html file,
+# o create links to the other files.
+#####
+create_html_tree () {
+    INDFILE="${TARGROOT}/index.html"
+
+
+    if [ ! -f "${INDFILE}" ]; then
+        echo "<H1>Artifacts Directory</H1><P>" > "${INDFILE}"
+    fi
+    echo "<A href=\"..${LOGHTML}\">${TARGSUFFIX}</A><BR>" >> "${INDFILE}"
+    
+    echo "<H1>$(date)</H1></P>" > "${LOGHTML}"
+
+
+
+    # CMake-based build?
+    if [ "${USECMAKE}" = "TRUE" ] || [ "${USECMAKE}" = "ON" ]; then
+        echo "<A href=\"./netcdf-c-cmake-build/libnetcdf.settings\">${TARG_BUILD_CMAKE_CDIR}/libnetcdf.settings</A><BR>" >> "${LOGHTML}"
+    else
+        echo "No Cmake Build<BR>" >> "${LOGHTML}"
+    fi
+
+    # AC-based build?
+    if [ "${USEAC}" = "TRUE" ] || [ "${USEAC}" = "ON" ]; then
+        echo "<A href=\"./netcdf-c-ac-build/libnetcdf.settings\">${TARG_BUILD_AC_CDIR}/libnetcdf.settings</A><BR>" >> "${LOGHTML}"
+    else
+        echo "No Autoconf Build<BR>" >> "${LOGHTML}"
+    fi
+
+}
+
+#####
+# End create html tree.
+#####
+
+#####
 # Function to copy artifacts from /workdir to  /artifacts
 #####
 publish_artifacts () {
@@ -63,6 +101,7 @@ fi
 
 
 TKEY="$(date +%m%d%y%H%M%S)"
+TARGROOT="$(pwd)"
 TARGSUFFIX="$(pwd)/${TKEY}-artifacts"
 TARGINSTALL="${TARGSUFFIX}"
 
@@ -70,6 +109,8 @@ mkdir -p "${TARGSUFFIX}"
 TARG_SRC_CDIR="${TARGSUFFIX}"/netcdf-c-src
 TARG_BUILD_AC_CDIR="${TARGSUFFIX}"/netcdf-c-ac-build
 TARG_BUILD_CMAKE_CDIR="${TARGSUFFIX}"/netcdf-c-cmake-build
+
+LOGHTML="${TARGSUFFIX}/index.html"
 
 export CFLAGS="-I${CONDA_PREFIX}/include -I${TARGINSTALL}/include"
 export LDFLAGS="-L${CONDA_PREFIX}/lib -L${TARGINSTALL}/lib"
@@ -79,8 +120,10 @@ export CC=${USE_CC}
 
 ##
 # Create the diagnostic env file, just in case we need it.
+# Also create html tree.
 ##
 create_env_file
+create_html_tree
 
 ##
 # Install some conda packages
@@ -149,6 +192,5 @@ fi
 # in the function itself
 ##
 publish_artifacts
-create_env_file
 
 echo "!!!!! TODO: CREATE SUMMARY OUTPUT FILE !!!!!"
