@@ -38,7 +38,7 @@ TARG_BUILD_CMAKE_CDIR="${TARGSUFFIX}"/netcdf-c-cmake-build
 
 export CFLAGS="-I${CONDA_PREFIX}/include -I${TARGINSTALL}/include"
 export LDFLAGS="-L${CONDA_PREFIX}/lib -L${TARGINSTALL}/lib"
-export LD_LIBRARY_PATH="${CONDA_PREFIX}/lib:${TARGINSTALL}/lib"
+export LD_LIBRARY_PATH="${LD_LIBRARY_PATH}:${CONDA_PREFIX}/lib:${TARGINSTALL}/lib"
 export PATH="${TARGINSTALL}/bin:${PATH}"
 export CC=${USE_CC}
 
@@ -46,7 +46,7 @@ export CC=${USE_CC}
 # Install some conda packages
 ##
 
-conda install -c conda-forge hdf5 ncurses -y
+conda install -c conda-forge hdf5 ncurses cmake bison make zip unzip autoconf automake libtool -y
 
 ##
 # Set some more environmental Variables

@@ -4,6 +4,7 @@
 # shared layers that docker provides.
 #####
 FROM continuumio/anaconda3
+
 USER root
 ENV HOME /root
 # Where the work takes place
@@ -73,7 +74,7 @@ COPY README.md ${HOME}/
 ##
 RUN apt update
 RUN apt full-upgrade -y
-RUN apt install gcc clang mpich libmpich12 doxygen graphviz cmake bison make zip unzip autoconf automake libtool -y
+RUN apt install gcc clang mpich libmpich12 doxygen graphviz -y
 
 ###
 # Start conda-based testing
