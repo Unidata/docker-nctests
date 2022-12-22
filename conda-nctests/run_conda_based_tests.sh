@@ -46,7 +46,7 @@ create_html_tree () {
     
     echo "<H1>$(date)</H1></P>" > "${LOGHTML}"
 
-
+    echo "<A href=\"${INDFILE}\">Back</A><BR>" >> "${LOGHTML}" 
 
     # CMake-based build?
     if [ "${USECMAKE}" = "TRUE" ] || [ "${USECMAKE}" = "ON" ]; then
