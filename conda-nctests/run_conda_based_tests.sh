@@ -23,7 +23,7 @@ create_env_file () {
     echo -e "export TARG_BUILD_AC_CDIR=\"${TARG_BUILD_AC_CDIR}\"" >> "${ENVFILE}"
     echo -e "export TARG_BUILD_CMAKE_CDIR=\"${TARG_BUILD_CMAKE_CDIR}\"" >> "${ENVFILE}"
     echo -e "" >> "${ENVFILE}"
-
+    echo -e "$(env)" >> "${TARGSUFFIX}"/docker-env.txt
 }   
 
 #####
@@ -47,6 +47,7 @@ create_html_tree () {
     echo "<H1>$(date)</H1></P>" > "${LOGHTML}"
 
     echo "<A href=\"../index.html\">Back</A><BR>" >> "${LOGHTML}" 
+    echo "<A href=\".\">Local Directory Structure</A><BR>" >> "${LOGHTML}"
     echo "<ul>" >> "${LOGHTML}"
     # CMake-based build?
     if [ "${USECMAKE}" = "TRUE" ] || [ "${USECMAKE}" = "ON" ]; then
@@ -102,7 +103,8 @@ fi
 
 TKEY="$(date +%m%d%y%H%M%S)"
 TARGROOT="$(pwd)"
-TARGSUFFIX="$(pwd)/${TKEY}-artifacts"
+TARGID="${TKEY}-${CBRANCH}-${USE_CC}-artifacts"
+TARGSUFFIX="$(pwd)/${TARGID}"
 TARGINSTALL="${TARGSUFFIX}"
 
 mkdir -p "${TARGSUFFIX}"
@@ -110,7 +112,7 @@ TARG_SRC_CDIR="${TARGSUFFIX}"/netcdf-c-src
 TARG_BUILD_AC_CDIR="${TARGSUFFIX}"/netcdf-c-ac-build
 TARG_BUILD_CMAKE_CDIR="${TARGSUFFIX}"/netcdf-c-cmake-build
 
-LOGHTML="${TKEY}-artifacts/index.html"
+LOGHTML="${TARGID}/index.html"
 
 export CFLAGS="-I${CONDA_PREFIX}/include -I${TARGINSTALL}/include"
 export LDFLAGS="-L${CONDA_PREFIX}/lib -L${TARGINSTALL}/lib"
