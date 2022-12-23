@@ -41,6 +41,7 @@ create_html_tree () {
 
     if [ ! -f "${INDFILE}" ]; then
         echo "<H1>Artifacts Directory</H1><P>" > "${INDFILE}"
+        echo "<H2><A href=\".\">Local Directory Structure</A></H2><BR>" >> "${INDFILE}"
     fi
     echo "<A href=\"${LOGHTML}\">$(date) - ${TARGSUFFIX}</A><BR>" >> "${INDFILE}"
     
