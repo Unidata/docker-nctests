@@ -114,7 +114,7 @@ LOGHTML="${TARGSUFFIX}/index.html"
 
 export CFLAGS="-I${CONDA_PREFIX}/include -I${TARGINSTALL}/include"
 export LDFLAGS="-L${CONDA_PREFIX}/lib -L${TARGINSTALL}/lib"
-export LD_LIBRARY_PATH="${LD_LIBRARY_PATH}:${CONDA_PREFIX}/lib:${TARGINSTALL}/lib"
+export LD_LIBRARY_PATH="${CONDA_PREFIX}/lib:${TARGINSTALL}/lib:${LD_LIBRARY_PATH}"
 export PATH="${TARGINSTALL}/bin:${PATH}"
 export CC=${USE_CC}
 
