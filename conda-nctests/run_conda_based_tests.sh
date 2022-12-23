@@ -42,26 +42,26 @@ create_html_tree () {
     if [ ! -f "${INDFILE}" ]; then
         echo "<H1>Artifacts Directory</H1><P>" > "${INDFILE}"
     fi
-    echo "<A href=\"..${LOGHTML}\">${TARGSUFFIX}</A><BR>" >> "${INDFILE}"
+    echo "<A href=\"${LOGHTML}\">$(date) - ${TARGSUFFIX}</A><BR>" >> "${INDFILE}"
     
     echo "<H1>$(date)</H1></P>" > "${LOGHTML}"
 
-    echo "<A href=\"${INDFILE}\">Back</A><BR>" >> "${LOGHTML}" 
-
+    echo "<A href=\"../index.html\">Back</A><BR>" >> "${LOGHTML}" 
+    echo "<ul>" >> "${LOGHTML}"
     # CMake-based build?
     if [ "${USECMAKE}" = "TRUE" ] || [ "${USECMAKE}" = "ON" ]; then
-        echo "<A href=\"./netcdf-c-cmake-build/libnetcdf.settings\">${TARG_BUILD_CMAKE_CDIR}/libnetcdf.settings</A><BR>" >> "${LOGHTML}"
+        echo "<li><A href=\"netcdf-c-cmake-build/libnetcdf.settings\">cmake-build/libnetcdf.settings</li>" >> "${LOGHTML}"
     else
-        echo "No Cmake Build<BR>" >> "${LOGHTML}"
+        echo "<li>No Cmake Build</li>" >> "${LOGHTML}"
     fi
 
     # AC-based build?
     if [ "${USEAC}" = "TRUE" ] || [ "${USEAC}" = "ON" ]; then
-        echo "<A href=\"./netcdf-c-ac-build/libnetcdf.settings\">${TARG_BUILD_AC_CDIR}/libnetcdf.settings</A><BR>" >> "${LOGHTML}"
+        echo "<li><A href=\"netcdf-c-ac-build/libnetcdf.settings\">ac-build/libnetcdf.settings</li></A>" >> "${LOGHTML}"
     else
-        echo "No Autoconf Build<BR>" >> "${LOGHTML}"
+        echo "<li>No Autoconf Build</li>" >> "${LOGHTML}"
     fi
-
+    echo "</ul>" >> "${LOGHTML}"
 }
 
 #####
@@ -110,7 +110,7 @@ TARG_SRC_CDIR="${TARGSUFFIX}"/netcdf-c-src
 TARG_BUILD_AC_CDIR="${TARGSUFFIX}"/netcdf-c-ac-build
 TARG_BUILD_CMAKE_CDIR="${TARGSUFFIX}"/netcdf-c-cmake-build
 
-LOGHTML="${TARGSUFFIX}/index.html"
+LOGHTML="${TKEY}-artifacts/index.html"
 
 export CFLAGS="-I${CONDA_PREFIX}/include -I${TARGINSTALL}/include"
 export LDFLAGS="-L${CONDA_PREFIX}/lib -L${TARGINSTALL}/lib"
