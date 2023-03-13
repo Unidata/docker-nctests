@@ -21,13 +21,13 @@ ENV DIST nc
 
 RUN apt-get update
 RUN apt-get -y upgrade
-RUN apt-get install -y ca-certificates man nano curl git emacs wget gcc g++ gfortran clang gdb autoconf automake make libtool m4 bison flex zlib1g-dev libjpeg-dev libcurl4-openssl-dev python zip elfutils libelf-dev dos2unix cmake
+RUN apt-get install -y ca-certificates man nano curl git emacs wget gcc g++ gfortran clang gdb autoconf automake make libtool m4 bison flex zlib1g-dev libjpeg-dev libcurl4-openssl-dev python3 zip elfutils libelf-dev dos2unix cmake
 
 ###
-RUN tar -jxf hdf5-1.10.7.tar.bz2 && cd hdf5-1.10.7 && ./configure --prefix=/usr --disable-static --enable-shared --enable-hl && make -j 4 && make install -j 4
+RUN tar -jxf hdf5-1.12.2.tar.bz2 && cd hdf5-1.12.2 && ./configure --prefix=/usr --disable-static --enable-shared --enable-hl && make -j 4 && make install -j 4
 
 ###
-ENV NCVER=v4.7.4
+ENV NCVER=v4.9.1
 RUN git clone https://github.com/Unidata/netcdf-c && cd netcdf-c && git checkout ${NCVER} && mkdir build && cd build && cmake .. -DENABLE_TESTS=OFF -DCMAKE_INSTALL_PREFIX=/usr && make -j 100 && make install
 RUN rm -rf netcdf-c
 
