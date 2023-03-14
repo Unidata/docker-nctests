@@ -2,7 +2,7 @@
 # Common stuff at front.
 ####
 #FROM ubuntu:xenial
-FROM unidata/nctests:serial
+FROM docker.unidata.ucar.edu/nctests:serial
 MAINTAINER Ward Fisher <wfisher@ucar.edu>
 USER root
 ENV HOME /root

@@ -1,4 +1,4 @@
-FROM unidata/nctests:base
+FROM docker.unidata.ucar.edu/nctests:base
 
 ###
 # Copy over a script to provision.
