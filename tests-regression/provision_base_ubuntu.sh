@@ -27,10 +27,6 @@ sudo apt-get -y install --no-install-recommends bzip2 g++ gfortran libtool autom
 # Uncompress tarballs.
 ###
 
-##
-# Install cmake manually
-##
-#tar -zxf cmake-3.21.2.tar.gz && cd cmake-3.21.2 && ./configure --prefix=/usr && make -j 8 && sudo make install -j 8
 
 ##
 # Some cleanup

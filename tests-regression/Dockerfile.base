@@ -22,7 +22,7 @@ ENV CTEST_OUTPUT_ON_FAILURE 1
 ENV HDF5VER 1.12.2
 ENV HDF5_VER hdf5-${HDF5VER}
 ENV HDF5_FILE ${HDF5_VER}.tar.bz2
-ENV PNCVER 1.11.0
+ENV PNCVER 1.12.3
 ##
 # Let the user specify the branches.
 ##
@@ -62,7 +62,7 @@ ENV H5VER="1.12.2"
 ###
 # Copy over local tarballs.
 ###
-COPY hdf5-1.8.22.tar.bz2 hdf5-1.10.8.tar.bz2 hdf5-1.12.2.tar.bz2 pnetcdf-1.11.0.tar.gz hdf-4.2.15.tar.bz2 cmake-3.21.2.tar.gz ${HOME}/
+COPY hdf5-1.8.22.tar.bz2 hdf5-1.10.8.tar.bz2 hdf5-1.12.2.tar.bz2 pnetcdf-1.12.3.tar.gz hdf-4.2.15.tar.bz2 cmake-3.21.2.tar.gz ${HOME}/
 
 
 ###
