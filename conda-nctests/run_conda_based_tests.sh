@@ -3,6 +3,46 @@
 set -e
 # set -x
 
+#####
+# Function to download HDF5 tarball and install it.
+#####
+installhdf5 () {
+
+    cd "${TARGSUFFIX}"
+    H5MAJ=$(echo $H5VER | cut -d '.' -f 1)
+    H5MIN=$(echo $H5VER | cut -d '.' -f 2)
+    H5REV=$(echo $H5VER | cut -d '.' -f 3)
+
+    H5DIR="hdf5-${H5VER}"
+    H5FILE="${H5DIR}.tar.bz2"
+    H5URL="https://support.hdfgroup.org/ftp/HDF5/releases/hdf5-${H5MAJ}.${H5MIN}/hdf5-${H5VER}/src/${H5FILE}"
+
+    if [ ! -f "../${H5FILE}" ]; then
+        echo "Downloading ${H5FILE}"
+        wget "${H5URL}"
+        cp "${H5FILE}" ..
+    else
+        echo "${H5FILE} Found"
+        cp "../${H5FILE}" .
+    fi
+
+    H5_API_OP="--with-default-api-version=v110"
+
+    echo -e "\tUncompressing, Compiling HDF5"
+    H5DIR="${H5DIR}-${TKEY}"
+    mkdir -p "${H5DIR}"
+    tar -jxf "${H5FILE}" --strip-components=2 -C "${H5DIR}"
+    cd "${H5DIR}"
+    autoreconf -if 
+    CC="${USE_CC}" ./configure --disable-static --enable-shared --prefix="${TARGINSTALL}" "${H5PAROPT}" --enable-hl --with-szlib ${H5_API_OP} 
+    make install -j "${TESTPROC}" 
+    make clean -j "${TESTPROC}"
+
+    # Cleanup
+    cd ..
+    rm "${H5FILE}"
+    cd ..
+}
 
 #####
 # Function to create an environment script that
@@ -75,7 +115,8 @@ create_html_tree () {
 #####
 publish_artifacts () {
     echo "Generating Artifacts"
-    # Were the AC-based artifacts generated? If not, skip
+    # Were the AC-based artifacts generated These are the tar and zip files? If not, skip.
+
     if [ "${USEAC}" = "TRUE" ] || [ "${USEAC}" = "ON" ]; then
         if [ "${DISTCHECK_C}" = "TRUE" ] || [ "${DISTCHECK_C}" = "ON" ]; then
             echo "Copying archive artifacts to ${TARGSUFFIX}"
@@ -101,10 +142,9 @@ fi
 # Set some environmental variables
 ##
 
-
-TKEY="$(date +%m%d%y%H%M%S)"
+TKEY="$(date +%s)"
 TARGROOT="$(pwd)"
-TARGID="${TKEY}-${CBRANCH}-${USE_CC}-artifacts"
+TARGID="${TKEY}-${CBRANCH}-${H5VER}-${USE_CC}-artifacts"
 TARGSUFFIX="$(pwd)/${TARGID}"
 TARGINSTALL="${TARGSUFFIX}"
 
@@ -115,11 +155,14 @@ TARG_BUILD_CMAKE_CDIR="${TARGSUFFIX}"/netcdf-c-cmake-build
 
 LOGHTML="${TARGID}/index.html"
 
-export CFLAGS="-I${CONDA_PREFIX}/include -I${TARGINSTALL}/include"
-export LDFLAGS="-L${CONDA_PREFIX}/lib -L${TARGINSTALL}/lib"
-export LD_LIBRARY_PATH="${CONDA_PREFIX}/lib:${TARGINSTALL}/lib:${LD_LIBRARY_PATH}"
+mkdir -p "${TARGINSTALL}/include"
+mkdir -p "${TARGINSTALL}/lib"
+
+export CFLAGS="-I${TARGINSTALL}/include"
+export LDFLAGS="-L${TARGINSTALL}/lib"
+export LD_LIBRARY_PATH="${TARGINSTALL}/lib:${LD_LIBRARY_PATH}"
 export PATH="${TARGINSTALL}/bin:${PATH}"
-export CC=${USE_CC}
+export CC"=${USE_CC}"
 
 ##
 # Create the diagnostic env file, just in case we need it.
@@ -129,10 +172,9 @@ create_env_file
 create_html_tree
 
 ##
-# Install some conda packages
+# Install HDF5 from source.  
 ##
-
-conda install -c conda-forge hdf5 ncurses cmake bison make zip unzip autoconf automake libtool libxml2 -y
+installhdf5
 
 ##
 # Set some more environmental Variables

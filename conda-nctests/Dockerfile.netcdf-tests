@@ -3,8 +3,9 @@
 # so that we can take advantage of the
 # shared layers that docker provides.
 #####
-FROM continuumio/miniconda3:4.12.0
+#FROM continuumio/miniconda3:4.12.0
 #FROM continuumio/miniconda3
+FROM ubuntu
 USER root
 ENV HOME /root
 # Where the work takes place
@@ -22,10 +23,13 @@ ENV NCTEST_VERSION 0.1.7 - development
 
 ENV CTEST_OUTPUT_ON_FAILURE 1
 
-ENV HDF5VER 1.12.2
-ENV HDF5_VER hdf5-${HDF5VER}
-ENV HDF5_FILE ${HDF5_VER}.tar.bz2
-ENV PNCVER 1.11.0
+## 
+# Set default versions
+# These can be overridden at runtime, but if they aren't,
+# these will be downloaded and installed.
+##
+ENV H5VER 1.12.2
+ENV PNETCDFVER 1.12.3 
 
 ##
 # Let the user specify the branches.
@@ -73,13 +77,13 @@ COPY README.md ${HOME}/
 # Install some system packages
 ##
 RUN apt update
+RUN apt install -y sudo
 RUN apt full-upgrade -y
-RUN apt install gcc clang mpich libmpich12 doxygen graphviz -y
+RUN apt -y install bzip2 g++ gfortran libtool automake autoconf m4 bison flex libcurl4-openssl-dev zlib1g-dev git wget curl libjpeg-dev cmake python3-dev gdb dos2unix antlr libantlr-dev libexpat1-dev libxml2-dev gsl-bin libgsl0-dev udunits-bin libudunits2-0 libudunits2-dev clang zip valgrind make build-essential less unzip patch libsz2 libaec-dev libmpich-dev clang zip
 
 #
 # Fiddling around in the system
 # 
-RUN ln -s /bin/sed /usr/bin/sed
 RUN echo "alias ls='ls --color'" >> ${HOME}/.bashrc
 
 ###
