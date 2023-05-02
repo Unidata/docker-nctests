@@ -3,7 +3,7 @@
 # so that we can take advantage of the
 # shared layers that docker provides.
 #####
-FROM ubuntu
+FROM ubuntu:23.04
 USER root
 ENV HOME /root
 WORKDIR /root
