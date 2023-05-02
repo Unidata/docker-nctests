@@ -7,7 +7,7 @@ set -e
 
 apt-get update
 apt-get -y upgrade
-apt-get -y install --no-install-recommends sudo
+apt-get -y install --no-install-recommends sudo adduser
 apt-get -y install ca-certificates
 ##
 # Set up a non-root admin to run the tests as.
