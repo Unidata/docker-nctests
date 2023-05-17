@@ -27,7 +27,7 @@ RUN apt-get install -y ca-certificates man nano curl git emacs wget gcc g++ gfor
 RUN tar -jxf hdf5-1.12.2.tar.bz2 && cd hdf5-1.12.2 && ./configure --prefix=/usr --disable-static --enable-shared --enable-hl && make -j 4 && make install -j 4
 
 ###
-ENV NCVER=v4.9.1
+ENV NCVER=v4.9.2
 RUN git clone https://github.com/Unidata/netcdf-c && cd netcdf-c && git checkout ${NCVER} && mkdir build && cd build && cmake .. -DENABLE_TESTS=OFF -DCMAKE_INSTALL_PREFIX=/usr && make -j 100 && make install
 RUN rm -rf netcdf-c
 
