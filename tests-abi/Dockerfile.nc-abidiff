@@ -21,7 +21,7 @@ ENV DIST nc
 
 RUN apt-get update
 RUN apt-get -y upgrade
-RUN apt-get install -y ca-certificates man nano curl git emacs wget gcc g++ gfortran clang gdb autoconf automake make libtool m4 bison flex zlib1g-dev libjpeg-dev libcurl4-openssl-dev python3 zip elfutils libelf-dev dos2unix cmake
+RUN apt-get install -y ca-certificates man nano curl git emacs wget gcc g++ gfortran clang gdb autoconf automake make libtool m4 bison flex zlib1g-dev libjpeg-dev libcurl4-openssl-dev python3 zip elfutils libelf-dev dos2unix cmake libzstd-dev libzstd1
 
 ###
 RUN tar -jxf hdf5-1.12.2.tar.bz2 && cd hdf5-1.12.2 && ./configure --prefix=/usr --disable-static --enable-shared --enable-hl && make -j 4 && make install -j 4
