@@ -53,6 +53,7 @@ ENV USECMAKE TRUE
 ENV BITNESS 64
 ENV USE_CC gcc
 ENV USE_CXX g++
+ENV USE_FC gfortran
 
 ##
 # Which tests/systems to run
@@ -63,6 +64,11 @@ ENV RUNCXX FALSE
 ENV RUNP FALSE
 ENV RUNNCO FALSE
 
+##
+# Various other settings.
+##
+ENV DIST_C=OFF
+ENV DISTCHECK_C=OFF
 
 ENV TESTPROC 1
 

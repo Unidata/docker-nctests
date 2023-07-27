@@ -42,7 +42,7 @@ If you want artifacts to be generated in a way that's easily accessible, you'll 
 #### NetCDF-C
 
 * `CBRANCH` - Branch of `netCDF-C` to test. **Default value: `main`**
-* `DIST_C` - Generate source-code artifacts via `make dist`. **Default value: TRUE**
+* `DIST_C` - Generate source-code artifacts via `make dist`. **Default value: FALSE**
 * `DISTCHECK_C` - Whether to run `make distcheck`. **Default Value: FALSE**
 ## Examples
 
