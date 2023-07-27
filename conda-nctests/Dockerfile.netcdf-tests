@@ -69,7 +69,7 @@ ENV TESTPROC 1
 ###
 # Copy over files and scripts.
 ###
-COPY run_conda_based_tests.sh ${HOME}/
+COPY run_docker_based_tests.sh ${HOME}/
 COPY Dockerfile.netcdf-tests ${HOME}/
 COPY README.md ${HOME}/
 
@@ -90,4 +90,4 @@ RUN echo "alias ls='ls --color'" >> ${HOME}/.bashrc
 # Start conda-based testing
 ###
 WORKDIR ${WORKDIR}
-CMD bash -l -e ${HOME}/run_conda_based_tests.sh
+CMD bash -l -e ${HOME}/run_docker_based_tests.sh

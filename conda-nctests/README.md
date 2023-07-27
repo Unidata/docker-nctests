@@ -1,4 +1,8 @@
-# Docker Tests
+# Docker-based Tests and Artifact Generation
+
+`docker.unidata.ucar.edu/netcdf-tests`
+
+This project is used to run tests and generate artifacts for `netCDF-C`, `netCDF-Fortran` and `netCDF-CXX4`.  It uses `docker` for containerization, and allows us to build and run tests under emulation using the `--platform` director for compatible `docker` installs. 
 
 ## Building
 
@@ -27,11 +31,15 @@ If you want artifacts to be generated in a way that's easily accessible, you'll 
 * `DIST_C` - Generate C source-code artifacts. **Default value: ON**
 * `DISTCHECK_C` - Whether to perform `make distcheck` on the C library.  **Default value: OFF**
 
-### Resources
+### System Resource Options
 
 * `TESTPROC` - The number of processors to use. **Default value: 1**
-* `USE_CC` - The C compiler to use.  Options are `gcc`, `clang`, `mpi`.  **Default value: gcc**
 
+### Build System Options
+
+* `USE_CC` - The C compiler to use.  Options are `gcc`, `clang`, `mpi`.  **Default value: gcc**
+* `USEAC` - Run tests using the `autotools`-based build system. **Default value: TRUE**
+* `USECMAKE` - Run tests using the `cmake`-based build system. **Default value: TRUE**
 
 ## Examples
 
