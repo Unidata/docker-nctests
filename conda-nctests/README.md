@@ -23,24 +23,29 @@ If you want artifacts to be generated in a way that's easily accessible, you'll 
 
 ## Arguments
 
-### Source Code
 
-#### NetCDF-C
-
-* `CBRANCH` - Branch of `netCDF-C` to test. **Default value: main**
-* `DIST_C` - Generate C source-code artifacts. **Default value: ON**
-* `DISTCHECK_C` - Whether to perform `make distcheck` on the C library.  **Default value: OFF**
 
 ### System Resource Options
 
+* `DOHELP` - Show `HELP` info, exit 0. 
 * `TESTPROC` - The number of processors to use. **Default value: 1**
 
 ### Build System Options
 
-* `USE_CC` - The C compiler to use.  Options are `gcc`, `clang`, `mpi`.  **Default value: gcc**
+* `USE_CC` - The C compiler to use.  Options are `gcc`, `clang`, `mpicc`.  **Default value: gcc**
 * `USEAC` - Run tests using the `autotools`-based build system. **Default value: TRUE**
 * `USECMAKE` - Run tests using the `cmake`-based build system. **Default value: TRUE**
+* `H5VER` - Version of HDF5 to install.  **Default value: 1.12.2**
 
+### Source-Code Specific
+
+#### NetCDF-C
+
+* `CBRANCH` - Branch of `netCDF-C` to test. **Default value: `main`**
+* `DIST_C` - Generate source-code artifacts via `make dist`. **Default value: TRUE**
+* `DISTCHECK_C` - Whether to run `make distcheck`. **Default Value: FALSE**
 ## Examples
 
-    $ docker run --rm -it -e TESTPROC=8 -v $(pwd)/artifacts:/artifacts unidata/netcdf-test 
+    $ docker run --rm -it -e TESTPROC=8 -v $(pwd)/artifacts:/artifacts docker.undiata.ucar.edu/netcdf-tests
+
+    $ docker run --rm -it -e TESTPROC=4 -v $(pwd)/artifacts:/artifacts -e H5VER=1.12.2 -e CBRANCH=v4.9.2 -e USEAC=FALSE docker.unidata.ucar.edu/netcdf-tests

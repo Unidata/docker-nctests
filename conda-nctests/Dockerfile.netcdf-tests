@@ -66,6 +66,15 @@ ENV RUNNCO FALSE
 
 ENV TESTPROC 1
 
+##
+# Install some system packages
+##
+ARG DEBIAN_FRONTEND=noninteractive
+RUN apt update
+RUN apt install -y sudo
+RUN apt full-upgrade -y
+RUN apt -y install bzip2 g++ gfortran libtool automake autoconf m4 bison flex libcurl4-openssl-dev zlib1g-dev git wget curl libjpeg-dev cmake python3-dev gdb dos2unix antlr libantlr-dev libexpat1-dev libxml2-dev gsl-bin libgsl0-dev udunits-bin libudunits2-0 libudunits2-dev clang zip valgrind make build-essential less unzip patch libsz2 libaec-dev libmpich-dev clang zip expect-dev
+
 ###
 # Copy over files and scripts.
 ###
@@ -73,21 +82,13 @@ COPY run_docker_based_tests.sh ${HOME}/
 COPY Dockerfile.netcdf-tests ${HOME}/
 COPY README.md ${HOME}/
 
-##
-# Install some system packages
-##
-RUN apt update
-RUN apt install -y sudo
-RUN apt full-upgrade -y
-RUN apt -y install bzip2 g++ gfortran libtool automake autoconf m4 bison flex libcurl4-openssl-dev zlib1g-dev git wget curl libjpeg-dev cmake python3-dev gdb dos2unix antlr libantlr-dev libexpat1-dev libxml2-dev gsl-bin libgsl0-dev udunits-bin libudunits2-0 libudunits2-dev clang zip valgrind make build-essential less unzip patch libsz2 libaec-dev libmpich-dev clang zip
-
 #
 # Fiddling around in the system
 # 
 RUN echo "alias ls='ls --color'" >> ${HOME}/.bashrc
 
 ###
-# Start conda-based testing
+# Start docker-based testing
 ###
 WORKDIR ${WORKDIR}
 CMD bash -l -e ${HOME}/run_docker_based_tests.sh

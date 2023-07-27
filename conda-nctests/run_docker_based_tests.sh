@@ -34,7 +34,13 @@ installhdf5 () {
     tar -jxf "${H5FILE}" --strip-components=2 -C "${H5DIR}"
     cd "${H5DIR}"
     autoreconf -if 
-    CC="${USE_CC}" ./configure --disable-static --enable-shared --prefix="${TARGINSTALL}" "${H5PAROPT}" --enable-hl --with-szlib ${H5_API_OP} 
+
+    PAROPT=""
+    if [ "x${USE_CC}" = "xmpicc" ]; then
+        PAROPT="--enable-parallel"
+    fi
+
+    CC="${USE_CC}" ./configure --disable-static --enable-shared --prefix="${TARGINSTALL}" "${H5PAROPT}" --enable-hl --with-szlib ${H5_API_OP} ${PAROPT}
     make install -j "${TESTPROC}" 
     make clean -j "${TESTPROC}"
 
@@ -202,7 +208,11 @@ git clone https://www.github.com/Unidata/netcdf-c --single-branch --branch "${CB
 if [ "${USECMAKE}" != "FALSE" ]; then
     mkdir -p "${TARG_BUILD_CMAKE_CDIR}"
 
-    cd "${TARG_BUILD_CMAKE_CDIR}" && cmake "${TARG_SRC_CDIR}" -DCMAKE_C_COMPILER="${USE_CC}" -DCMAKE_C_FLAGS="${CFLAGS}" && make -j "${TESTPROC}" && ctest -j "${TESTPROC}"
+    cd "${TARG_BUILD_CMAKE_CDIR}" \
+    && unbuffer cmake "${TARG_SRC_CDIR}" -DCMAKE_C_COMPILER="${USE_CC}" -DCMAKE_C_FLAGS="${CFLAGS}" 2>&1 | tee -a ${TARGSUFFIX}/cmake_configure_output.txt \
+    && unbuffer make -j "${TESTPROC}" 2>&1 | tee -a ${TARGSUFFIX}/cmake_build_output.txt \
+    && unbuffer ctest -j "${TESTPROC}" 2>&1 | tee -a  ${TARGSUFFIX}/cmake_ctest_output.txt 
+
 fi
 
 #
@@ -218,7 +228,12 @@ if [ "${USEAC}" = "TRUE" ] || [ "${USEAC}" = "ON" ]; then
 
     mkdir -p "${TARG_BUILD_AC_CDIR}"
    
-    cd "${TARG_SRC_CDIR}" && autoreconf -if && cd "${TARG_BUILD_AC_CDIR}" && CC="${USE_CC}" "${TARG_SRC_CDIR}"/configure --prefix="${TARGINSTALL}" && make check -j "${TESTPROC}" TESTS="" && make check -j "${TESTPROC}" && make install -j "${TESTPROC}"
+    cd "${TARG_SRC_CDIR}" && autoreconf -if \
+        && cd "${TARG_BUILD_AC_CDIR}" \
+        && CC="${USE_CC}" unbuffer "${TARG_SRC_CDIR}"/configure --prefix="${TARGINSTALL}" 2>&1 | tee -a ${TARGSUFFIX}/ac_configure_output.txt \
+        && unbuffer make check -j "${TESTPROC}" TESTS="" 2>&1 | tee -a ${TARGSUFFIX}/ac_build_output.txt \
+        && unbuffer make check -j "${TESTPROC}" 2>&1 | tee -a ${TARGSUFFIX}/ac_make_check_output.txt \
+        && unbuffer make install -j "${TESTPROC}" 2>&1 | tee -a ${TARGSUFFIX}/ac_make_install_output.txt 
 
     if [ "${DISTCHECK_C}" = "TRUE" ] || [ "${DISTCHECK_C}" = "ON" ]; then
         cd "${TARG_BUILD_AC_CDIR}" && make distcheck -j "${TESTPROC}"
