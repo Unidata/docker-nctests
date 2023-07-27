@@ -12,7 +12,7 @@ This project is used to run tests and generate artifacts for `netCDF-C`, `netCDF
 
 ### Docker Buildx (multi-arch)
 
-    $ time docker buildx build --push --platform linux/arm64/v8,linux/amd64 -t unidata/netcdf-tests -f Dockerfile.netcdf-tests .
+    $ time docker buildx build --push --platform linux/arm64/v8,linux/amd64 -t docker.unidata.ucar.edu/netcdf-tests -f Dockerfile.netcdf-tests .
 ## Usage
 
 ### Artifacts
