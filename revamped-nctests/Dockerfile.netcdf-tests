@@ -5,7 +5,7 @@
 #####
 #FROM continuumio/miniconda3:4.12.0
 #FROM continuumio/miniconda3
-FROM ubuntu
+FROM ubuntu:mantic
 USER root
 ENV HOME /root
 # Where the work takes place
@@ -44,7 +44,7 @@ ENV NCOBRANCH master
 # Which build systems to run?
 ##
 ENV USEAC TRUE
-ENV USECMAKE TRUE
+ENV USECMAKE FALSE
 
 ## 
 # Compiler and Bitness labels.

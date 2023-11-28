@@ -1,5 +1,14 @@
 # Docker-based Tests and Artifact Generation
 
+## Status of this Revamp
+
+* [X] Create artifacts directory.
+* [ ] NetCDF-C tests
+* [ ] NetCDF-Fortran tests
+* [ ] NetCDF-CXX4 tests
+
+## Overview
+
 `docker.unidata.ucar.edu/netcdf-tests`
 
 This project is used to run tests and generate artifacts for `netCDF-C`, `netCDF-Fortran` and `netCDF-CXX4`.  It uses `docker` for containerization, and allows us to build and run tests under emulation using the `--platform` director for compatible `docker` installs. 
@@ -37,6 +46,15 @@ If you want artifacts to be generated in a way that's easily accessible, you'll 
 * `USECMAKE` - Run tests using the `cmake`-based build system. **Default value: TRUE**
 * `H5VER` - Version of HDF5 to install.  **Default value: 1.12.2**
 
+### Environmental Variables
+
+You can use the `-e` flag to pass environmental variables to `docker run`.  The environmental variables used by the container at runtime are as follows.
+
+* `CFLAGS`: Additional cflags to pass via `cmake` or `autotools`.
+* `LDFLAGS`: Additional ldflags to pass via `cmake` or `autotools`.
+* `ACARGS`: Additional arguments to pass to `configure`.
+* `CMAKEARGS`: Additional arguments to pass to `cmake`.
+
 ### Source-Code Specific
 
 #### NetCDF-C
@@ -44,6 +62,7 @@ If you want artifacts to be generated in a way that's easily accessible, you'll 
 * `CBRANCH` - Branch of `netCDF-C` to test. **Default value: `main`**
 * `DIST_C` - Generate source-code artifacts via `make dist`. **Default value: FALSE**
 * `DISTCHECK_C` - Whether to run `make distcheck`. **Default Value: FALSE**
+
 ## Examples
 
     $ docker run --rm -it -e TESTPROC=8 -v $(pwd)/artifacts:/artifacts docker.undiata.ucar.edu/netcdf-tests

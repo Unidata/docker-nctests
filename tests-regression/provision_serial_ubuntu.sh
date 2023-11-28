@@ -40,7 +40,7 @@ cd /root
 
 # HDF5 1.12.2
 
-HDF5VER=1.12.2
+HDF5VER=1.14.2
 
 tar -jxf /root/hdf5-${HDF5VER}.tar.bz2 && cd /root/hdf5-${HDF5VER} && autoreconf -if && ./configure --disable-static --enable-shared --disable-fortran --enable-hl --prefix=/environments/${HDF5VER} --with-szlib && make -j 8 && sudo make install
 

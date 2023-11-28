@@ -9,9 +9,9 @@ set -e
 installhdf5 () {
 
     cd "${TARGSUFFIX}"
-    H5MAJ=$(echo $H5VER | cut -d '.' -f 1)
-    H5MIN=$(echo $H5VER | cut -d '.' -f 2)
-    H5REV=$(echo $H5VER | cut -d '.' -f 3)
+    H5MAJ=$(echo "${H5VER}" | cut -d '.' -f 1)
+    H5MIN=$(echo "${H5VER}" | cut -d '.' -f 2)
+    #H5REV=$(echo $H5VER | cut -d '.' -f 3)
 
     H5DIR="hdf5-${H5VER}"
     H5FILE="${H5DIR}.tar.bz2"
@@ -40,7 +40,7 @@ installhdf5 () {
         PAROPT="--enable-parallel"
     fi
 
-    CC="${USE_CC}" ./configure --disable-static --enable-shared --prefix="${TARGINSTALL}" "${H5PAROPT}" --enable-hl --with-szlib ${H5_API_OP} ${PAROPT}
+    CC="${USE_CC}" ./configure --disable-tests --disable-static --enable-shared --prefix="${TARGINSTALL}" "${H5PAROPT}" --enable-hl --with-szlib ${H5_API_OP} ${PAROPT}
     make install -j "${TESTPROC}" 
     make clean -j "${TESTPROC}"
 
@@ -67,7 +67,9 @@ create_env_file () {
     echo -e ""
     echo -e "export TARG_SRC_CDIR=\"${TARG_SRC_CDIR}\"" >> "${ENVFILE}"
     echo -e "export TARG_BUILD_AC_CDIR=\"${TARG_BUILD_AC_CDIR}\"" >> "${ENVFILE}"
-    echo -e "export TARG_BUILD_CMAKE_CDIR=\"${TARG_BUILD_CMAKE_CDIR}\"" >> "${ENVFILE}"
+    if [ x"${USECMAKE}" != "xFALSE" ]; then
+        echo -e "export TARG_BUILD_CMAKE_CDIR=\"${TARG_BUILD_CMAKE_CDIR}\"" >> "${ENVFILE}"
+    fi
     echo -e "" >> "${ENVFILE}"
     echo -e "$(env)" >> "${TARGSUFFIX}"/docker-env.txt
 }   
@@ -164,8 +166,8 @@ LOGHTML="${TARGID}/index.html"
 mkdir -p "${TARGINSTALL}/include"
 mkdir -p "${TARGINSTALL}/lib"
 
-export CFLAGS="-I${TARGINSTALL}/include"
-export LDFLAGS="-L${TARGINSTALL}/lib"
+export CFLAGS="${CFLAGS} -I${TARGINSTALL}/include"
+export LDFLAGS="${LDFLAGS} -L${TARGINSTALL}/lib"
 export LD_LIBRARY_PATH="${TARGINSTALL}/lib:${LD_LIBRARY_PATH}"
 export PATH="${TARGINSTALL}/bin:${PATH}"
 export CC"=${USE_CC}"
@@ -205,11 +207,11 @@ git clone https://www.github.com/Unidata/netcdf-c --single-branch --branch "${CB
 # CMake-based tests
 #
 
-if [ "${USECMAKE}" != "FALSE" ]; then
+if [ "${USECMAKE}" != "FALSE" ] && [ "${USECMAKE}" != OFF ]; then
     mkdir -p "${TARG_BUILD_CMAKE_CDIR}"
 
     cd "${TARG_BUILD_CMAKE_CDIR}" \
-    && unbuffer cmake "${TARG_SRC_CDIR}" -DCMAKE_C_COMPILER="${USE_CC}" -DCMAKE_C_FLAGS="${CFLAGS}" 2>&1 | tee -a ${TARGSUFFIX}/cmake_configure_output.txt \
+    && unbuffer cmake "${TARG_SRC_CDIR}" -DCMAKE_C_COMPILER="${USE_CC}" -DCMAKE_C_FLAGS="${CFLAGS}" ${CMAKEARGS} 2>&1 | tee -a ${TARGSUFFIX}/cmake_configure_output.txt \
     && unbuffer make -j "${TESTPROC}" 2>&1 | tee -a ${TARGSUFFIX}/cmake_build_output.txt \
     && unbuffer ctest -j "${TESTPROC}" 2>&1 | tee -a  ${TARGSUFFIX}/cmake_ctest_output.txt 
 
@@ -230,7 +232,7 @@ if [ "${USEAC}" = "TRUE" ] || [ "${USEAC}" = "ON" ]; then
    
     cd "${TARG_SRC_CDIR}" && autoreconf -if \
         && cd "${TARG_BUILD_AC_CDIR}" \
-        && CC="${USE_CC}" unbuffer "${TARG_SRC_CDIR}"/configure --prefix="${TARGINSTALL}" 2>&1 | tee -a ${TARGSUFFIX}/ac_configure_output.txt \
+        && CC="${USE_CC}" unbuffer "${TARG_SRC_CDIR}"/configure --prefix="${TARGINSTALL}" ${ACARGS} 2>&1 | tee -a ${TARGSUFFIX}/ac_configure_output.txt \
         && unbuffer make check -j "${TESTPROC}" TESTS="" 2>&1 | tee -a ${TARGSUFFIX}/ac_build_output.txt \
         && unbuffer make check -j "${TESTPROC}" 2>&1 | tee -a ${TARGSUFFIX}/ac_make_check_output.txt \
         && unbuffer make install -j "${TESTPROC}" 2>&1 | tee -a ${TARGSUFFIX}/ac_make_install_output.txt 
