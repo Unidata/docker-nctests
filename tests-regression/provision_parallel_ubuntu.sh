@@ -41,9 +41,9 @@ CFLAGS="-Wno-format-security"
 #rm -rf /root/hdf5-${HDF5VER}
 
 #
-# 1.12.2
+# 1.14.2
 #
-HDF5VER=1.12.2
+HDF5VER=1.14.2
 tar -jxf /root/hdf5-${HDF5VER}.tar.bz2 && cd /root/hdf5-${HDF5VER} && autoreconf -if && CC=mpicc ./configure --disable-static --enable-shared --disable-fortran --enable-hl --prefix=/environments/${HDF5VER} --with-szlib --enable-parallel && make -j 8 && sudo make install
 
 cd /root
