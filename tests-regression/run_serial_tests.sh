@@ -35,20 +35,6 @@ if [ "x$VERSION" != "x" ]; then
 fi
 
 
-###
-# Configure Environmental Variables"
-###
-
-export TARGDIR="/environments/${H5VER}"
-
-echo "Using TARGDIR=${TARGDIR}"
-
-export CPPFLAGS="-I${TARGDIR}/include"
-export CFLAGS="-I${TARGDIR}/include"
-export LDFLAGS="-L${TARGDIR}/lib"
-export LD_LIBRARY_PATH="${TARGDIR}/lib"
-export PATH="${TARGDIR}/bin:$PATH"
-export CMAKE_PREFIX_PATH="${TARGDIR}"
 
 CHECKERR() {
 
@@ -161,6 +147,55 @@ if [ "x$RUNNCO" == "xTRUE" ]; then
 else
     echo "Skipping NCO"
 fi
+
+## 
+# Set Target Dir
+##
+export TARGDIR="/environments/${H5VER}"
+echo "Using TARGDIR=${TARGDIR}"
+
+##
+# Allow us to build dependencies from source.
+# For now, just HDF5
+##
+if [ "x${HDF5SRC}" != "x" ]; then
+    echo "Building HDF5 ${H5VER} from source."
+    H5MAJ=$(echo $H5VER | cut -d '.' -f 1)
+    H5MIN=$(echo $H5VER | cut -d '.' -f 2)
+    H5REV=$(echo $H5VER | cut -d '.' -f 3)
+
+    H5DIR="hdf5-${H5VER}${H5VERSUFFIX}"
+    H5FILE="${H5DIR}.tar.bz2"
+    H5URL="https://support.hdfgroup.org/ftp/HDF5/releases/hdf5-${H5MAJ}.${H5MIN}/hdf5-${H5VER}/src/${H5FILE}"
+
+    H5_API_OP="--with-default-api-version=v110"
+
+    echo -e "\to HDF5"
+    tar -jxf "${H5FILE}"
+    cd "${H5DIR}"
+    autoreconf -if 
+    CFLAGS="${CFLAGS}" CC="${NCCOMP}" ./configure --disable-static --enable-shared --disable-tests --prefix="${TARGDIR}" "${H5PAROPT}" --enable-hl --with-szlib ${H5_API_OP} "${BUILDDEBUGHDF5}"
+    sleep 5
+    make install -j "${NUMPROC}" 
+    make clean -j "${NUMPROC}"
+    cd ..
+
+fi
+
+
+###
+# Configure Environmental Variables
+###
+
+
+
+export CPPFLAGS="-I${TARGDIR}/include"
+export CFLAGS="-I${TARGDIR}/include"
+export LDFLAGS="-L${TARGDIR}/lib"
+export LD_LIBRARY_PATH="${TARGDIR}/lib"
+export PATH="${TARGDIR}/bin:$PATH"
+export CMAKE_PREFIX_PATH="${TARGDIR}"
+
 
 ###
 # Initalize some variables
