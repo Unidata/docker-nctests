@@ -167,7 +167,7 @@ if [ "x${HDF5SRC}" != "x" ]; then
     H5DIR="hdf5-${H5VER}${H5VERSUFFIX}"
     H5FILE="${H5DIR}.tar.bz2"
     H5URL="https://support.hdfgroup.org/ftp/HDF5/releases/hdf5-${H5MAJ}.${H5MIN}/hdf5-${H5VER}/src/${H5FILE}"
-
+    wget "${H5URL}"
     H5_API_OP="--with-default-api-version=v110"
 
     echo -e "\to HDF5"
@@ -176,8 +176,9 @@ if [ "x${HDF5SRC}" != "x" ]; then
     autoreconf -if 
     CFLAGS="${CFLAGS}" CC="${NCCOMP}" ./configure --disable-static --enable-shared --disable-tests --prefix="${TARGDIR}" "${H5PAROPT}" --enable-hl --with-szlib ${H5_API_OP} "${BUILDDEBUGHDF5}"
     sleep 5
-    make install -j "${NUMPROC}" 
-    make clean -j "${NUMPROC}"
+    make -j "${TESTPROC}"
+    sudo make install -j "${TESTPROC}" 
+    make clean -j "${TESTPROC}"
     cd ..
 
 fi
@@ -239,7 +240,7 @@ while [[ $CCOUNT -le $CREPS ]]; do
         sleep 2
         mkdir -p build-netcdf-c
         cd build-netcdf-c
-        cmake ${HOME}/netcdf-c -DCMAKE_INSTALL_PREFIX=/usr -DENABLE_HDF4=OFF -DENABLE_MMAP=ON -DBUILDNAME_PREFIX="docker$BITNESS-$USE_CC" -DBUILDNAME_SUFFIX="$CBRANCH" -DCMAKE_C_COMPILER=$USE_CC $COPTS -DCMAKE_C_FLAGS="${CMEM}" -D ENABLE_TESTS="${RUNC}"; CHECKERR
+        cmake ${HOME}/netcdf-c -DCMAKE_INSTALL_PREFIX=/usr -DNETCDF_ENABLE_HDF4=OFF -DNETCDF_ENABLE_MMAP=ON -DBUILDNAME_PREFIX="docker$BITNESS-$USE_CC" -DBUILDNAME_SUFFIX="$CBRANCH" -DCMAKE_C_COMPILER=$USE_CC $COPTS -DCMAKE_C_FLAGS="${CMEM}" -D NETCDF_ENABLE_TESTS="${RUNC}"; CHECKERR
         make clean
 
         if [ "x$RUNC" == "xTRUE" ]; then

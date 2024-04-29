@@ -8,11 +8,11 @@ FROM i386/debian:latest
 USER root
 ENV HOME /root
 WORKDIR /root
-MAINTAINER Ward Fisher <wfisher@ucar.edu>
+LABEL maintainer="Ward Fisher <wfisher@ucar.edu>"
 
 ENV DEBIAN_FRONTEND noninteractive
 
-ENV NCTEST_VERSION 1.9.12 - development
+ENV NCTEST_VERSION 1.10.0 - development
 
 ENV VERSION_FILE VERSION.md
 
