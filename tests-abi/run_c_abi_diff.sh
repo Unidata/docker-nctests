@@ -49,7 +49,11 @@ pushd $TDIR
 mkdir build && cd build
 cmake .. -DCMAKE_C_FLAGS="-g -Og" -DENABLE_TESTS=OFF
 make -j 4
-abi-dumper liblib/libnetcdf.so -o /output/ABI-C-$NEWVER.dump -lver $NEWVER
+if [ -f liblib/libnetcdf.so ]; then
+    abi-dumper liblib/libnetcdf.so -o /output/ABI-C-$NEWVER.dump -lver $NEWVER
+else 
+    abi-dumper libnetcdf.so -o /output/ABI-C-$NEWVER.dump -lver $NEWVER
+fi
 popd
 
 cd /output
