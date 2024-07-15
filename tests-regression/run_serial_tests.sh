@@ -158,7 +158,8 @@ echo "Using TARGDIR=${TARGDIR}"
 # Allow us to build dependencies from source.
 # For now, just HDF5
 ##
-if [ "x${HDF5SRC}" != "x" ]; then
+#if [ "x${HDF5SRC}" != "x" ]; then
+if [ ! -d "${TARGDIR}" ]; then
     echo "Building HDF5 ${H5VER} from source."
     H5MAJ=$(echo $H5VER | cut -d '.' -f 1)
     H5MIN=$(echo $H5VER | cut -d '.' -f 2)
