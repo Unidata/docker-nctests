@@ -16,7 +16,7 @@ RUN ls -alh /root && /root/provision_parallel_ubuntu.sh
 
 COPY Dockerfile.mpich ${HOME}/
 
-ENV USE_CC mpich
+ENV USE_CC mpicc
 ENV PARTYPE -mpich
 
 RUN chown -R ${CUSER}:${CUSER} ${HOME}
