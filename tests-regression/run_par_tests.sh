@@ -164,7 +164,7 @@ if [ ! -d "${TARGDIR}" ]; then
     tar -jxf "${H5FILE}"
     cd "${H5DIR}"
     autoreconf -if 
-    CFLAGS="${CFLAGS}" CC="${NCCOMP}" ./configure --disable-static --enable-shared --disable-tests --prefix="${TARGDIR}" "${H5PAROPT}" --enable-hl --with-szlib ${H5_API_OP} "${BUILDDEBUGHDF5}"
+    CFLAGS="${CFLAGS}" CC="${USE_CC}" ./configure --disable-static --enable-shared --disable-tests --prefix="${TARGDIR}" --enable-parallel --enable-hl --with-szlib ${H5_API_OP} "${BUILDDEBUGHDF5}"
     sleep 5
     make -j "${TESTPROC}"
     sudo make install -j "${TESTPROC}" 
