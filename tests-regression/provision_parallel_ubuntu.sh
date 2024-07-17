@@ -9,10 +9,10 @@ cd /root
 # those tests as well.
 ###
 
-#tar -jxf /root/hdf-4.2.15.tar.bz2 && cd /root/hdf-4.2.15 && CC=mpicc ./configure --disable-static --enable-shared --disable-netcdf --disable-fortran --prefix=/usr && make -j 8 && sudo make install
+tar -jxf /root/hdf-.tar.bz2 && cd /root/hdf-4.3.0 && CC=mpicc ./configure --disable-static --enable-shared --disable-netcdf --disable-fortran --prefix=/usr && make -j 8 && sudo make install
 
-#cd /root
-#rm -rf /root/hdf-4.2.15
+cd /root
+rm -rf /root/hdf-4.3.0
 
 
 ###
@@ -44,7 +44,7 @@ CFLAGS="-Wno-format-security"
 # 1.14.2
 #
 HDF5VER=1.14.2
-tar -jxf /root/hdf5-${HDF5VER}.tar.bz2 && cd /root/hdf5-${HDF5VER} && autoreconf -if && CC=mpicc ./configure --disable-static --enable-shared --disable-fortran --enable-hl --prefix=/environments/${HDF5VER} --with-szlib --enable-parallel && make -j 8 && sudo make install
+tar -jxf /root/hdf5-${HDF5VER}.tar.bz2 && cd /root/hdf5-${HDF5VER} && autoreconf -if && CC=mpicc ./configure --disable-static --enable-shared --disable-fortran --enable-hl --prefix=/environments/${HDF5VER} --with-szlib --enable-parallel && make -j $(nproc) && sudo make install
 
 cd /root
 rm -rf /root/hdf5-${HDF5VER}
@@ -56,7 +56,7 @@ rm -rf /root/hdf5-${HDF5VER}
 # run pnetcdf tests.
 ###
 
-tar -zxf /root/pnetcdf-1.12.3.tar.gz && cd /root/pnetcdf-1.12.3 && CPPFLAGS=-fPIC CC=mpicc ./configure --prefix=/usr --disable-fortran --enable-relax-coord-bound && make -j 8 -k && sudo make install
+tar -zxf /root/pnetcdf-1.12.3.tar.gz && cd /root/pnetcdf-1.12.3 && CPPFLAGS=-fPIC CC=mpicc ./configure --prefix=/usr --disable-fortran --enable-relax-coord-bound && make -j $(nproc) -k && sudo make install
 
 cd /root
 rm -rf pnetcdf-1.12.3
