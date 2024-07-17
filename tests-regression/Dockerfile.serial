@@ -16,7 +16,7 @@ COPY Dockerfile.serial ${HOME}/
 
 RUN chown -R ${CUSER}:${CUSER} ${HOME}
 
-user ${CUSER}
+USER ${CUSER}
 ##
 # Run test script on launch.
 ##
