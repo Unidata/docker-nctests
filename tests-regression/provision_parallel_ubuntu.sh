@@ -3,18 +3,6 @@
 set -e
 cd /root
 
-
-###
-# Manually install hdf4 so that we can run
-# those tests as well.
-###
-
-tar -jxf /root/hdf-.tar.bz2 && cd /root/hdf-4.3.0 && CC=mpicc ./configure --disable-static --enable-shared --disable-netcdf --disable-fortran --prefix=/usr && make -j 8 && sudo make install
-
-cd /root
-rm -rf /root/hdf-4.3.0
-
-
 ###
 # Manually install hdf5 so that we can run
 # those tests as well.
@@ -22,33 +10,23 @@ rm -rf /root/hdf-4.3.0
 CFLAGS="-Wno-format-security"
 
 #
-# 1.8.22
+# 1.14.3
 #
-#HDF5VER=1.8.22
-#tar -jxf /root/hdf5-${HDF5VER}.tar.bz2 && cd /root/hdf5-${HDF5VER} && autoreconf -if && CC=mpicc ./configure --disable-static --enable-shared --disable-fortran --enable-hl --prefix=/environments/${HDF5VER} --with-szlib --enable-parallel && make -j 8 && sudo make install
-
-#cd /root
-#rm -rf /root/hdf5-${HDF5VER}
-
-
-#
-# 1.10.8
-#
-#HDF5VER=1.10.8
-#tar -jxf /root/hdf5-${HDF5VER}.tar.bz2 && cd /root/hdf5-${HDF5VER} && autoreconf -if && CC=mpicc ./configure --disable-static --enable-shared --disable-fortran --enable-hl --prefix=/environments/${HDF5VER} --with-szlib --enable-parallel && make -j 8 && sudo make install
-
-#cd /root
-#rm -rf /root/hdf5-${HDF5VER}
-
-#
-# 1.14.2
-#
-HDF5VER=1.14.2
+HDF5VER=1.14.3
 tar -jxf /root/hdf5-${HDF5VER}.tar.bz2 && cd /root/hdf5-${HDF5VER} && autoreconf -if && CC=mpicc ./configure --disable-static --enable-shared --disable-fortran --enable-hl --prefix=/environments/${HDF5VER} --with-szlib --enable-parallel && make -j $(nproc) && sudo make install
 
 cd /root
 rm -rf /root/hdf5-${HDF5VER}
 
+###
+# Manually install hdf4 so that we can run
+# those tests as well.
+###
+
+tar -jxf /root/hdf4.3.0.tar.gz && cd /root/hdf-hdf4.3.0 && CC=mpicc ./configure --disable-static --enable-shared --disable-netcdf --disable-fortran --prefix=/environments/${HDF5VER} && make -j $(nproc) && sudo make install
+
+cd /root
+rm -rf /root/hdf-4.3.0
 
 
 ###
