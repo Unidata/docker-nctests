@@ -19,7 +19,7 @@ rm -rf /root/hdf5-${HDF5VER}
 # Manually install hdf4 so that we can run
 # those tests as well.
 ###
-tar -zxf /root/hdf4.3.0.tar.gz && cd /root/hdf4-hdf4.3.0 && autoreconf -if && ./configure --disable-static --enable-shared --disable-netcdf --disable-fortran --prefix=/environments/${HDF5VER} && make -j $(nproc) && sudo make install -j $(nproc)
+#tar -zxf /root/hdf4.3.0.tar.gz && cd /root/hdf4-hdf4.3.0 && autoreconf -if && ./configure --disable-static --enable-shared --disable-netcdf --disable-fortran --prefix=/environments/${HDF5VER} && make -j $(nproc) && sudo make install -j $(nproc)
 
 ##
 # Some cleanup
