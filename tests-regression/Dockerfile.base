@@ -3,13 +3,13 @@
 # so that we can take advantage of the
 # shared layers that docker provides.
 #####
-FROM ubuntu:24.04 
+FROM ubuntu:22.04 
 USER root
 ENV HOME=/root
 WORKDIR /root
 LABEL maintainer="Ward Fisher <wfisher@ucar.edu>"
 
-ENV NCTEST_VERSION="1.10.3 - development"
+ENV NCTEST_VERSION="1.10.5 - development"
 
 ENV VERSION_FILE=VERSION.md
 
