@@ -4,7 +4,7 @@
 # Download the files so that each build can copy locally.
 ##
 
-wget https://support.hdfgroup.org/ftp/HDF5/releases/hdf5-1.14/hdf5-1.14.2/src/hdf5-1.14.2.tar.bz2
+wget https://support.hdfgroup.org/ftp/HDF5/releases/hdf5-1.14/hdf5-1.14.3/src/hdf5-1.14.3.tar.bz2
 wget https://parallel-netcdf.github.io/Release/pnetcdf-1.12.3.tar.gz
 
 H4VER=4.3.0
