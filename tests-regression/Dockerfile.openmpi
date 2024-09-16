@@ -1,4 +1,4 @@
-FROM unidata/nctests:base
+FROM docker.unidata.ucar.edu/nctests:base
 
 RUN sudo apt-get update &&  sudo apt-get install -y libopenmpi-dev openmpi-bin && sudo apt-get -y autoclean && sudo rm -rf /var/lib/apt/lists/*
 
