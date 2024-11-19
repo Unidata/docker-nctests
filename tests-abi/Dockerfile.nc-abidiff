@@ -3,7 +3,7 @@
 ####
 #FROM ubuntu:xenial
 FROM docker.unidata.ucar.edu/nctests:serial
-MAINTAINER Ward Fisher <wfisher@ucar.edu>
+LABEL maintainer "Ward Fisher <wfisher@ucar.edu>"
 USER root
 ENV HOME /root
 WORKDIR /root
@@ -24,10 +24,11 @@ RUN apt-get -y upgrade
 RUN apt-get install -y ca-certificates man nano curl git emacs wget gcc g++ gfortran clang gdb autoconf automake make libtool m4 bison flex zlib1g-dev libjpeg-dev libcurl4-openssl-dev python3 zip elfutils libelf-dev dos2unix cmake libzstd-dev libzstd1
 
 ###
-RUN tar -jxf hdf5-1.12.2.tar.bz2 && cd hdf5-1.12.2 && ./configure --prefix=/usr --disable-static --enable-shared --enable-hl && make -j 4 && make install -j 4
+#RUN tar -jxf hdf5-1.12.2.tar.bz2 && cd hdf5-1.12.2 && ./configure --prefix=/usr --disable-static --enable-shared --enable-hl && make -j 4 && make install -j 4
+RUN tar -jxf hdf5-1.14.3.tar.bz2 && cd hdf5-1.14.3 && ./configure --prefix=/usr --disable-static --enable-shared --enable-hl && make -j $(nproc) && make install -j $(nproc)
 
 ###
-ENV NCVER=v4.9.2
+ENV NCVER v4.9.3-rc1
 RUN git clone https://github.com/Unidata/netcdf-c && cd netcdf-c && git checkout ${NCVER} && mkdir build && cd build && cmake .. -DENABLE_TESTS=OFF -DCMAKE_INSTALL_PREFIX=/usr && make -j 100 && make install
 RUN rm -rf netcdf-c
 

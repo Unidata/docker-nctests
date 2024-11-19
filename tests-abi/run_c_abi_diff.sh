@@ -41,9 +41,9 @@ cmake .. -DCMAKE_C_FLAGS="-g -Og" -DENABLE_TESTS=OFF
 make -j 4
 
 if [ -f liblib/libnetcdf.so ]; then
-    abi-dumper liblib/libnetcdf.so -o /output/ABI-C-$NEWVER.dump -lver $NEWVER
+    abi-dumper liblib/libnetcdf.so -o /output/ABI-C-$OLDVER.dump -lver $NEWVER
 else 
-    abi-dumper libnetcdf.so -o /output/ABI-C-$NEWVER.dump -lver $NEWVER
+    abi-dumper libnetcdf.so -o /output/ABI-C-$OLDVER.dump -lver $NEWVER
 fi
 git reset --hard
 popd
