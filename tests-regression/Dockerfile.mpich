@@ -1,13 +1,14 @@
 FROM docker.unidata.ucar.edu/nctests:base
 
 USER root
-RUN apt-get update &&  sudo apt-get install -y mpich libmpich-dev && sudo apt-get -y autoclean && sudo rm -rf /var/lib/apt/lists/*
+RUN sudo apt update && sudo apt install -y python3 && sudo apt -y autoclean && sudo rm -rf /var/lib/apt/lists/*
 
 ###
 # Copy over provisioning script.
 ###
 
 COPY provision_parallel_ubuntu.sh /root/
+COPY mpich-4.2.3.tar.gz /root
 RUN ls -alh /root && /root/provision_parallel_ubuntu.sh
 
 ###
@@ -26,4 +27,4 @@ USER ${CUSER}
 ##
 # Run test scripts on launch.
 ##
-CMD bash -l -e ${HOME}/run_par_tests.sh
+CMD ["bash", "-l", "-e", "/home/tester/run_par_tests.sh"]

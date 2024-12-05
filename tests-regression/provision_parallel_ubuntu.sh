@@ -9,6 +9,16 @@ cd /root
 ###
 CFLAGS="-Wno-format-security"
 
+##
+# Ok, currently mpich is broken so we will need to install it manually.
+##
+# 4.2.3
+##
+tar -zxf /root/mpich-4.2.3.tar.gz && cd /root/mpich-4.2.3 && ./configure --prefix=/usr && make -j $(nproc) && sudo make install -j $(nproc)
+
+cd /root
+rm -rf /root/mpich-4.2.3
+
 #
 # 1.14.3
 #
