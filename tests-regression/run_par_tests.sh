@@ -150,27 +150,7 @@ echo "Using TARGDIR=${TARGDIR}"
 #if [ "x${HDF5SRC}" != "x" ]; then
 if [ ! -d "${TARGDIR}" ]; then
     echo "Building HDF5 ${H5VER} from source."
-    H5MAJ=$(echo $H5VER | cut -d '.' -f 1)
-    H5MIN=$(echo $H5VER | cut -d '.' -f 2)
-    H5REV=$(echo $H5VER | cut -d '.' -f 3)
-
-    H5DIR="hdf5-${H5VER}${H5VERSUFFIX}"
-    H5FILE="${H5DIR}.tar.bz2"
-    H5URL="https://support.hdfgroup.org/ftp/HDF5/releases/hdf5-${H5MAJ}.${H5MIN}/hdf5-${H5VER}/src/${H5FILE}"
-    wget "${H5URL}"
-    H5_API_OP="--with-default-api-version=v110"
-
-    echo -e "\to HDF5"
-    tar -jxf "${H5FILE}"
-    cd "${H5DIR}"
-    autoreconf -if 
-    CFLAGS="${CFLAGS}" CC="${USE_CC}" ./configure --disable-static --enable-shared --disable-tests --prefix="${TARGDIR}" --enable-parallel --enable-hl --with-szlib ${H5_API_OP} "${BUILDDEBUGHDF5}"
-    sleep 5
-    make -j "${TESTPROC}"
-    sudo make install -j "${TESTPROC}" 
-    make clean -j "${TESTPROC}"
-    cd ..
-
+    sudo ./install_hdf5.sh -c "${USE_CC}" -d "${H5VER}" -j "${TESTPROC}" -t "${TARGDIR}"
 fi
 
 

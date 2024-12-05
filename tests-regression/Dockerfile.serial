@@ -20,4 +20,4 @@ USER ${CUSER}
 ##
 # Run test script on launch.
 ##
-CMD bash -l -e ${HOME}/run_serial_tests.sh
+CMD ["bash", "-l", "-e", "${HOME}/run_serial_tests.sh"]

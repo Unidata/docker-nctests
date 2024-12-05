@@ -95,6 +95,7 @@ COPY run_all_nctest_images.sh ${HOME}/
 COPY build_all_nctest_images.sh ${HOME}/
 COPY push_all_nctest_images.sh ${HOME}/
 COPY squash_all_nctest_images.sh ${HOME}/
+COPY install_hdf5.sh ${HOME}/
 COPY README.md ${HOME}/
 
 RUN echo "Version:\n\tunidata/nctests ($BITNESS) :\t$NCTEST_VERSION\t$(date)" > $VERSION_FILE
