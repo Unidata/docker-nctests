@@ -14,11 +14,11 @@ CFLAGS="-Wno-format-security"
 ##
 # 4.2.3
 ##
-tar -zxf /root/mpich-4.2.3.tar.gz && cd /root/mpich-4.2.3 && ./configure --prefix=/usr && make -j $(nproc) && sudo make install -j $(nproc)
+#tar -zxf /root/mpich-4.2.3.tar.gz && cd /root/mpich-4.2.3 && ./configure --prefix=/usr && make -j $(nproc) && sudo make install -j $(nproc)
 
-cd /root
-rm -rf /root/mpich-4.2.3
-
+#cd /root
+#rm -rf /root/mpich-4.2.3
+sudo apt install mpich
 #
 # 1.14.3
 #

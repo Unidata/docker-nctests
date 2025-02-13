@@ -8,7 +8,7 @@ RUN sudo apt update && sudo apt install -y python3 && sudo apt -y autoclean && s
 ###
 
 COPY provision_parallel_ubuntu.sh /root/
-COPY mpich-4.2.3.tar.gz /root
+#COPY mpich-4.2.3.tar.gz /root
 RUN ls -alh /root && /root/provision_parallel_ubuntu.sh
 
 ###
