@@ -227,6 +227,30 @@ else
     echo -e "\t\to File ${H5FILE} exists."
 fi
 
+####
+# Calculate dynamically what the appropriate SC level should be.
+###
+echo -e "\n\to Examining ${H5FILE} to calculate 'tar' command arguments."
+TOP_LEVEL_ITEMS=$(tar tf "${H5FILE}" | awk -F/ '{print $1}' | sort -u)
+
+# Count the number of unique top-level components
+COUNT=$(echo "$TOP_LEVEL_ITEMS" | wc -l)
+
+# Determine the number of components to strip
+if [[ ${TOP_LEVEL_ITEMS} = "." ]]; then
+  SC=2
+else
+  SC=1
+fi
+
+echo -e "\to Calculated SC Level: ${SC}\n"
+
+sleep 3
+
+##
+# End SC calculation
+## 
+
 set -e
 ## Configure proper untar command
 H5UNTAR="tar ${SCFLAG} ${H5FILE} -C $(pwd)/${H5DIR} --strip-components=${SC}"
