@@ -23,20 +23,20 @@ sudo apt update && sudo apt install -y mpich
 # 1.14.3
 #
 HDF5VER=1.14.3
-tar -jxf /root/hdf5-${HDF5VER}.tar.bz2 && cd /root/hdf5-${HDF5VER} && autoreconf -if && CC=mpicc ./configure --disable-static --enable-shared --disable-fortran --enable-hl --prefix=/environments/${HDF5VER} --with-szlib --enable-parallel && make -j $(nproc) && sudo make install
+#tar -jxf /root/hdf5-${HDF5VER}.tar.bz2 && cd /root/hdf5-${HDF5VER} && autoreconf -if && CC=mpicc ./configure --disable-static --enable-shared --disable-fortran --enable-hl --prefix=/environments/${HDF5VER} --with-szlib --enable-parallel && make -j $(nproc) && sudo make install
 
-cd /root
-rm -rf /root/hdf5-${HDF5VER}
+#cd /root
+#rm -rf /root/hdf5-${HDF5VER}
 
 ###
 # Manually install hdf4 so that we can run
 # those tests as well.
 ###
 
-tar -jxf /root/hdf4.3.0.tar.gz && cd /root/hdf-hdf4.3.0 && CC=mpicc ./configure --disable-static --enable-shared --disable-netcdf --disable-fortran --prefix=/environments/${HDF5VER} && make -j $(nproc) && sudo make install
+#tar -jxf /root/hdf4.3.0.tar.gz && cd /root/hdf-hdf4.3.0 && CC=mpicc ./configure --disable-static --enable-shared --disable-netcdf --disable-fortran --prefix=/environments/${HDF5VER} && make -j $(nproc) && sudo make install
 
-cd /root
-rm -rf /root/hdf-4.3.0
+#cd /root
+#rm -rf /root/hdf-4.3.0
 
 
 ###
@@ -44,10 +44,10 @@ rm -rf /root/hdf-4.3.0
 # run pnetcdf tests.
 ###
 
-tar -zxf /root/pnetcdf-1.12.3.tar.gz && cd /root/pnetcdf-1.12.3 && CPPFLAGS=-fPIC CC=mpicc ./configure --prefix=/usr --disable-fortran --enable-relax-coord-bound && make -j $(nproc) -k && sudo make install
+#tar -zxf /root/pnetcdf-1.12.3.tar.gz && cd /root/pnetcdf-1.12.3 && CPPFLAGS=-fPIC CC=mpicc ./configure --prefix=/usr --disable-fortran --enable-relax-coord-bound && make -j $(nproc) -k && sudo make install
 
-cd /root
-rm -rf pnetcdf-1.12.3
+#cd /root
+#rm -rf pnetcdf-1.12.3
 
 ##
 # Some cleanup

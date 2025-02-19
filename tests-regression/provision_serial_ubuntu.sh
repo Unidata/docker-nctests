@@ -10,10 +10,10 @@ cd /root
 
 HDF5VER=1.14.3
 
-tar -jxf /root/hdf5-${HDF5VER}.tar.bz2 && cd /root/hdf5-${HDF5VER} && autoreconf -if && ./configure --disable-static --enable-shared --disable-tests --disable-fortran --enable-hl --prefix=/environments/${HDF5VER} --with-szlib && make -j $(nproc) && sudo make install
+#tar -jxf /root/hdf5-${HDF5VER}.tar.bz2 && cd /root/hdf5-${HDF5VER} && autoreconf -if && ./configure --disable-static --enable-shared --disable-tests --disable-fortran --enable-hl --prefix=/environments/${HDF5VER} --with-szlib && make -j $(nproc) && sudo make install
 
-cd /root
-rm -rf /root/hdf5-${HDF5VER}
+#cd /root
+#rm -rf /root/hdf5-${HDF5VER}
 
 ###
 # Manually install hdf4 so that we can run

@@ -151,7 +151,7 @@ fi
 ## 
 # Set Target Dir
 ##
-export TARGDIR="/environments/${H5VER}"
+export TARGDIR="/environments/${H5VER}-${USE_CC}"
 echo "Using TARGDIR=${TARGDIR}"
 
 ##

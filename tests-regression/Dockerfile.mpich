@@ -19,6 +19,7 @@ COPY Dockerfile.mpich ${HOME}/
 
 ENV USE_CC=mpicc
 ENV PARTYPE=-mpich
+ENV TESTTYPE=mpich
 
 RUN chown -R ${CUSER}:${CUSER} ${HOME}
 
@@ -27,4 +28,4 @@ USER ${CUSER}
 ##
 # Run test scripts on launch.
 ##
-CMD ["bash", "-l", "-e", "/home/tester/run_par_tests.sh"]
+CMD ["bash", "-l", "-e", "/home/tester/run_tests.sh"]
