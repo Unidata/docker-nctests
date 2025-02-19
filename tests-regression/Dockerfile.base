@@ -62,8 +62,9 @@ ENV CUSSERPWORD="password.1234"
 
 ###
 # Copy over local tarballs.
+# No longer needed, all handled dynamically.
 ###
-COPY hdf5-1.14.3.tar.bz2 pnetcdf-1.12.3.tar.gz hdf4.3.0.tar.gz ${HOME}/
+#COPY hdf5-1.14.3.tar.bz2 pnetcdf-1.12.3.tar.gz hdf4.3.0.tar.gz ${HOME}/
 
 
 ###

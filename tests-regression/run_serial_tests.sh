@@ -161,7 +161,7 @@ echo "Using TARGDIR=${TARGDIR}"
 #if [ "x${HDF5SRC}" != "x" ]; then
 if [ ! -d "${TARGDIR}" ]; then
     echo "Building HDF5 ${H5VER} from source."
-    sudo ./install_hdf5.sh -c "${USE_CC}" -d "${H5VER}" -j "${TESTPROC}" -t "${TARGDIR}"
+    sudo ./install_hdf5.sh -c "${USE_CC}" -d "${H5VER}" -j "${TESTPROC}" -t "${TARGDIR}-${USE_CC}"
 fi
 
 
