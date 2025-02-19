@@ -9,7 +9,7 @@ ENV HOME=/root
 WORKDIR /root
 LABEL maintainer="Ward Fisher <wfisher@ucar.edu>"
 
-ENV NCTEST_VERSION="1.10.7 - development"
+ENV NCTEST_VERSION="1.10.8 - development"
 
 ENV VERSION_FILE=VERSION.md
 
@@ -91,6 +91,7 @@ WORKDIR ${HOME}
 
 COPY run_serial_tests.sh ${HOME}/
 COPY run_par_tests.sh ${HOME}/
+COPY run_tests.sh ${HOME}/
 COPY run_all_nctest_images.sh ${HOME}/
 COPY build_all_nctest_images.sh ${HOME}/
 COPY push_all_nctest_images.sh ${HOME}/
