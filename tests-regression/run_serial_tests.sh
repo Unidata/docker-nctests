@@ -151,7 +151,7 @@ fi
 ## 
 # Set Target Dir
 ##
-export TARGDIR="/environments/${H5VER}"
+export TARGDIR="/environments/${H5VER}-${USE_CC}"
 echo "Using TARGDIR=${TARGDIR}"
 
 ##
@@ -161,7 +161,7 @@ echo "Using TARGDIR=${TARGDIR}"
 #if [ "x${HDF5SRC}" != "x" ]; then
 if [ ! -d "${TARGDIR}" ]; then
     echo "Building HDF5 ${H5VER} from source."
-    sudo ./install_hdf5.sh -c "${USE_CC}" -d "${H5VER}" -j "${TESTPROC}" -t "${TARGDIR}-${USE_CC}"
+    sudo ./install_hdf5.sh -c "${USE_CC}" -d "${H5VER}" -j "${TESTPROC}" -t "${TARGDIR}"
 fi
 
 
