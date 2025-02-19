@@ -18,7 +18,7 @@ CFLAGS="-Wno-format-security"
 
 #cd /root
 #rm -rf /root/mpich-4.2.3
-sudo apt install mpich
+sudo apt update && sudo apt install -y mpich
 #
 # 1.14.3
 #
