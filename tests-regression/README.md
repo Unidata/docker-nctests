@@ -177,7 +177,7 @@ This will show you the help file for the docker image.
 
 This will put you into the shell for the docker container.  Note that any changes you make will not persist once you exit.  
 
-    $ docker run --rm -it docker.unidata.ucar.edu/nctests:serial bash
+    $ docker run --rm -it --entrypoint /bin/bash docker.unidata.ucar.edu/nctests:serial
 
 ### - Run all tests (standard use case)
 
