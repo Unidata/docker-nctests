@@ -11,6 +11,7 @@ When this docker container is run, it will check out the following packages from
 * netcdf-c
 * netcdf-fortran
 * netcdf-cxx4
+* netcdf-java
 * netcdf4-python
 * NetCDF Operators (NCO)
 
@@ -22,6 +23,7 @@ The docker containers will let you use the following compilers:
 
 * `gcc` and `g++`
 * `clang` and `clang++`
+* `mpicc` (from `mpich` package)
 
 These are controlled via the `USE_CC` and `USE_CXX` environmental variables.
 
@@ -29,14 +31,11 @@ These are controlled via the `USE_CC` and `USE_CXX` environmental variables.
 
 The following containers/systems are available:
 
-* Ubuntu (32/64-bit)
-    * serial
-    * openmpi
-    * mpich
-* Fedora (64-bit)
-    * serial
-    * openmpi
-    *mpich
+* Ubuntu (64-bit)
+    * serial (for serial tests)
+    * parallel (for parallel tests)
+
+These are specified by changing the `USE_CC` environmental variable, `gcc` by default.
 
 ### NetCDF Operators (NCO)
 
@@ -81,8 +80,12 @@ The following environmental variables can be used to control the behavior at run
 * `CBRANCH` - Git branch for `netcdf-c`
 * `FBRANCH` - Git branch for `netcdf-fortran`
 * `CXXBRANCH` - Git branch for `netcdf-cxx4`
+* `JAVABRANCH` - Git branch for `netcdf-java` 
+    * Default: `maint-5.x`
+    * `JDKVER` - Version of `OpenJDK` to run for tests. Default: `8` 
 * `PBRANCH` - Git branch for `netcdf4-python`
-* `NCOBRANCH` - Git branch for `NCO`. Default: `4.5.4`.
+* `NCOBRANCH` - Git branch for `NCO`. 
+    * Default: `4.5.4`.
 
 ### Select HDF5 Version to Use
 
@@ -116,6 +119,7 @@ The following environmental variables can be used to control the behavior at run
 * `RUNC` - Set to `OFF`, `FALSE`, anything but `TRUE`, to disable running `netcdf-c` tests. NetCDF-C is still downloaded, compiled and installed.
 * `RUNF` - Set to `OFF`, `FALSE`, anything but `TRUE`, to disable running `netcdf-fortran` tests.
 * `RUNCXX` - Set to `OFF`, `FALSE`, anything but `TRUE`, to disable running `netcdf-cxx4` tests.
+* `RUNJAVA` - Set to Non-`TRUE` to disable.  
 * `RUNP` - Set to `OFF`, `FALSE`, anything but `TRUE`, to disable running `netcdf4-python` tests.
 * `RUNNCO` - Set to `OFF`, `FALSE`, anything but `TRUE`, to disable running `NCO` tests.
 
@@ -128,6 +132,7 @@ The following environmental variables can be used to control the behavior at run
 * `NCOREPS` - Default 1.  How many times to repeat the `NCO` build and tests.
 
 > Note that `USECMAKE` and `USEAC` may be used concurrently and, when coupled with `CREPS` and other loop control options, we can see if the different build systems interfere with each other.
+
 
 ### Build Systems to use
 ----

@@ -7,7 +7,7 @@ FROM docker.unidata.ucar.edu/nctests:base
 USER root
 COPY provision_serial_ubuntu.sh /root/
 RUN ls -alh /root &&  /root/provision_serial_ubuntu.sh
-ENV TESTTYPE=serial
+
 ###
 # Copy over the dockerfile, scripts and README.
 ###
