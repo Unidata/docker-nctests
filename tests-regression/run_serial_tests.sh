@@ -120,6 +120,29 @@ else
     echo "Skipping CXX"
 fi
 
+
+if [ "x$RUNJAVA" == "xTRUE" ]; then
+
+    if [ -d "/netcdf-java" ]; then
+        echo "Using local netcdf-cxx4 repository"
+        if [ "x$USE_LOCAL_JAVA" == "xTRUE" ]; then
+            cp -R /netcdf-java ${HOME}
+        else
+            git clone /netcdf-java ${HOME}/netcdf-java
+        fi
+
+        else
+        echo "Using remote netcdf-java repository"
+        git clone http://www.github.com/Unidata/netcdf-java --single-branch --branch $JAVABRANCH --depth=1 $JAVABRANCH
+        mv $JAVABRANCH netcdf-java
+    fi
+else
+    echo "Skipping Java"
+fi
+
+
+
+
 if [ "x$RUNP" == "xTRUE" ]; then
     if [ -d "/netcdf4-python" ]; then
         echo "Using local netcdf4-python repository"
@@ -148,10 +171,12 @@ else
     echo "Skipping NCO"
 fi
 
+#
+
 ## 
 # Set Target Dir
 ##
-export TARGDIR="/environments/${H5VER}-${USE_CC}"
+export TARGDIR="/environments/${H5VER}-${CBRANCH}-${USE_CC}"
 echo "Using TARGDIR=${TARGDIR}"
 
 ##
@@ -175,6 +200,7 @@ export CPPFLAGS="-I${TARGDIR}/include"
 export CFLAGS="-I${TARGDIR}/include"
 export LDFLAGS="-L${TARGDIR}/lib"
 export LD_LIBRARY_PATH="${TARGDIR}/lib"
+export LIBDIR="${TARGDIR}/lib"
 export PATH="${TARGDIR}/bin:$PATH"
 export CMAKE_PREFIX_PATH="${TARGDIR}"
 
@@ -221,7 +247,7 @@ while [[ $CCOUNT -le $CREPS ]]; do
         sleep 2
         mkdir -p build-netcdf-c
         cd build-netcdf-c
-        cmake ${HOME}/netcdf-c -DCMAKE_INSTALL_PREFIX=/usr -DNETCDF_ENABLE_HDF4=OFF -DNETCDF_ENABLE_MMAP=ON -DBUILDNAME_PREFIX="docker$BITNESS-$USE_CC" -DBUILDNAME_SUFFIX="$CBRANCH" -DCMAKE_C_COMPILER=$USE_CC $COPTS -DCMAKE_C_FLAGS="${CMEM}" -D NETCDF_ENABLE_TESTS="${RUNC}"; CHECKERR
+        cmake ${HOME}/netcdf-c -DCMAKE_INSTALL_PREFIX=${TARGDIR} -DNETCDF_ENABLE_HDF4=OFF -DNETCDF_ENABLE_MMAP=ON -DBUILDNAME_PREFIX="docker$BITNESS-$USE_CC" -DBUILDNAME_SUFFIX="$CBRANCH" -DCMAKE_C_COMPILER=$USE_CC $COPTS -DCMAKE_C_FLAGS="${CMEM}" -D NETCDF_ENABLE_TESTS="${RUNC}"; CHECKERR
         make clean
 
         if [ "x$RUNC" == "xTRUE" ]; then
@@ -259,7 +285,7 @@ while [[ $CCOUNT -le $CREPS ]]; do
         if [ ! -f "configure" ]; then
             autoreconf -if
         fi
-        CC=$USE_CC ./configure --prefix=/usr --disable-hdf4 --enable-extra-tests --enable-mmap $AC_COPTS
+        CC=$USE_CC ./configure --prefix=${TARGDIR} --disable-hdf4 --enable-extra-tests --enable-mmap $AC_COPTS
         make clean
         make -j $TESTPROC ; CHECKERR
         if [ "x$RUNC" == "xTRUE" ]; then
@@ -398,6 +424,19 @@ if [ "x$RUNCXX" == "xTRUE" ]; then
         CXXCOUNT=$[CXXCOUNT+1]
 
     done
+
+fi
+
+###
+# Build & test netcdf-java
+###
+if [ "x$RUNJAVA" == "xTRUE" ]; then
+    echo -e "o Testing netcdf-java"
+    sudo apt update && sudo apt install -y openjdk-${JDKVER}-jdk
+    cd ${HOME}/netcdf-java
+    JNA_PATH=${LIBDIR} ./gradlew clean :netcdf4:test
+    ./gradlew clean classes
+    cd ${HOME}
 
 fi
 

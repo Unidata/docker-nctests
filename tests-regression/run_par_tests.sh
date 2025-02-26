@@ -40,7 +40,7 @@ fi
 # Configure Environmental Variables"
 ###
 
-export TARGDIR="/environments/${H5VER}"
+export TARGDIR="/environments/${H5VER}-${CBRANCH}-${USE_CC}"
 
 echo "Using TARGDIR=${TARGDIR}"
 
@@ -137,11 +137,10 @@ else
     echo "Skipping CXX"
 fi
 
-## 
-# Set Target Dir
 ##
-export TARGDIR="/environments/${H5VER}-${USE_CC}"
-echo "Using TARGDIR=${TARGDIR}"
+# Install mpich
+##
+sudo apt update && sudo apt install -y mpich
 
 ##
 # Allow us to build dependencies from source.

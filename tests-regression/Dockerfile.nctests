@@ -32,6 +32,8 @@ ENV FBRANCH=main
 ENV CXXBRANCH=master
 ENV PBRANCH=master
 ENV NCOBRANCH=master
+ENV JAVABRANCH=maint-5.x
+ENV JDKVER=8
 
 ENV BITNESS=64
 ENV USE_CC=gcc
@@ -42,6 +44,7 @@ ENV RUNF=TRUE
 ENV RUNCXX=FALSE
 ENV RUNP=FALSE
 ENV RUNNCO=FALSE
+ENV RUNJAVA=FALSE
 
 ENV USEDASH=FALSE
 
@@ -93,10 +96,7 @@ WORKDIR ${HOME}
 COPY run_serial_tests.sh ${HOME}/
 COPY run_par_tests.sh ${HOME}/
 COPY run_tests.sh ${HOME}/
-COPY run_all_nctest_images.sh ${HOME}/
-COPY build_all_nctest_images.sh ${HOME}/
 COPY push_all_nctest_images.sh ${HOME}/
-COPY squash_all_nctest_images.sh ${HOME}/
 COPY install_hdf5.sh ${HOME}/
 COPY README.md ${HOME}/
 
@@ -108,3 +108,6 @@ USER ${CUSER}
 
 RUN dos2unix ${HOME}/run_serial_tests.sh
 RUN dos2unix ${HOME}/run_par_tests.sh
+RUN dos2unix ${HOME}/run_tests.sh
+
+ENTRYPOINT ["/bin/bash", "-l", "-e", "/home/tester/run_tests.sh"]

@@ -282,7 +282,7 @@ mkdir -p "${H5DIR}"
 $(echo ${H5UNTAR})
 
 cd "${H5DIR}"
-
+#CFLAGS="${CFLAGS} -Wno-format-security"
 if [ "x${USEBUILD}" = "xac" ]; then
     BUILDTESTSTRING="--disable-tests"
     if [ "x${DONCTESTS}" = "xTRUE" ]; then

@@ -1,7 +1,0 @@
-CRON_TZ="America/Denver"
-LD_LIBRARY_PATH=/usr/lib:/usr/local/lib:/home/ciuser/local2
-
-01 2 * * * cd /home/ciuser && rm -rf netcdf-nightly*
-01 3 * * * cd /home/ciuser && /home/ciuser/run_nightly_test.sh -p -l netcdf-c > nightly_log_c.txt
-01 4 * * * cd /home/ciuser && /home/ciuser/run_nightly_test.sh -p -l netcdf-fortran > nightly_log_fortran.txt
-01 5 * * * cd /home/ciuser && /home/ciuser/run_nightly_test.sh -p -l netcdf-cxx4 > nightly_log_cxx4.txt
