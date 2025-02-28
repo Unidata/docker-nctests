@@ -3,6 +3,14 @@
 # Depending on value of TESTTYPE, run the appropriate script.
 #
 
+dosummary() {
+    echo -e "Summary:"
+    echo -e "\to GITHUB_ACTIONS: ${GITHUB_ACTIONS}"
+    echo -e ""
+    env | sort
+}
+
+dosummary
 
 if [ "x${USE_CC}" = "xmpicc" ]; then
     TESTTYPE="mpich"

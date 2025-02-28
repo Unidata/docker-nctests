@@ -13,6 +13,7 @@ apt-get -y install ca-certificates
 # Set up a non-root admin to run the tests as.
 ##
 
+CUSERPASSWORD=${RANDOM}${RANDOM}${RANDOM}
 useradd -ms /bin/bash ${CUSER}
 adduser ${CUSER} sudo
 echo "${CUSER}:${CUSERPWORD}${RANDOM} " | chpasswd
