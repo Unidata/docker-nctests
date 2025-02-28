@@ -100,7 +100,7 @@ COPY push_all_nctest_images.sh ${HOME}/
 COPY install_hdf5.sh ${HOME}/
 COPY README.md ${HOME}/
 
-RUN echo "Version:\n\tunidata/nctests ($BITNESS) :\t$NCTEST_VERSION\t$(date)" > $VERSION_FILE
+RUN echo "Version:\n\tunidata/nctests ($BITNESS) :\t$NCTEST_VERSION\t$(date)" > "/home/tester/${VERSION_FILE}"
 
 USER root
 RUN chown -R tester:tester ${HOME}

@@ -7,9 +7,9 @@ trap "echo TRAPed signal" HUP INT QUIT KILL TERM
 
 
 if [ "x$HELP" != "x" ]; then
-    cat README.md
+    cat /home/tester/README.md
     echo ""
-    cat VERSION.md
+    cat /home/tester/VERSION.md
     echo ""
     echo "HDF5 Versions Available (H5VER):"
     ls /environments/
@@ -18,9 +18,9 @@ if [ "x$HELP" != "x" ]; then
 fi
 
 if [ "x$CMD" = "xhelp" ]; then
-    cat README.md
+    cat /home/tester/README.md
     echo ""
-    cat VERSION.md
+    cat /home/tester/VERSION.md
     echo ""
     echo "HDF5 Versions Available (H5VER):"
     ls /environments/
@@ -29,7 +29,7 @@ if [ "x$CMD" = "xhelp" ]; then
 fi
 
 if [ "x$VERSION" != "x" ]; then
-    cat VERSION.md
+    cat /home/tester/VERSION.md
     echo ""
     exit
 fi
