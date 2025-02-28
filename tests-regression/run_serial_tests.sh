@@ -4,7 +4,7 @@ set -e
 
 trap "echo TRAPed signal" HUP INT QUIT KILL TERM
 
-
+echo -e "Running Serial Tests"
 
 if [ "x$HELP" != "x" ]; then
     cat /home/tester/README.md
@@ -50,7 +50,7 @@ CHECKERR() {
 ###
 # Print out version.
 ###
-cat VERSION.md
+cat /home/tester/VERSION.md
 echo "Using HDF5 version: ${H5VER}"
 echo ""
 sleep 3

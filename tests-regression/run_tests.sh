@@ -8,9 +8,14 @@ dosummary() {
     echo -e "\to GITHUB_ACTIONS: ${GITHUB_ACTIONS}"
     echo -e "\to Current User (whoami): $(whoami)"
     echo -e "\to Current directory: $(pwd)"
-    echo -e "\to Contents of current directory:"
     echo -e "===================================="
+    echo -e "\to Contents of current directory:"
+    echo -e ""
     ls -alh 
+    echo -e "===================================="
+    echo -e "\to Contents of /home/tester/"
+    echo -e ""
+    ls -alh /home/tester/
     echo -e "===================================="
     echo -e ""
     echo -e "\to Environmental Variables:"

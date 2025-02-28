@@ -8,10 +8,12 @@ export OMPI_MPICC=$USE_CC
 export OMPI_CC=$USE_CC
 export OMPI_CXX=$USE_CXX
 
+echo -e "Running Parallel Tests"
+
 if [ "x$HELP" != "x" ]; then
-    cat README.md
+    cat /home/tester/README.md
     echo ""
-    cat VERSION.md
+    cat /home/tester/VERSION.md
     echo ""
     echo "HDF5 Versions Available (H5VER):"
     ls /environments/
@@ -20,9 +22,9 @@ if [ "x$HELP" != "x" ]; then
 fi
 
 if [ "x$CMD" = "xhelp" ]; then
-    cat README.md
+    cat /home/tester/README.md
     echo ""
-    cat VERSION.md
+    cat /home/tester/VERSION.md
     echo ""
     echo "HDF5 Versions Available (H5VER):"
     ls /environments/
@@ -31,7 +33,7 @@ if [ "x$CMD" = "xhelp" ]; then
 fi
 
 if [ "x$VERSION" != "x" ]; then
-    cat VERSION.md
+    cat /home/tester/VERSION.md
     echo ""
     exit
 fi
@@ -66,7 +68,7 @@ CHECKERR() {
 ###
 # Print out version.
 ###
-cat VERSION.md
+cat /home/tester/VERSION.md
 echo "Using HDF5 version: ${H5VER}"
 echo ""
 sleep 3
