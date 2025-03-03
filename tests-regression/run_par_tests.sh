@@ -88,30 +88,30 @@ sleep 3
 # specified by "CBRANCH", "FBRANCH", "CXXBRANCH"
 ###
 
-if [ -d "/netcdf-c" ]; then
+if [ -d "${C_VOLUME_MAP}" ]; then
     echo "Using local netcdf-c repository"
     if [ "x$USE_LOCAL_CP" == "xTRUE" ]; then
-        cp -R /netcdf-c ${HOME}
+        cp -R ${C_VOLUME_MAP} ${HOME}
     else
-        git clone /netcdf-c ${HOME}/netcdf-c
+        git clone ${C_VOLUME_MAP} ${HOME}${C_VOLUME_MAP}
     fi
 else
     echo "Using remote netcdf-c repository"
-    git clone http://www.github.com/Unidata/netcdf-c --single-branch --branch $CBRANCH --depth=1 $CBRANCH
+    git clone http://www.github.com/Unidata${C_VOLUME_MAP} --single-branch --branch $CBRANCH --depth=1 $CBRANCH
     mv $CBRANCH netcdf-c
 fi
 
 if [ "x$RUNF" == "xTRUE" ]; then
-    if [ -d "/netcdf-fortran" ]; then
+    if [ -d "${FORTRAN_VOLUME_MAP}" ]; then
         echo "Using local netcdf-fortran repository"
         if [ "x$USE_LOCAL_CP" != "xTRUE" ]; then
-            cp -R /netcdf-fortran ${HOME}
+            cp -R ${FORTRAN_VOLUME_MAP} ${HOME}
         else
-            git clone /netcdf-fortran ${HOME}/netcdf-fortran
+            git clone ${FORTRAN_VOLUME_MAP} ${HOME}${FORTRAN_VOLUME_MAP}
         fi
     else
         echo "Using remote netcdf-fortran repository"
-        git clone http://www.github.com/Unidata/netcdf-fortran --single-branch --branch $FBRANCH --depth=1 $FBRANCH
+        git clone http://www.github.com/Unidata${FORTRAN_VOLUME_MAP} --single-branch --branch $FBRANCH --depth=1 $FBRANCH
         mv $FBRANCH netcdf-fortran
     fi
 else
@@ -120,17 +120,17 @@ fi
 
 if [ "x$RUNCXX" == "xTRUE" ]; then
 
-    if [ -d "/netcdf-cxx4" ]; then
+    if [ -d "${CXX4_VOLUME_MAP}" ]; then
         echo "Using local netcdf-cxx4 repository"
         if [ "x$USE_LOCAL_CP" == "xTRUE" ]; then
-            cp -R /netcdf-cxx4 ${HOME}
+            cp -R ${CXX4_VOLUME_MAP} ${HOME}
         else
-            git clone /netcdf-cxx4 ${HOME}/netcdf-cxx4
+            git clone ${CXX4_VOLUME_MAP} ${HOME}${CXX4_VOLUME_MAP}
         fi
 
         else
         echo "Using remote netcdf-cxx4 repository"
-        git clone http://www.github.com/Unidata/netcdf-cxx4 --single-branch --branch $CXXBRANCH --depth=1 $CXXBRANCH
+        git clone http://www.github.com/Unidata${CXX4_VOLUME_MAP} --single-branch --branch $CXXBRANCH --depth=1 $CXXBRANCH
         mv $CXXBRANCH netcdf-cxx4
         cd ${HOME}
     fi
@@ -204,7 +204,7 @@ while [[ $CCOUNT -le $CREPS ]]; do
         sleep 2
         mkdir -p build-netcdf-c
         cd build-netcdf-c
-        cmake ${HOME}/netcdf-c -DCMAKE_INSTALL_PREFIX=/usr -DENABLE_HDF4=OFF -DENABLE_EXTRA_TESTS=ON -DENABLE_MMAP=ON -DBUILDNAME_PREFIX="docker$BITNESS-parallel$PARTYPE" -DBUILDNAME_SUFFIX="$CBRANCH" -DCMAKE_C_COMPILER=mpicc -DENABLE_PNETCDF=ON -DENABLE_PARALLEL_TESTS="${RUNC}" -DENABLE_TESTS="${RUNC}" $COPTS -DCMAKE_C_FLAGS="${CMEM}"
+        cmake ${HOME}${C_VOLUME_MAP} -DCMAKE_INSTALL_PREFIX=/usr -DENABLE_HDF4=OFF -DENABLE_EXTRA_TESTS=ON -DENABLE_MMAP=ON -DBUILDNAME_PREFIX="docker$BITNESS-parallel$PARTYPE" -DBUILDNAME_SUFFIX="$CBRANCH" -DCMAKE_C_COMPILER=mpicc -DENABLE_PNETCDF=ON -DENABLE_PARALLEL_TESTS="${RUNC}" -DENABLE_TESTS="${RUNC}" $COPTS -DCMAKE_C_FLAGS="${CMEM}"
 
         if [ "x$RUNC" == "xTRUE" ]; then
             if [ "x$USEDASH" == "xTRUE" ]; then
@@ -274,7 +274,7 @@ if [ "x$RUNF" == "xTRUE" ]; then
             cd ${HOME}
             mkdir -p build-netcdf-fortran
             cd build-netcdf-fortran
-            cmake ${HOME}/netcdf-fortran -DBUILDNAME_PREFIX="docker$BITNESS-parallel$PARTYPE" -DBUILDNAME_SUFFIX="$FBRANCH" -DTEST_PARALLEL=OFF -DCMAKE_Fortran_COMPILER=$(which mpif90) $FOPTS
+            cmake ${HOME}${FORTRAN_VOLUME_MAP} -DBUILDNAME_PREFIX="docker$BITNESS-parallel$PARTYPE" -DBUILDNAME_SUFFIX="$FBRANCH" -DTEST_PARALLEL=OFF -DCMAKE_Fortran_COMPILER=$(which mpif90) $FOPTS
 
             if [ "x$USEDASH" == "xTRUE" ]; then
                 ctest -j $TESTPROC_FORTRAN -D Experimental
@@ -326,7 +326,7 @@ if [ "x$RUNCXX" == "xTRUE" ]; then
 
             mkdir -p build-netcdf-cxx4
             cd build-netcdf-cxx4
-            cmake ${HOME}/netcdf-cxx4 -DBUILDNAME_PREFIX="docker$BITNESS-parallel$PARTYPE" -DBUILDNAME_SUFFIX="$CXXBRANCH" -DCMAKE_C_COMPILER=$(which mpicc) -DCMAKE_CXX_COMPILER=$(which mpic++) $CXXOPTS
+            cmake ${HOME}${CXX4_VOLUME_MAP} -DBUILDNAME_PREFIX="docker$BITNESS-parallel$PARTYPE" -DBUILDNAME_SUFFIX="$CXXBRANCH" -DCMAKE_C_COMPILER=$(which mpicc) -DCMAKE_CXX_COMPILER=$(which mpic++) $CXXOPTS
 
             if [ "x$USEDASH" == "xTRUE" ]; then
                 ctest -D Experimental ; CHECKERR
