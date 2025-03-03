@@ -4,7 +4,15 @@ set -e
 
 trap "echo TRAPed signal" HUP INT QUIT KILL TERM
 
+if [ "${USER}" = "root" ]; then
+    export SUDOCMD=""
+else
+    export SUDOCMD="sudo"
+fi
+
 echo -e "Running Serial Tests"
+
+cd ${WORKING_DIRECTORY}
 
 if [ "x$HELP" != "x" ]; then
     cat /home/tester/README.md
@@ -72,9 +80,9 @@ sleep 3
 if [ -d "${C_VOLUME_MAP}" ]; then
     echo "Using local netcdf-c repository"
     if [ "x$USE_LOCAL_CP" == "xTRUE" ]; then
-        cp -R ${C_VOLUME_MAP} ${HOME}
+        cp -R ${C_VOLUME_MAP} ${WORKING_DIRECTORY}
     else
-        git clone ${C_VOLUME_MAP} ${HOME}${C_VOLUME_MAP}
+        git clone ${C_VOLUME_MAP} ${WORKING_DIRECTORY}${C_VOLUME_MAP}
     fi
 else
     echo "Using remote netcdf-c repository"
@@ -87,9 +95,9 @@ if [ "x$RUNF" == "xTRUE" ]; then
     if [ -d "${FORTRAN_VOLUME_MAP}" ]; then
         echo "Using local netcdf-fortran repository"
         if [ "x$USE_LOCAL_CP" != "xTRUE" ]; then
-            cp -R ${FORTRAN_VOLUME_MAP} ${HOME}
+            cp -R ${FORTRAN_VOLUME_MAP} ${WORKING_DIRECTORY}
         else
-            git clone ${FORTRAN_VOLUME_MAP} ${HOME}${FORTRAN_VOLUME_MAP}
+            git clone ${FORTRAN_VOLUME_MAP} ${WORKING_DIRECTORY}${FORTRAN_VOLUME_MAP}
         fi
     else
         echo "Using remote netcdf-fortran repository"
@@ -106,9 +114,9 @@ if [ "x$RUNCXX" == "xTRUE" ]; then
     if [ -d "${CXX4_VOLUME_MAP}" ]; then
         echo "Using local netcdf-cxx4 repository"
         if [ "x$USE_LOCAL_CP" == "xTRUE" ]; then
-            cp -R ${CXX4_VOLUME_MAP} ${HOME}
+            cp -R ${CXX4_VOLUME_MAP} ${WORKING_DIRECTORY}
         else
-            git clone ${CXX4_VOLUME_MAP} ${HOME}${CXX4_VOLUME_MAP}
+            git clone ${CXX4_VOLUME_MAP} ${WORKING_DIRECTORY}${CXX4_VOLUME_MAP}
         fi
 
         else
@@ -126,9 +134,9 @@ if [ "x$RUNJAVA" == "xTRUE" ]; then
     if [ -d "${JAVA_VOLUME_MAP}" ]; then
         echo "Using local netcdf-cxx4 repository"
         if [ "x$USE_LOCAL_JAVA" == "xTRUE" ]; then
-            cp -R ${JAVA_VOLUME_MAP} ${HOME}
+            cp -R ${JAVA_VOLUME_MAP} ${WORKING_DIRECTORY}
         else
-            git clone ${JAVA_VOLUME_MAP} ${HOME}${JAVA_VOLUME_MAP}
+            git clone ${JAVA_VOLUME_MAP} ${WORKING_DIRECTORY}${JAVA_VOLUME_MAP}
         fi
 
         else
@@ -143,8 +151,8 @@ fi
 if [ "x$RUNP" == "xTRUE" ]; then
     if [ -d "/netcdf4-python" ]; then
         echo "Using local netcdf4-python repository"
-        #git clone /netcdf4-python ${HOME}/netcdf4-python
-        cp -R /netcdf4-python ${HOME}
+        #git clone /netcdf4-python ${WORKING_DIRECTORY}/netcdf4-python
+        cp -R /netcdf4-python ${WORKING_DIRECTORY}
     else
         echo "Using remote netcdf4-python repository"
         git clone http://github.com/Unidata/netcdf4-python --single-branch --branch $PBRANCH --depth=1 $PBRANCH
@@ -157,8 +165,8 @@ fi
 if [ "x$RUNNCO" == "xTRUE" ]; then
     if [ -d "/nco" ]; then
         echo "Using local NCO repository"
-        #git clone /nco ${HOME}/nco
-        cp -R /nco ${HOME}
+        #git clone /nco ${WORKING_DIRECTORY}/nco
+        cp -R /nco ${WORKING_DIRECTORY}
     else
         echo "Using remote NCO repository"
         git clone https://github.com/nco/nco.git --single-branch --branch $NCOBRANCH --depth=1 $NCOBRANCH
@@ -183,7 +191,7 @@ echo "Using TARGDIR=${TARGDIR}"
 #if [ "x${HDF5SRC}" != "x" ]; then
 if [ ! -d "${TARGDIR}" ]; then
     echo "Building HDF5 ${H5VER} from source."
-    sudo ./install_hdf5.sh -c "${USE_CC}" -d "${H5VER}" -j "${TESTPROC}" -t "${TARGDIR}"
+    ${SUDOCMD} /home/tester/install_hdf5.sh -c "${USE_CC}" -d "${H5VER}" -j "${TESTPROC}" -t "${TARGDIR}"
 fi
 
 
@@ -217,7 +225,7 @@ NCOCOUNT=1
 # can be used by the other projects.
 ###
 
-cd ${HOME}
+cd ${WORKING_DIRECTORY}
 
 
 # CREPS is defined as an environmental variable.
@@ -244,7 +252,7 @@ while [[ $CCOUNT -le $CREPS ]]; do
         sleep 2
         mkdir -p build-netcdf-c
         cd build-netcdf-c
-        cmake ${HOME}${C_VOLUME_MAP} -DCMAKE_INSTALL_PREFIX=${TARGDIR} -DNETCDF_ENABLE_HDF4=OFF -DNETCDF_ENABLE_MMAP=ON -DBUILDNAME_PREFIX="docker$BITNESS-$USE_CC" -DBUILDNAME_SUFFIX="$CBRANCH" -DCMAKE_C_COMPILER=$USE_CC $COPTS -DCMAKE_C_FLAGS="${CMEM}" -D NETCDF_ENABLE_TESTS="${RUNC}"; CHECKERR
+        cmake ${WORKING_DIRECTORY}${C_VOLUME_MAP} -DCMAKE_INSTALL_PREFIX=${TARGDIR} -DNETCDF_ENABLE_HDF4=OFF -DNETCDF_ENABLE_MMAP=ON -DBUILDNAME_PREFIX="docker$BITNESS-$USE_CC" -DBUILDNAME_SUFFIX="$CBRANCH" -DCMAKE_C_COMPILER=$USE_CC $COPTS -DCMAKE_C_FLAGS="${CMEM}" -D NETCDF_ENABLE_TESTS="${RUNC}"; CHECKERR
         make clean
 
         if [ "x$RUNC" == "xTRUE" ]; then
@@ -263,7 +271,7 @@ while [[ $CCOUNT -le $CREPS ]]; do
             fi
 
         fi
-        cd ${HOME}
+        cd ${WORKING_DIRECTORY}
         echo ""
     fi
 
@@ -294,7 +302,7 @@ while [[ $CCOUNT -le $CREPS ]]; do
             fi
 
         fi
-        cd ${HOME}
+        cd ${WORKING_DIRECTORY}
         echo ""
     fi
 
@@ -305,15 +313,15 @@ done
 if [ "x$USECMAKE" = "xTRUE" ]; then
     cd build-netcdf-c
     make -j "${TESTPROC}"
-    sudo make install
+    ${SUDOCMD} make install
 elif [ "x$USEAC" = "xTRUE" ]; then
     cd netcdf-c
-    sudo make install -j $TESTPROC
+    ${SUDOCMD} make install -j $TESTPROC
 fi
 
-cd ${HOME}
+cd ${WORKING_DIRECTORY}
 
-sudo ldconfig
+${SUDOCMD} ldconfig
 
 ###
 # Build & test netcdf-fortran
@@ -329,10 +337,10 @@ if [ "x$RUNF" == "xTRUE" ]; then
         if [ "x$USECMAKE" = "xTRUE" ]; then
             echo "[$FCOUNT | $FREPS] Testing netCDF-Fortran - CMAKE"
             echo "----------------------------------"
-            cd ${HOME}
+            cd ${WORKING_DIRECTORY}
             mkdir -p build-netcdf-fortran
             cd build-netcdf-fortran
-            cmake ${HOME}${FORTRAN_VOLUME_MAP} -DBUILDNAME_PREFIX="docker$BITNESS-$USE_CC" -DBUILDNAME_SUFFIX="$FBRANCH" -DCMAKE_C_COMPILER=$USE_CC $FOPTS
+            cmake ${WORKING_DIRECTORY}${FORTRAN_VOLUME_MAP} -DBUILDNAME_PREFIX="docker$BITNESS-$USE_CC" -DBUILDNAME_SUFFIX="$FBRANCH" -DCMAKE_C_COMPILER=$USE_CC $FOPTS
             if [ "x$USEDASH" == "xTRUE" ]; then
                 ctest -j $TESTPROC_FORTRAN -D Experimental
             else
@@ -340,7 +348,7 @@ if [ "x$RUNF" == "xTRUE" ]; then
                 ctest -j $TESTPROC_FORTRAN ; CHECKERR
             fi
             make clean
-            cd ${HOME}
+            cd ${WORKING_DIRECTORY}
             echo ""
         fi
 
@@ -362,7 +370,7 @@ if [ "x$RUNF" == "xTRUE" ]; then
             fi
 
             make clean
-            cd ${HOME}
+            cd ${WORKING_DIRECTORY}
             echo ""
         fi
 
@@ -385,14 +393,14 @@ if [ "x$RUNCXX" == "xTRUE" ]; then
 
             mkdir -p build-netcdf-cxx4
             cd build-netcdf-cxx4
-            cmake ${HOME}${CXX4_VOLUME_MAP} -DBUILDNAME_PREFIX="docker$BITNESS-$USE_CXX" -DBUILDNAME_SUFFIX="$CXXBRANCH" -DCMAKE_CXX_COMPILER=$USE_CXX $CXXOPTS
+            cmake ${WORKING_DIRECTORY}${CXX4_VOLUME_MAP} -DBUILDNAME_PREFIX="docker$BITNESS-$USE_CXX" -DBUILDNAME_SUFFIX="$CXXBRANCH" -DCMAKE_CXX_COMPILER=$USE_CXX $CXXOPTS
             if [ "x$USEDASH" == "xTRUE" ]; then
                 ctest -D Experimental ; CHECKERR
             else
                 make -j $TESTPROC && ctest ; CHECKERR
             fi
             make clean
-            cd ${HOME}
+            cd ${WORKING_DIRECTORY}
             echo ""
         fi
 
@@ -414,7 +422,7 @@ if [ "x$RUNCXX" == "xTRUE" ]; then
             fi
 
             make clean
-            cd ${HOME}
+            cd ${WORKING_DIRECTORY}
             echo ""
         fi
 
@@ -429,11 +437,11 @@ fi
 ###
 if [ "x$RUNJAVA" == "xTRUE" ]; then
     echo -e "o Testing netcdf-java"
-    sudo apt update && sudo apt install -y openjdk-${JDKVER}-jdk
-    cd ${HOME}${JAVA_VOLUME_MAP}
+    ${SUDOCMD} apt update && ${SUDOCMD} apt install -y openjdk-${JDKVER}-jdk
+    cd ${WORKING_DIRECTORY}${JAVA_VOLUME_MAP}
     JNA_PATH=${LIBDIR} ./gradlew clean :netcdf4:test
     ./gradlew clean classes
-    cd ${HOME}
+    cd ${WORKING_DIRECTORY}
 
 fi
 
@@ -445,12 +453,12 @@ if [ "x$RUNP" == "xTRUE" ]; then
 
     while [[ $PCOUNT -le $PREPS ]]; do
         echo "[$PCOUNT | $PREPS] Testing netcdf4-python"
-        cd ${HOME}/netcdf4-python
+        cd ${WORKING_DIRECTORY}/netcdf4-python
         python setup.py build
-        sudo python setup.py install
+        ${SUDOCMD} python setup.py install
         cd test
         python run_all.py
-        cd ${HOME}
+        cd ${WORKING_DIRECTORY}
 
         PCOUNT=$[PCOUNT+1]
 
@@ -466,7 +474,7 @@ if [ "x$RUNNCO" == "xTRUE" ]; then
 
     while [[ $NCOCOUNT -le $NCOREPS ]]; do
         echo "[$NCOCOUNT | $NCOREPS] Testing NCO"
-        cd ${HOME}/nco
+        cd ${WORKING_DIRECTORY}/nco
         CC=$USE_CC ./configure
         make
         make check

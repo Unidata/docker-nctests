@@ -4,10 +4,18 @@
 #
 
 dosummary() {
+    echo -e "===================================="
+    echo -e "\to Current Environmental Variables:"
+    echo -e ""
+    env | sort
+    echo -e ""
+    echo -e ""
+    echo -e "===================================="
     echo -e "Summary:"
     echo -e "\to GITHUB_ACTIONS: ${GITHUB_ACTIONS}"
     echo -e "\to Current User (whoami): $(whoami)"
     echo -e "\to Current directory: $(pwd)"
+    echo -e "\to Working Directory: ${WORKING_DIRECTORY}"
     echo -e "===================================="
     echo -e "\to Contents of current directory:"
     echo -e ""
@@ -17,12 +25,20 @@ dosummary() {
     echo -e ""
     ls -alh /home/tester/
     echo -e "===================================="
+    echo -e "\to Contents of ${WORKING_DIRECTORY}"
     echo -e ""
-    echo -e "\to Environmental Variables:"
-    env | sort
-    echo -e ""
-    echo -e ""
+    ls -alh /home/tester/
+    echo -e "===================================="
 }
+
+# if [ "${GITHUB_ACTIONS}" = "true" -o "${GITHUB_ACTIONS}" = "TRUE" ]; then
+
+
+# fi
+
+if [ "${TESTPROC}" = "" ]; then
+    export TESTPROC=$(nproc)
+fi
 
 dosummary
 
@@ -44,6 +60,12 @@ echo ""
 sleep 1
 
 cd /home/tester
+export WORKING_DIRECTORY=${WORKING_DIRECTORY}/build-$(date +%s)
+
+sudo mkdir -p ${WORKING_DIRECTORY}
+sudo chown -R tester:tester ${WORKING_DIRECTORY}
+cd ${WORKING_DIRECTORY}
+
 
 if [ "x${TESTTYPE}" = "xserial" ]; then
     bash -le /home/tester/run_serial_tests.sh

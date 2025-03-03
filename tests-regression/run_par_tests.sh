@@ -10,6 +10,8 @@ export OMPI_CXX=$USE_CXX
 
 echo -e "Running Parallel Tests"
 
+cd ${WORKING_DIRECTORY}
+
 if [ "x$HELP" != "x" ]; then
     cat /home/tester/README.md
     echo ""
@@ -91,9 +93,8 @@ sleep 3
 if [ -d "${C_VOLUME_MAP}" ]; then
     echo "Using local netcdf-c repository"
     if [ "x$USE_LOCAL_CP" == "xTRUE" ]; then
-        cp -R ${C_VOLUME_MAP} ${HOME}
-    else
-        git clone ${C_VOLUME_MAP} ${HOME}${C_VOLUME_MAP}
+        cp -R ${C_VOLUME_MAP} ${WORKING_DIRECTORY}
+        git clone ${C_VOLUME_MAP} ${WORKING_DIRECTORY}${C_VOLUME_MAP}
     fi
 else
     echo "Using remote netcdf-c repository"
@@ -105,9 +106,9 @@ if [ "x$RUNF" == "xTRUE" ]; then
     if [ -d "${FORTRAN_VOLUME_MAP}" ]; then
         echo "Using local netcdf-fortran repository"
         if [ "x$USE_LOCAL_CP" != "xTRUE" ]; then
-            cp -R ${FORTRAN_VOLUME_MAP} ${HOME}
+            cp -R ${FORTRAN_VOLUME_MAP} ${WORKING_DIRECTORY}
         else
-            git clone ${FORTRAN_VOLUME_MAP} ${HOME}${FORTRAN_VOLUME_MAP}
+            git clone ${FORTRAN_VOLUME_MAP} ${WORKING_DIRECTORY}${FORTRAN_VOLUME_MAP}
         fi
     else
         echo "Using remote netcdf-fortran repository"
@@ -123,16 +124,16 @@ if [ "x$RUNCXX" == "xTRUE" ]; then
     if [ -d "${CXX4_VOLUME_MAP}" ]; then
         echo "Using local netcdf-cxx4 repository"
         if [ "x$USE_LOCAL_CP" == "xTRUE" ]; then
-            cp -R ${CXX4_VOLUME_MAP} ${HOME}
+            cp -R ${CXX4_VOLUME_MAP} ${WORKING_DIRECTORY}
         else
-            git clone ${CXX4_VOLUME_MAP} ${HOME}${CXX4_VOLUME_MAP}
+            git clone ${CXX4_VOLUME_MAP} ${WORKING_DIRECTORY}${CXX4_VOLUME_MAP}
         fi
 
         else
         echo "Using remote netcdf-cxx4 repository"
         git clone http://www.github.com/Unidata${CXX4_VOLUME_MAP} --single-branch --branch $CXXBRANCH --depth=1 $CXXBRANCH
         mv $CXXBRANCH netcdf-cxx4
-        cd ${HOME}
+        cd ${WORKING_DIRECTORY}
     fi
 
 else
@@ -151,7 +152,7 @@ sudo apt update && sudo apt install -y mpich
 #if [ "x${HDF5SRC}" != "x" ]; then
 if [ ! -d "${TARGDIR}" ]; then
     echo "Building HDF5 ${H5VER} from source."
-    sudo ./install_hdf5.sh -c "${USE_CC}" -d "${H5VER}" -j "${TESTPROC}" -t "${TARGDIR}"
+    sudo ${HOME}/install_hdf5.sh -c "${USE_CC}" -d "${H5VER}" -j "${TESTPROC}" -t "${TARGDIR}"
 fi
 
 
@@ -182,7 +183,7 @@ CXXCOUNT=1
 # can be used by the other projects.
 ###
 
-cd ${HOME}
+cd ${WORKING_DIRECTORY}
 
 # CREPS is defined as an environmental variable.
 
@@ -204,7 +205,7 @@ while [[ $CCOUNT -le $CREPS ]]; do
         sleep 2
         mkdir -p build-netcdf-c
         cd build-netcdf-c
-        cmake ${HOME}${C_VOLUME_MAP} -DCMAKE_INSTALL_PREFIX=/usr -DENABLE_HDF4=OFF -DENABLE_EXTRA_TESTS=ON -DENABLE_MMAP=ON -DBUILDNAME_PREFIX="docker$BITNESS-parallel$PARTYPE" -DBUILDNAME_SUFFIX="$CBRANCH" -DCMAKE_C_COMPILER=mpicc -DENABLE_PNETCDF=ON -DENABLE_PARALLEL_TESTS="${RUNC}" -DENABLE_TESTS="${RUNC}" $COPTS -DCMAKE_C_FLAGS="${CMEM}"
+        cmake ${WORKING_DIRECTORY}${C_VOLUME_MAP} -DCMAKE_INSTALL_PREFIX=/usr -DENABLE_HDF4=OFF -DENABLE_EXTRA_TESTS=ON -DENABLE_MMAP=ON -DBUILDNAME_PREFIX="docker$BITNESS-parallel$PARTYPE" -DBUILDNAME_SUFFIX="$CBRANCH" -DCMAKE_C_COMPILER=mpicc -DENABLE_PNETCDF=ON -DENABLE_PARALLEL_TESTS="${RUNC}" -DENABLE_TESTS="${RUNC}" $COPTS -DCMAKE_C_FLAGS="${CMEM}"
 
         if [ "x$RUNC" == "xTRUE" ]; then
             if [ "x$USEDASH" == "xTRUE" ]; then
@@ -213,7 +214,7 @@ while [[ $CCOUNT -le $CREPS ]]; do
                 make -j $TESTPROC && ctest -j $TESTPROC ; CHECKERR
             fi
         fi
-        cd ${HOME}
+        cd ${WORKING_DIRECTORY}
         echo ""
     fi
 
@@ -237,7 +238,7 @@ while [[ $CCOUNT -le $CREPS ]]; do
             fi
 
         fi
-        cd ${HOME}
+        cd ${WORKING_DIRECTORY}
         echo ""
     fi
 
@@ -254,7 +255,7 @@ elif [ "x$USEAC" = "xTRUE" ]; then
     sudo make install -j $TESTPROC ; CHECKERR
 fi
 
-cd ${HOME}
+cd ${WORKING_DIRECTORY}
 
 sudo ldconfig
 
@@ -271,10 +272,10 @@ if [ "x$RUNF" == "xTRUE" ]; then
         if [ "x$USECMAKE" = "xTRUE" ]; then
             echo "[$FCOUNT | $FREPS] Testing netCDF-Fortran - CMAKE"
             echo "----------------------------------"
-            cd ${HOME}
+            cd ${WORKING_DIRECTORY}
             mkdir -p build-netcdf-fortran
             cd build-netcdf-fortran
-            cmake ${HOME}${FORTRAN_VOLUME_MAP} -DBUILDNAME_PREFIX="docker$BITNESS-parallel$PARTYPE" -DBUILDNAME_SUFFIX="$FBRANCH" -DTEST_PARALLEL=OFF -DCMAKE_Fortran_COMPILER=$(which mpif90) $FOPTS
+            cmake ${WORKING_DIRECTORY}${FORTRAN_VOLUME_MAP} -DBUILDNAME_PREFIX="docker$BITNESS-parallel$PARTYPE" -DBUILDNAME_SUFFIX="$FBRANCH" -DTEST_PARALLEL=OFF -DCMAKE_Fortran_COMPILER=$(which mpif90) $FOPTS
 
             if [ "x$USEDASH" == "xTRUE" ]; then
                 ctest -j $TESTPROC_FORTRAN -D Experimental
@@ -283,7 +284,7 @@ if [ "x$RUNF" == "xTRUE" ]; then
                 ctest -j $TESTPROC_FORTRAN ; CHECKERR
             fi
             make clean
-            cd ${HOME}
+            cd ${WORKING_DIRECTORY}
             echo ""
         fi
 
@@ -305,7 +306,7 @@ if [ "x$RUNF" == "xTRUE" ]; then
             fi
 
             make clean
-            cd ${HOME}
+            cd ${WORKING_DIRECTORY}
             echo ""
         fi
 
@@ -326,7 +327,7 @@ if [ "x$RUNCXX" == "xTRUE" ]; then
 
             mkdir -p build-netcdf-cxx4
             cd build-netcdf-cxx4
-            cmake ${HOME}${CXX4_VOLUME_MAP} -DBUILDNAME_PREFIX="docker$BITNESS-parallel$PARTYPE" -DBUILDNAME_SUFFIX="$CXXBRANCH" -DCMAKE_C_COMPILER=$(which mpicc) -DCMAKE_CXX_COMPILER=$(which mpic++) $CXXOPTS
+            cmake ${WORKING_DIRECTORY}{CXX4_VOLUME_MAP} -DBUILDNAME_PREFIX="docker$BITNESS-parallel$PARTYPE" -DBUILDNAME_SUFFIX="$CXXBRANCH" -DCMAKE_C_COMPILER=$(which mpicc) -DCMAKE_CXX_COMPILER=$(which mpic++) $CXXOPTS
 
             if [ "x$USEDASH" == "xTRUE" ]; then
                 ctest -D Experimental ; CHECKERR
@@ -335,7 +336,7 @@ if [ "x$RUNCXX" == "xTRUE" ]; then
                 make test ; CHECKERR
             fi
             make clean
-            cd ${HOME}
+            cd ${WORKING_DIRECTORY}
             echo ""
         fi
 
@@ -357,7 +358,7 @@ if [ "x$RUNCXX" == "xTRUE" ]; then
             fi
 
             make clean
-            cd ${HOME}
+            cd ${WORKING_DIRECTORY}
             echo ""
         fi
 
@@ -375,12 +376,12 @@ fi
 #
 #    while [[ $PCOUNT -le $PREPS ]]; do
 #        echo "[$PCOUNT | $PREPS] Testing netcdf4-python"
-#        cd ${HOME}/netcdf4-python
+#        cd ${WORKING_DIRECTORY}/netcdf4-python
 #        python setup.py build
 #        python setup.py install
 #        cd test
 #        python run_all.py
-#        cd ${HOME}
+#        cd ${WORKING_DIRECTORY}
 #
 #        PCOUNT=$[PCOUNT+1]
 #
