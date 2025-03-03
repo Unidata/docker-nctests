@@ -69,12 +69,12 @@ sleep 3
 # specified by "CBRANCH", "FBRANCH", "CXXBRANCH"
 ###
 
-if [ -d "/netcdf-c" ]; then
+if [ -d "${C_VOLUME_MAP}" ]; then
     echo "Using local netcdf-c repository"
     if [ "x$USE_LOCAL_CP" == "xTRUE" ]; then
-        cp -R /netcdf-c ${HOME}
+        cp -R ${C_VOLUME_MAP} ${HOME}
     else
-        git clone /netcdf-c ${HOME}/netcdf-c
+        git clone ${C_VOLUME_MAP} ${HOME}${C_VOLUME_MAP}
     fi
 else
     echo "Using remote netcdf-c repository"
@@ -84,12 +84,12 @@ fi
 
 if [ "x$RUNF" == "xTRUE" ]; then
 
-    if [ -d "/netcdf-fortran" ]; then
+    if [ -d "${FORTRAN_VOLUME_MAP}" ]; then
         echo "Using local netcdf-fortran repository"
         if [ "x$USE_LOCAL_CP" != "xTRUE" ]; then
-            cp -R /netcdf-fortran ${HOME}
+            cp -R ${FORTRAN_VOLUME_MAP} ${HOME}
         else
-            git clone /netcdf-fortran ${HOME}/netcdf-fortran
+            git clone ${FORTRAN_VOLUME_MAP} ${HOME}${FORTRAN_VOLUME_MAP}
         fi
     else
         echo "Using remote netcdf-fortran repository"
@@ -103,12 +103,12 @@ fi
 
 if [ "x$RUNCXX" == "xTRUE" ]; then
 
-    if [ -d "/netcdf-cxx4" ]; then
+    if [ -d "${CXX4_VOLUME_MAP}" ]; then
         echo "Using local netcdf-cxx4 repository"
         if [ "x$USE_LOCAL_CP" == "xTRUE" ]; then
-            cp -R /netcdf-cxx4 ${HOME}
+            cp -R ${CXX4_VOLUME_MAP} ${HOME}
         else
-            git clone /netcdf-cxx4 ${HOME}/netcdf-cxx4
+            git clone ${CXX4_VOLUME_MAP} ${HOME}${CXX4_VOLUME_MAP}
         fi
 
         else
@@ -123,12 +123,12 @@ fi
 
 if [ "x$RUNJAVA" == "xTRUE" ]; then
 
-    if [ -d "/netcdf-java" ]; then
+    if [ -d "${JAVA_VOLUME_MAP}" ]; then
         echo "Using local netcdf-cxx4 repository"
         if [ "x$USE_LOCAL_JAVA" == "xTRUE" ]; then
-            cp -R /netcdf-java ${HOME}
+            cp -R ${JAVA_VOLUME_MAP} ${HOME}
         else
-            git clone /netcdf-java ${HOME}/netcdf-java
+            git clone ${JAVA_VOLUME_MAP} ${HOME}${JAVA_VOLUME_MAP}
         fi
 
         else
@@ -244,7 +244,7 @@ while [[ $CCOUNT -le $CREPS ]]; do
         sleep 2
         mkdir -p build-netcdf-c
         cd build-netcdf-c
-        cmake ${HOME}/netcdf-c -DCMAKE_INSTALL_PREFIX=${TARGDIR} -DNETCDF_ENABLE_HDF4=OFF -DNETCDF_ENABLE_MMAP=ON -DBUILDNAME_PREFIX="docker$BITNESS-$USE_CC" -DBUILDNAME_SUFFIX="$CBRANCH" -DCMAKE_C_COMPILER=$USE_CC $COPTS -DCMAKE_C_FLAGS="${CMEM}" -D NETCDF_ENABLE_TESTS="${RUNC}"; CHECKERR
+        cmake ${HOME}${C_VOLUME_MAP} -DCMAKE_INSTALL_PREFIX=${TARGDIR} -DNETCDF_ENABLE_HDF4=OFF -DNETCDF_ENABLE_MMAP=ON -DBUILDNAME_PREFIX="docker$BITNESS-$USE_CC" -DBUILDNAME_SUFFIX="$CBRANCH" -DCMAKE_C_COMPILER=$USE_CC $COPTS -DCMAKE_C_FLAGS="${CMEM}" -D NETCDF_ENABLE_TESTS="${RUNC}"; CHECKERR
         make clean
 
         if [ "x$RUNC" == "xTRUE" ]; then
@@ -332,7 +332,7 @@ if [ "x$RUNF" == "xTRUE" ]; then
             cd ${HOME}
             mkdir -p build-netcdf-fortran
             cd build-netcdf-fortran
-            cmake ${HOME}/netcdf-fortran -DBUILDNAME_PREFIX="docker$BITNESS-$USE_CC" -DBUILDNAME_SUFFIX="$FBRANCH" -DCMAKE_C_COMPILER=$USE_CC $FOPTS
+            cmake ${HOME}${FORTRAN_VOLUME_MAP} -DBUILDNAME_PREFIX="docker$BITNESS-$USE_CC" -DBUILDNAME_SUFFIX="$FBRANCH" -DCMAKE_C_COMPILER=$USE_CC $FOPTS
             if [ "x$USEDASH" == "xTRUE" ]; then
                 ctest -j $TESTPROC_FORTRAN -D Experimental
             else
@@ -385,7 +385,7 @@ if [ "x$RUNCXX" == "xTRUE" ]; then
 
             mkdir -p build-netcdf-cxx4
             cd build-netcdf-cxx4
-            cmake ${HOME}/netcdf-cxx4 -DBUILDNAME_PREFIX="docker$BITNESS-$USE_CXX" -DBUILDNAME_SUFFIX="$CXXBRANCH" -DCMAKE_CXX_COMPILER=$USE_CXX $CXXOPTS
+            cmake ${HOME}${CXX4_VOLUME_MAP} -DBUILDNAME_PREFIX="docker$BITNESS-$USE_CXX" -DBUILDNAME_SUFFIX="$CXXBRANCH" -DCMAKE_CXX_COMPILER=$USE_CXX $CXXOPTS
             if [ "x$USEDASH" == "xTRUE" ]; then
                 ctest -D Experimental ; CHECKERR
             else
@@ -430,7 +430,7 @@ fi
 if [ "x$RUNJAVA" == "xTRUE" ]; then
     echo -e "o Testing netcdf-java"
     sudo apt update && sudo apt install -y openjdk-${JDKVER}-jdk
-    cd ${HOME}/netcdf-java
+    cd ${HOME}${JAVA_VOLUME_MAP}
     JNA_PATH=${LIBDIR} ./gradlew clean :netcdf4:test
     ./gradlew clean classes
     cd ${HOME}
