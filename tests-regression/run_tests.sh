@@ -41,6 +41,7 @@ echo "Using compiler: ${USE_CC}"
 echo ""
 sleep 1
 
+cd /home/tester
 
 if [ "x${TESTTYPE}" = "xserial" ]; then
     bash -le /home/tester/run_serial_tests.sh

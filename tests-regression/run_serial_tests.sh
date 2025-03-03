@@ -140,9 +140,6 @@ else
     echo "Skipping Java"
 fi
 
-
-
-
 if [ "x$RUNP" == "xTRUE" ]; then
     if [ -d "/netcdf4-python" ]; then
         echo "Using local netcdf4-python repository"
