@@ -26,6 +26,8 @@ dosummary() {
 
 dosummary
 
+
+
 if [ "x${USE_CC}" = "xmpicc" ]; then
     TESTTYPE="mpich"
 elif [ "x${USE_CC}" = "xgcc" -o "x${USE_CC}" = "xclang" ]; then
@@ -50,4 +52,3 @@ elif [ "x${TESTTYPE}" = "xmpich" ]; then
 else
     echo "Error: Unknown TESTTYPE"
 fi
-
