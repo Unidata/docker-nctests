@@ -77,12 +77,12 @@ sleep 3
 # specified by "CBRANCH", "FBRANCH", "CXXBRANCH"
 ###
 
-if [ -d "${C_VOLUME_MAP}" ]; then
+if [ -d "/netcdf-c" ]; then
     echo "Using local netcdf-c repository"
     if [ "x$USE_LOCAL_CP" == "xTRUE" ]; then
-        cp -R ${C_VOLUME_MAP} ${WORKING_DIRECTORY}
+        cp -R /netcdf-c ${WORKING_DIRECTORY}
     else
-        git clone ${C_VOLUME_MAP} ${WORKING_DIRECTORY}${C_VOLUME_MAP}
+        git clone /netcdf-c ${WORKING_DIRECTORY}/netcdf-c
     fi
 else
     echo "Using remote netcdf-c repository"
@@ -92,12 +92,12 @@ fi
 
 if [ "x$RUNF" == "xTRUE" ]; then
 
-    if [ -d "${FORTRAN_VOLUME_MAP}" ]; then
+    if [ -d "/netcdf-fortran" ]; then
         echo "Using local netcdf-fortran repository"
         if [ "x$USE_LOCAL_CP" != "xTRUE" ]; then
-            cp -R ${FORTRAN_VOLUME_MAP} ${WORKING_DIRECTORY}
+            cp -R /netcdf-fortran ${WORKING_DIRECTORY}
         else
-            git clone ${FORTRAN_VOLUME_MAP} ${WORKING_DIRECTORY}${FORTRAN_VOLUME_MAP}
+            git clone /netcdf-fortran ${WORKING_DIRECTORY}/netcdf-fortran
         fi
     else
         echo "Using remote netcdf-fortran repository"
@@ -109,34 +109,34 @@ else
 fi
 
 
-if [ "x$RUNCXX" == "xTRUE" ]; then
+if [ "x$RUNCXX4" == "xTRUE" ]; then
 
-    if [ -d "${CXX4_VOLUME_MAP}" ]; then
+    if [ -d "/netcdf-cxx4" ]; then
         echo "Using local netcdf-cxx4 repository"
         if [ "x$USE_LOCAL_CP" == "xTRUE" ]; then
-            cp -R ${CXX4_VOLUME_MAP} ${WORKING_DIRECTORY}
+            cp -R /netcdf-cxx4 ${WORKING_DIRECTORY}
         else
-            git clone ${CXX4_VOLUME_MAP} ${WORKING_DIRECTORY}${CXX4_VOLUME_MAP}
+            git clone /netcdf-cxx4 ${WORKING_DIRECTORY}/netcdf-c
         fi
 
         else
         echo "Using remote netcdf-cxx4 repository"
-        git clone http://www.github.com/Unidata/netcdf-cxx4 --single-branch --branch $CXXBRANCH --depth=1 $CXXBRANCH
-        mv $CXXBRANCH netcdf-cxx4
+        git clone http://www.github.com/Unidata/netcdf-cxx4 --single-branch --branch $CXX4BRANCH --depth=1 $CXX4BRANCH
+        mv $CXX4BRANCH netcdf-cxx4
     fi
 else
-    echo "Skipping CXX"
+    echo "Skipping CXX4"
 fi
 
 
 if [ "x$RUNJAVA" == "xTRUE" ]; then
 
-    if [ -d "${JAVA_VOLUME_MAP}" ]; then
+    if [ -d "/netcdf-java" ]; then
         echo "Using local netcdf-cxx4 repository"
         if [ "x$USE_LOCAL_JAVA" == "xTRUE" ]; then
-            cp -R ${JAVA_VOLUME_MAP} ${WORKING_DIRECTORY}
+            cp -R /netcdf-java ${WORKING_DIRECTORY}
         else
-            git clone ${JAVA_VOLUME_MAP} ${WORKING_DIRECTORY}${JAVA_VOLUME_MAP}
+            git clone /netcdf-java ${WORKING_DIRECTORY}/netcdf-java
         fi
 
         else
@@ -194,12 +194,9 @@ if [ ! -d "${TARGDIR}" ]; then
     ${SUDOCMD} /home/tester/install_hdf5.sh -c "${USE_CC}" -d "${H5VER}" -j "${TESTPROC}" -t "${TARGDIR}"
 fi
 
-
 ###
 # Configure Environmental Variables
 ###
-
-
 
 export CPPFLAGS="-I${TARGDIR}/include"
 export CFLAGS="-I${TARGDIR}/include"
@@ -208,7 +205,6 @@ export LD_LIBRARY_PATH="${TARGDIR}/lib"
 export LIBDIR="${TARGDIR}/lib"
 export PATH="${TARGDIR}/bin:$PATH"
 export CMAKE_PREFIX_PATH="${TARGDIR}"
-
 
 ###
 # Initalize some variables
@@ -252,7 +248,7 @@ while [[ $CCOUNT -le $CREPS ]]; do
         sleep 2
         mkdir -p build-netcdf-c
         cd build-netcdf-c
-        cmake ${WORKING_DIRECTORY}${C_VOLUME_MAP} -DCMAKE_INSTALL_PREFIX=${TARGDIR} -DNETCDF_ENABLE_HDF4=OFF -DNETCDF_ENABLE_MMAP=ON -DBUILDNAME_PREFIX="docker$BITNESS-$USE_CC" -DBUILDNAME_SUFFIX="$CBRANCH" -DCMAKE_C_COMPILER=$USE_CC $COPTS -DCMAKE_C_FLAGS="${CMEM}" -D NETCDF_ENABLE_TESTS="${RUNC}"; CHECKERR
+        cmake ${WORKING_DIRECTORY}/netcdf-c -DCMAKE_INSTALL_PREFIX=${TARGDIR} -DNETCDF_ENABLE_HDF4=OFF -DNETCDF_ENABLE_MMAP=ON -DBUILDNAME_PREFIX="docker$BITNESS-$USE_CC" -DBUILDNAME_SUFFIX="$CBRANCH" -DCMAKE_C_COMPILER=$USE_CC $COPTS -DCMAKE_C_FLAGS="${CMEM}" -D NETCDF_ENABLE_TESTS="${RUNC}"; CHECKERR
         make clean
 
         if [ "x$RUNC" == "xTRUE" ]; then
@@ -340,7 +336,7 @@ if [ "x$RUNF" == "xTRUE" ]; then
             cd ${WORKING_DIRECTORY}
             mkdir -p build-netcdf-fortran
             cd build-netcdf-fortran
-            cmake ${WORKING_DIRECTORY}${FORTRAN_VOLUME_MAP} -DBUILDNAME_PREFIX="docker$BITNESS-$USE_CC" -DBUILDNAME_SUFFIX="$FBRANCH" -DCMAKE_C_COMPILER=$USE_CC $FOPTS
+            cmake ${WORKING_DIRECTORY}/netcdf-fortran -DBUILDNAME_PREFIX="docker$BITNESS-$USE_CC" -DBUILDNAME_SUFFIX="$FBRANCH" -DCMAKE_C_COMPILER=$USE_CC $FOPTS
             if [ "x$USEDASH" == "xTRUE" ]; then
                 ctest -j $TESTPROC_FORTRAN -D Experimental
             else
@@ -393,7 +389,7 @@ if [ "x$RUNCXX" == "xTRUE" ]; then
 
             mkdir -p build-netcdf-cxx4
             cd build-netcdf-cxx4
-            cmake ${WORKING_DIRECTORY}${CXX4_VOLUME_MAP} -DBUILDNAME_PREFIX="docker$BITNESS-$USE_CXX" -DBUILDNAME_SUFFIX="$CXXBRANCH" -DCMAKE_CXX_COMPILER=$USE_CXX $CXXOPTS
+            cmake ${WORKING_DIRECTORY}/netcdf-c -DBUILDNAME_PREFIX="docker$BITNESS-$USE_CXX" -DBUILDNAME_SUFFIX="$CXXBRANCH" -DCMAKE_CXX_COMPILER=$USE_CXX $CXXOPTS
             if [ "x$USEDASH" == "xTRUE" ]; then
                 ctest -D Experimental ; CHECKERR
             else
@@ -438,7 +434,7 @@ fi
 if [ "x$RUNJAVA" == "xTRUE" ]; then
     echo -e "o Testing netcdf-java"
     ${SUDOCMD} apt update && ${SUDOCMD} apt install -y openjdk-${JDKVER}-jdk
-    cd ${WORKING_DIRECTORY}${JAVA_VOLUME_MAP}
+    cd ${WORKING_DIRECTORY}/netcdf-java
     JNA_PATH=${LIBDIR} ./gradlew clean :netcdf4:test
     ./gradlew clean classes
     cd ${WORKING_DIRECTORY}

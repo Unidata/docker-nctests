@@ -3,6 +3,12 @@
 # Depending on value of TESTTYPE, run the appropriate script.
 #
 
+if [ "${USER}" = "root" ]; then
+    export SUDOCMD=""
+else
+    export SUDOCMD="sudo"
+fi
+
 dosummary() {
     echo -e "===================================="
     echo -e "\to Current Environmental Variables:"
@@ -35,15 +41,27 @@ if [ "${GITHUB_ACTIONS}" = "true" -o "${GITHUB_ACTIONS}" = "TRUE" ]; then
 
     if [ "${REPO_TYPE}" = "c" ]; then
         export C_VOLUME_MAP="/github/workspace"
+        ${SUDOCMD} mkdir -p /netcdf-c
+        ${SUDOCMD} cp -R /github/workspace/. /netcdf-c
+        ${SUDOCMD} chown -R tester:tester /netcdf-c
     fi
     if [ "${REPO_TYPE}" = "fortran" ]; then
         export FORTRAN_VOLUME_MAP="/github/workspace"
+        ${SUDOCMD} mkdir -p /netcdf-fortran
+        ${SUDOCMD} cp -R /github/workspace/. /netcdf-fortran
+        ${SUDOCMD} chown -R tester:tester /netcdf-fortran
     fi
     if [ "${REPO_TYPE}" = "cxx4" ]; then
         export CXX4_VOLUME_MAP="/github/workspace"
+        ${SUDOCMD} mkdir -p /netcdf-cxx4
+        ${SUDOCMD} cp -R /github/workspace/. /netcdf-cxx4
+        ${SUDOCMD} chown -R tester:tester /netcdf-cxx4
     fi
     if [ "${REPO_TYPE}" = "java" ]; then
         export JAVA_VOLUME_MAP="/github/workspace"
+        ${SUDOCMD} mkdir -p /netcdf-java
+        ${SUDOCMD} cp -R /github/workspace/. /netcdf-java
+        ${SUDOCMD} chown -R tester:tester /netcdf-java
     fi    
 
 fi
@@ -74,8 +92,8 @@ sleep 1
 cd /home/tester
 export WORKING_DIRECTORY=${WORKING_DIRECTORY}/build-$(date +%s)
 
-sudo mkdir -p ${WORKING_DIRECTORY}
-sudo chown -R tester:tester ${WORKING_DIRECTORY}
+${SUDOCMD} mkdir -p ${WORKING_DIRECTORY}
+${SUDOCMD} chown -R tester:tester ${WORKING_DIRECTORY}
 cd ${WORKING_DIRECTORY}
 
 
