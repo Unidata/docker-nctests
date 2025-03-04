@@ -83,7 +83,7 @@ echo -e "======================================"
 ##
 # Run C Test
 ## 
-DCMD="docker run --rm -it -v ${NCDIR}:/github/workspace -f ${NFDIR}:/netcdf-fortran -v ${ENVDIR}:/environments -e GITHUB_ACTIONS="TRUE" -e REPO_TYPE="c" docker.unidata.ucar.edu/nctests"
+DCMD="docker run --rm -it -v ${NCDIR}:/github/workspace -v ${NFDIR}:/netcdf-fortran -v ${ENVDIR}:/environments -e GITHUB_ACTIONS="TRUE" -e REPO_TYPE="c" docker.unidata.ucar.edu/nctests"
 echo -e "\to NetCDF-C"
 echo -e "\t\to GITHUB_ACTIONS=TRUE"
 echo -e "\t\to REPO_TYPE=c"
@@ -94,7 +94,7 @@ ${DCMD} >> ${LOGFILE} 2>&1 ; CHECKERR
 ##
 # Run Fortran Test
 ##
-DCMD="docker run --rm -it -v ${NCDIR}:/netcdf-c -v ${NFDIR}:/github/workspace -v ${ENVDIR}:/environments  -e GITHUB_ACTIONS="TRUE" -e RUNC=OFF -e REPO_TYPE="fortran" docker.unidata.ucar.edu/nctests"
+DCMD="docker run --rm -it -v ${NCDIR}:/netcdf-c -v ${NFDIR}:/github/workspace -v ${ENVDIR}:/environments -e GITHUB_ACTIONS="TRUE" -e RUNC=OFF -e REPO_TYPE="fortran" docker.unidata.ucar.edu/nctests"
 echo -e "\to NetCDF-Fortran"
 echo -e "\t\to GITHUB_ACTIONS=TRUE"
 echo -e "\t\to REPO_TYPE=fortran"
