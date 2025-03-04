@@ -72,8 +72,6 @@ fi
 
 dosummary
 
-
-
 if [ "x${USE_CC}" = "xmpicc" ]; then
     TESTTYPE="mpich"
 elif [ "x${USE_CC}" = "xgcc" -o "x${USE_CC}" = "xclang" ]; then
@@ -93,6 +91,7 @@ cd /home/tester
 export WORKING_DIRECTORY=${WORKING_DIRECTORY}/build-$(date +%s)
 
 ${SUDOCMD} mkdir -p ${WORKING_DIRECTORY}
+${SUDOCMD} mkdir -p ${RESULTS_DIRECTORY}
 ${SUDOCMD} chown -R tester:tester ${WORKING_DIRECTORY}
 cd ${WORKING_DIRECTORY}
 

@@ -444,7 +444,9 @@ if [ "x$RUNJAVA" == "xTRUE" ]; then
 
     # run netCDF-Java tests that rely on the netCDF-C library
     # and do not trigger trap on failure
-    JNA_PATH=${LIBDIR} ./gradlew ${GRADLE_OPTS} clean :netcdf4:test || true
+    set +e
+    JNA_PATH=${LIBDIR} ./gradlew ${GRADLE_OPTS} clean :netcdf4:test
+    GRADLERET=$?
 
     if [ -d "/results" ]; then
         # prepare netCDF-Java results directory
@@ -461,6 +463,12 @@ if [ "x$RUNJAVA" == "xTRUE" ]; then
         # a core dump
         find ./netcdf4 -maxdepth 1 -name \*.log -exec cp {} /results/netcdf-java \;
     fi
+    
+    set -e
+    if [ $GRADLERET -ne 0 ]; then
+        exit $GRADLERET
+    fi
+
     cd ${WORKING_DIRECTORY}
 
 fi
