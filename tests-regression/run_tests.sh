@@ -27,14 +27,26 @@ dosummary() {
     echo -e "===================================="
     echo -e "\to Contents of ${WORKING_DIRECTORY}"
     echo -e ""
-    ls -alh /home/tester/
+    ls -alh ${WORKING_DIRECTOR}
     echo -e "===================================="
 }
 
-# if [ "${GITHUB_ACTIONS}" = "true" -o "${GITHUB_ACTIONS}" = "TRUE" ]; then
+if [ "${GITHUB_ACTIONS}" = "true" -o "${GITHUB_ACTIONS}" = "TRUE" ]; then
 
+    if [ "${REPO_TYPE}" = "c" ]; then
+        export C_VOLUME_MAP="/github/workspace"
+    fi
+    if [ "${REPO_TYPE}" = "fortran" ]; then
+        export FORTRAN_VOLUME_MAP="/github/workspace"
+    fi
+    if [ "${REPO_TYPE}" = "cxx4" ]; then
+        export CXX4_VOLUME_MAP="/github/workspace"
+    fi
+    if [ "${REPO_TYPE}" = "java" ]; then
+        export JAVA_VOLUME_MAP="/github/workspace"
+    fi    
 
-# fi
+fi
 
 if [ "${TESTPROC}" = "" ]; then
     export TESTPROC=$(nproc)
