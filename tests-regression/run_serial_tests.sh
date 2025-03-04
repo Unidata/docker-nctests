@@ -433,10 +433,34 @@ fi
 ###
 if [ "x$RUNJAVA" == "xTRUE" ]; then
     echo -e "o Testing netcdf-java"
-    ${SUDOCMD} apt update && ${SUDOCMD} apt install -y openjdk-${JDKVER}-jdk
+
+    ${SUDOCMD} apt update && sudo apt install -y openjdk-${JDKVER}-jdk
     cd ${WORKING_DIRECTORY}/netcdf-java
-    JNA_PATH=${LIBDIR} ./gradlew clean :netcdf4:test
-    ./gradlew clean classes
+
+    GRADLE_OPTS="-DrunSlowTests=True"
+    if [ -d "/share/testdata/cdmUnitTest" ]; then
+        GRADLE_OPTS="${GRADLE_OPTS} -Dunidata.testdata.path=/share/testdata"
+    fi
+
+    # run netCDF-Java tests that rely on the netCDF-C library
+    # and do not trigger trap on failure
+    JNA_PATH=${LIBDIR} ./gradlew ${GRADLE_OPTS} clean :netcdf4:test || true
+
+    if [ -d "/results" ]; then
+        # prepare netCDF-Java results directory
+        if [ -d "/results/netcdf-java" ]; then
+            rm -rf /results/netcdf-java/*
+        else
+            mkdir /results/netcdf-java
+        fi
+        # copy junit test report
+        if [ -f "./netcdf4/build/reports/tests/test/index.html" ]; then
+            cp -r netcdf4/build/reports/tests/test/* /results/netcdf-java
+        fi
+        # copy java error log file if something in the netCDF-C stack trigggers
+        # a core dump
+        find ./netcdf4 -maxdepth 1 -name \*.log -exec cp {} /results/netcdf-java \;
+    fi
     cd ${WORKING_DIRECTORY}
 
 fi
