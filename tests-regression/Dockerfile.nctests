@@ -113,10 +113,8 @@ WORKDIR ${HOME}
 # Add the utility scripts, for portability.
 ###
 
-COPY run_serial_tests.sh ${HOME}/
-COPY run_par_tests.sh ${HOME}/
+COPY run_netcdf_tests.sh ${HOME}/
 COPY run_tests.sh ${HOME}/
-COPY push_all_nctest_images.sh ${HOME}/
 COPY install_hdf5.sh ${HOME}/
 COPY README.md ${HOME}/
 
@@ -126,8 +124,7 @@ USER root
 RUN chown -R tester:tester ${HOME}
 USER ${CUSER}
 
-RUN dos2unix ${HOME}/run_serial_tests.sh
-RUN dos2unix ${HOME}/run_par_tests.sh
 RUN dos2unix ${HOME}/run_tests.sh
+RUN dos2unix ${HOME}/run_netcdf_tests.sh 
 
 ENTRYPOINT ["/bin/bash", "-l", "-e", "/home/tester/run_tests.sh"]
