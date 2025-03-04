@@ -90,7 +90,7 @@ echo -e "\t\to REPO_TYPE=c"
 echo -e "\t\to command: ${DCMD}"
 
 ${DCMD} >> ${LOGFILE} 2>&1 ; CHECKERR
-
+echo -e ""
 ##
 # Run Fortran Test
 ##
@@ -101,7 +101,7 @@ echo -e "\t\to REPO_TYPE=fortran"
 echo -e "\t\to command: ${DCMD}"
 
 ${DCMD} >> ${LOGFILE} 2>&1 ; CHECKERR
-
+echo -e ""
 ##
 # Run Java Test
 ##
@@ -118,4 +118,4 @@ ${DCMD} >> ${LOGFILE} 2>&1 ; CHECKERR
 ###
 echo -e ""
 echo -e "Finished"
-
+echo -e ""
