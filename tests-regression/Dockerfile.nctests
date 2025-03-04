@@ -35,6 +35,26 @@ ENV NCOBRANCH=master
 ENV JAVABRANCH=maint-5.x
 ENV JDKVER=8
 
+##
+# Specify the locations for local mapped volumes if we want to skip git checkout.
+# This will allow us to change it dynamically if we are running on Github Actions or some
+# other platorm.
+##
+ENV C_VOLUME_MAP=/netcdf-c
+ENV FORTRAN_VOLUME_MAP=/netcdf-fortran
+ENV CXX4_VOLUME_MAP=/netcdf-cxx4
+ENV JAVA_VOLUME_MAP=/netcdf-java
+
+##
+# Specify a working directory so that we can do a volume mount
+# to capture all the output, if need be.
+##
+
+ENV WORKING_DIRECTORY=/workdir
+
+##
+# Other variables
+##
 ENV BITNESS=64
 ENV USE_CC=gcc
 ENV USE_CXX=g++
@@ -56,10 +76,10 @@ ENV FREPS=1
 ENV CXXREPS=1
 ENV PREPS=1
 ENV NCOREPS=1
-ENV TESTPROC=1
+ENV TESTPROC=""
 ENV TESTPROC_FORTRAN=1
 ENV CUSER=tester
-ENV CUSSERPWORD="password.1234"
+ENV CUSSERPWORD=""
 
 
 
@@ -100,7 +120,7 @@ COPY push_all_nctest_images.sh ${HOME}/
 COPY install_hdf5.sh ${HOME}/
 COPY README.md ${HOME}/
 
-RUN echo "Version:\n\tunidata/nctests ($BITNESS) :\t$NCTEST_VERSION\t$(date)" > $VERSION_FILE
+RUN echo "Version:\n\tunidata/nctests ($BITNESS) :\t$NCTEST_VERSION\t$(date)" > "/home/tester/${VERSION_FILE}"
 
 USER root
 RUN chown -R tester:tester ${HOME}
