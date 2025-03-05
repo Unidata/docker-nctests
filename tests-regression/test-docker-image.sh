@@ -1,8 +1,7 @@
 #!/bin/bash
 #
-# This script tests the docker container by checking out the netcdf-c and netcdf-fortran directories,
-# setting the appropriate environmental variables to test a github environment/
-# e.g. GITHUB_ACTIONS=TRUE, REPO_TYPE="c/fortran/cxx4/java"
+# This script tests the docker container by checking out the netcdf-c, netcdf-fortran, and
+# netcdf-java directories.
 #
 
 CHECKERR() {
