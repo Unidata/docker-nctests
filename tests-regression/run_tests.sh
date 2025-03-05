@@ -96,11 +96,4 @@ ${SUDOCMD} mkdir -p ${WORKING_DIRECTORY}
 ${SUDOCMD} chown -R tester:tester ${WORKING_DIRECTORY}
 cd ${WORKING_DIRECTORY}
 
-
-if [ "x${TESTTYPE}" = "xserial" ]; then
-    bash -le /home/tester/run_serial_tests.sh
-elif [ "x${TESTTYPE}" = "xmpich" ]; then
-    bash -le /home/tester/run_par_tests.sh
-else
-    echo "Error: Unknown TESTTYPE"
-fi
+bash -le /home/tester/run_netcdf_tests.sh

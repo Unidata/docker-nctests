@@ -1,8 +1,7 @@
 #!/bin/bash
 #
-# This script tests the docker container by checking out the netcdf-c and netcdf-fortran directories,
-# setting the appropriate environmental variables to test a github environment/
-# e.g. GITHUB_ACTIONS=TRUE, REPO_TYPE="c/fortran/cxx4/java"
+# This script tests the docker container by checking out the netcdf-c, netcdf-fortran, and
+# netcdf-java directories.
 #
 
 CHECKERR() {
@@ -68,50 +67,39 @@ git clone git@github.com:Unidata/netcdf-java --single-branch --branch ${NJVER} $
 # Begin running tests
 ###
 
-
-DCMD="docker run --rm -it -v ${NCDIR}:/netcdf-c -v ${NFDIR}:/netcdf-fortran -v ${ENVDIR}:/environments -v ${NFDIR}:/netcdf-fortran docker.unidata.ucar.edu/nctests"
+DCMD="docker run --rm -it -v ${NCDIR}:/netcdf-c -v ${NFDIR}:/netcdf-fortran -v ${NJVER}:/netcdf-java -v ${ENVDIR}:/environments -e USE_CC=gcc docker.unidata.ucar.edu/nctests"
 echo ""
-echo -e "Running Baseline Docker Test:"
-echo -e "============================="
-echo -e "\to NetCDF-C, NetCDF-Fortran"
+echo -e "Running Baseline Docker Test (gcc):"
+echo -e "======================================"
+echo -e "\to NetCDF-C: ${NCVER}"
+echo -e "\to NetCDF-Fortran: ${NFVER}"
+echo -e "\to NetCDF-Java: ${NJVER}"
 echo -e "\to command: ${DCMD}"
 ${DCMD} >> ${LOGFILE} 2>&1 ;
-
 echo ""
-echo -e "Running Docker Github-Emulation Tests:" 
+
+DCMD="docker run --rm -it -v ${NCDIR}:/netcdf-c -v ${NFDIR}:/netcdf-fortran -v ${NJVER}:/netcdf-java -v ${ENVDIR}:/environments -e USE_CC=clang docker.unidata.ucar.edu/nctests"
+echo ""
+echo -e "Running Baseline Docker Test (clang):"
 echo -e "======================================"
-##
-# Run C Test
-## 
-DCMD="docker run --rm -it -v ${NCDIR}:/github/workspace -v ${NFDIR}:/netcdf-fortran -v ${ENVDIR}:/environments -e GITHUB_ACTIONS="TRUE" -e REPO_TYPE="c" docker.unidata.ucar.edu/nctests"
-echo -e "\to NetCDF-C"
-echo -e "\t\to GITHUB_ACTIONS=TRUE"
-echo -e "\t\to REPO_TYPE=c"
-echo -e "\t\to command: ${DCMD}"
+echo -e "\to NetCDF-C: ${NCVER}"
+echo -e "\to NetCDF-Fortran: ${NFVER}"
+echo -e "\to NetCDF-Java: ${NJVER}"
+echo -e "\to command: ${DCMD}"
+${DCMD} >> ${LOGFILE} 2>&1 ;
+echo ""
 
-${DCMD} >> ${LOGFILE} 2>&1 ; CHECKERR
-echo -e ""
-##
-# Run Fortran Test
-##
-DCMD="docker run --rm -it -v ${NCDIR}:/netcdf-c -v ${NFDIR}:/github/workspace -v ${ENVDIR}:/environments -e GITHUB_ACTIONS="TRUE" -e RUNC=OFF -e REPO_TYPE="fortran" docker.unidata.ucar.edu/nctests"
-echo -e "\to NetCDF-Fortran"
-echo -e "\t\to GITHUB_ACTIONS=TRUE"
-echo -e "\t\to REPO_TYPE=fortran"
-echo -e "\t\to command: ${DCMD}"
+DCMD="docker run --rm -it -v ${NCDIR}:/netcdf-c -v ${NFDIR}:/netcdf-fortran -v ${NJVER}:/netcdf-java -v ${ENVDIR}:/environments -e USE_CC=clang docker.unidata.ucar.edu/nctests"
+echo ""
+echo -e "Running Baseline Docker Test (mpicc):"
+echo -e "======================================"
+echo -e "\to NetCDF-C: ${NCVER}"
+echo -e "\to NetCDF-Fortran: ${NFVER}"
+echo -e "\to NetCDF-Java: ${NJVER}"
+echo -e "\to command: ${DCMD}"
+${DCMD} >> ${LOGFILE} 2>&1 ;
+echo ""
 
-${DCMD} >> ${LOGFILE} 2>&1 ; CHECKERR
-echo -e ""
-##
-# Run Java Test
-##
-DCMD="docker run --rm -it -v ${NCDIR}:/netcdf-c -v ${NFDIR}:/netcdf-fortran -v ${NJDIR}:/github/workspace -v ${ENVDIR}:/environments -e GITHUB_ACTIONS="TRUE" -e RUNC=OFF -e RUNF=OFF -e RUNJAVA=TRUE -e REPO_TYPE="java" docker.unidata.ucar.edu/nctests"
-echo -e "\to NetCDF-Java"
-echo -e "\t\to GITHUB_ACTIONS=TRUE"
-echo -e "\t\to REPO_TYPE=java"
-echo -e "\t\to command:${DCMD}"
-
-${DCMD} >> ${LOGFILE} 2>&1 ; CHECKERR
 
 ###
 # Done Testing
