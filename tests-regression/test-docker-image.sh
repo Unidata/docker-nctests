@@ -68,7 +68,6 @@ git clone git@github.com:Unidata/netcdf-java --single-branch --branch ${NJVER} $
 # Begin running tests
 ###
 
-
 DCMD="docker run --rm -it -v ${NCDIR}:/netcdf-c -v ${NFDIR}:/netcdf-fortran -v ${ENVDIR}:/environments -v ${NFDIR}:/netcdf-fortran docker.unidata.ucar.edu/nctests"
 echo ""
 echo -e "Running Baseline Docker Test:"
