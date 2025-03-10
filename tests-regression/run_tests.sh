@@ -3,6 +3,19 @@
 # Depending on value of TESTTYPE, run the appropriate script.
 #
 
+function ERR {
+    RES=$?
+    if [ $RES -ne 0 ]; then
+        git stash
+        git clean -fd
+        git reset --hard
+        echo "$(git status | head -n 1): Error found: $RES"
+        echo -e "\t[x] $(git status | head -n 1): Error found: $RES" >> "${LOGFILE}"
+        exit $RES
+    fi
+
+}
+
 if [ "${USER}" = "root" ]; then
     export SUDOCMD=""
 else
@@ -96,4 +109,4 @@ ${SUDOCMD} mkdir -p ${WORKING_DIRECTORY}
 ${SUDOCMD} chown -R tester:tester ${WORKING_DIRECTORY}
 cd ${WORKING_DIRECTORY}
 
-bash -le /home/tester/run_netcdf_tests.sh
+bash -le /home/tester/run_netcdf_tests.sh ; ERR

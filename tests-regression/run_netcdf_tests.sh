@@ -45,6 +45,32 @@ if [ "x$VERSION" != "x" ]; then
 fi
 
 
+CHECKERRJAVA() {
+
+    RES=$?
+
+    if [ -d "/results" ]; then
+        # prepare netCDF-Java results directory
+        if [ -d "/results/netcdf-java" ]; then
+            rm -rf /results/netcdf-java/*
+        else
+            mkdir /results/netcdf-java
+        fi
+        # copy junit test report
+        if [ -f "./netcdf4/build/reports/tests/test/index.html" ]; then
+            cp -r netcdf4/build/reports/tests/test/* /results/netcdf-java
+        fi
+        # copy java error log file if something in the netCDF-C stack trigggers
+        # a core dump
+        find ./netcdf4 -maxdepth 1 -name \*.log -exec cp {} /results/netcdf-java \;
+    fi
+
+    if [[ $RES -ne 0 ]]; then
+        echo "Error Caught: $RES"
+        exit $RES
+    fi
+
+}
 
 CHECKERR() {
 
@@ -471,23 +497,9 @@ if [ "x$RUNJAVA" == "xTRUE" ]; then
 
     # run netCDF-Java tests that rely on the netCDF-C library
     # and do not trigger trap on failure
-    JNA_PATH=${LIBDIR} ./gradlew ${GRADLE_OPTS} clean :netcdf4:test || true
+    JNA_PATH=${LIBDIR} ./gradlew ${GRADLE_OPTS} clean :netcdf4:test ; CHECKERRJAVA
 
-    if [ -d "/results" ]; then
-        # prepare netCDF-Java results directory
-        if [ -d "/results/netcdf-java" ]; then
-            rm -rf /results/netcdf-java/*
-        else
-            mkdir /results/netcdf-java
-        fi
-        # copy junit test report
-        if [ -f "./netcdf4/build/reports/tests/test/index.html" ]; then
-            cp -r netcdf4/build/reports/tests/test/* /results/netcdf-java
-        fi
-        # copy java error log file if something in the netCDF-C stack trigggers
-        # a core dump
-        find ./netcdf4 -maxdepth 1 -name \*.log -exec cp {} /results/netcdf-java \;
-    fi
+
     cd ${WORKING_DIRECTORY}
 
 fi
