@@ -114,8 +114,12 @@ if [ -d "/netcdf-c" ]; then
     fi
 else
     echo "Using remote netcdf-c repository"
-    git clone http://www.github.com/Unidata/netcdf-c --single-branch --branch $CBRANCH --depth=1 $CBRANCH
-    mv $CBRANCH netcdf-c
+    if [ "x$CHASH" != "x" ]; then
+
+    else
+        git clone http://www.github.com/Unidata/netcdf-c --single-branch --branch $CBRANCH --depth=1 $CBRANCH
+        mv $CBRANCH netcdf-c
+    fi
 fi
 
 if [ "x$RUNF" == "xTRUE" ]; then

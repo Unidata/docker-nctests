@@ -2,10 +2,11 @@
 # Common stuff at front.
 ####
 #FROM ubuntu:xenial
-FROM docker.unidata.ucar.edu/nctests:serial
-LABEL maintainer "Ward Fisher <wfisher@ucar.edu>"
+FROM docker.unidata.ucar.edu/nctests:latest
+LABEL maintainer="Ward Fisher <wfisher@ucar.edu>"
 USER root
-ENV HOME /root
+ENV H5VER=1.14.3
+ENV HOME=/root
 WORKDIR /root
 
 ###
@@ -13,8 +14,8 @@ WORKDIR /root
 ###
 
 
-ENV DEBIAN_FRONTEND noninteractive
-ENV DIST nc
+ENV DEBIAN_FRONTEND=noninteractive
+ENV DIST=nc
 ###
 # Install common packages.
 ###
@@ -25,12 +26,12 @@ RUN apt-get install -y ca-certificates man nano curl git emacs wget gcc g++ gfor
 
 ###
 #RUN tar -jxf hdf5-1.12.2.tar.bz2 && cd hdf5-1.12.2 && ./configure --prefix=/usr --disable-static --enable-shared --enable-hl && make -j 4 && make install -j 4
-RUN tar -jxf hdf5-1.14.3.tar.bz2 && cd hdf5-1.14.3 && ./configure --prefix=/usr --disable-static --enable-shared --enable-hl && make -j $(nproc) && make install -j $(nproc)
-
+#RUN tar -jxf hdf5-1.14.3.tar.bz2 && cd hdf5-1.14.3 && ./configure --prefix=/usr --disable-static --enable-shared --enable-hl && make -j $(nproc) && make install -j $(nproc)
+#RUN 
 ###
-ENV NCVER v4.9.3-rc1
-RUN git clone https://github.com/Unidata/netcdf-c && cd netcdf-c && git checkout ${NCVER} && mkdir build && cd build && cmake .. -DENABLE_TESTS=OFF -DCMAKE_INSTALL_PREFIX=/usr && make -j 100 && make install
-RUN rm -rf netcdf-c
+#ENV NCVER v4.9.3-rc1
+#RUN git clone https://github.com/Unidata/netcdf-c && cd netcdf-c && git checkout ${NCVER} && mkdir build && cd build && cmake .. -DENABLE_TESTS=OFF -DCMAKE_INSTALL_PREFIX=/usr && make -j 100 && make install
+#RUN rm -rf netcdf-c
 
 
 ###
@@ -58,4 +59,4 @@ RUN dos2unix /root/README.md
 # Run script.
 ###
 
-CMD /root/run_abi.sh
+ENTRYPOINT ["/bin/bash", "-l", "-e", "/root/run_abi.sh"]

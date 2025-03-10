@@ -24,6 +24,11 @@ if [ "x$NEWVER" == "x" ]; then
     exit
 fi
 
+echo ""
+env | sort
+echo ""
+echo ""
+
 if [ "x$DIST" == "xnc" ]; then
     ./run_c_abi_diff.sh
 elif [ "x$DIST" == "xnf" ]; then
