@@ -163,7 +163,7 @@ fi
 if [ "x$RUNJAVA" == "xTRUE" ]; then
 
     if [ -d "/netcdf-java" ]; then
-        echo "Using local netcdf-cxx4 repository"
+        echo "Using local netcdf-java repository"
         if [ "x$USE_LOCAL_JAVA" == "xTRUE" ]; then
             cp -R /netcdf-java ${WORKING_DIRECTORY}
         else
