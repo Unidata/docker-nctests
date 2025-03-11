@@ -110,16 +110,13 @@ if [ -d "/netcdf-c" ]; then
     if [ "x$USE_LOCAL_CP" == "xTRUE" ]; then
         cp -R /netcdf-c ${WORKING_DIRECTORY}
     else
+        git config --global --add safe.directory /netcdf-c/.git
         git clone /netcdf-c ${WORKING_DIRECTORY}/netcdf-c
     fi
 else
     echo "Using remote netcdf-c repository"
-    if [ "x$CHASH" != "x" ]; then
-
-    else
-        git clone http://www.github.com/Unidata/netcdf-c --single-branch --branch $CBRANCH --depth=1 $CBRANCH
-        mv $CBRANCH netcdf-c
-    fi
+    git clone http://www.github.com/Unidata/netcdf-c --single-branch --branch $CBRANCH --depth=1 $CBRANCH
+    mv $CBRANCH netcdf-c
 fi
 
 if [ "x$RUNF" == "xTRUE" ]; then
@@ -129,6 +126,7 @@ if [ "x$RUNF" == "xTRUE" ]; then
         if [ "x$USE_LOCAL_CP" != "xTRUE" ]; then
             cp -R /netcdf-fortran ${WORKING_DIRECTORY}
         else
+            git config --global --add safe.directory /netcdf-fortran/.git
             git clone /netcdf-fortran ${WORKING_DIRECTORY}/netcdf-fortran
         fi
     else
@@ -148,7 +146,8 @@ if [ "x$RUNCXX4" == "xTRUE" ]; then
         if [ "x$USE_LOCAL_CP" == "xTRUE" ]; then
             cp -R /netcdf-cxx4 ${WORKING_DIRECTORY}
         else
-            git clone /netcdf-cxx4 ${WORKING_DIRECTORY}/netcdf-c
+            git config --global --add safe.directory /netcdf-cxx4/.git
+            git clone /netcdf-cxx4 ${WORKING_DIRECTORY}/netcdf-cxx4
         fi
 
         else
@@ -168,6 +167,7 @@ if [ "x$RUNJAVA" == "xTRUE" ]; then
         if [ "x$USE_LOCAL_JAVA" == "xTRUE" ]; then
             cp -R /netcdf-java ${WORKING_DIRECTORY}
         else
+            git config --global --add safe.directory /netcdf-java/.git
             git clone /netcdf-java ${WORKING_DIRECTORY}/netcdf-java
         fi
 
