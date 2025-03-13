@@ -51,39 +51,55 @@ dosummary() {
 }
 
 if [ "${GITHUB_ACTIONS}" = "true" -o "${GITHUB_ACTIONS}" = "TRUE" ]; then
+    if [ "${REPO_TYPE}" != "" ]; then
+        echo "==================================="
+        echo "GITHUB_ACTIONS Detected: REPO_TYPE: ${REPO_TYPE}"
+        echo ""
 
-    if [ "${REPO_TYPE}" = "c" ]; then
-        export C_VOLUME_MAP="/github/workspace"
-        ${SUDOCMD} mkdir -p /netcdf-c
-        ${SUDOCMD} cp -R /github/workspace/. /netcdf-c
-        ${SUDOCMD} chown -R tester:tester /netcdf-c
-    fi
-    if [ "${REPO_TYPE}" = "fortran" ]; then
-        export FORTRAN_VOLUME_MAP="/github/workspace"
-        ${SUDOCMD} mkdir -p /netcdf-fortran
-        ${SUDOCMD} cp -R /github/workspace/. /netcdf-fortran
-        ${SUDOCMD} chown -R tester:tester /netcdf-fortran
-    fi
-    if [ "${REPO_TYPE}" = "cxx4" ]; then
-        export CXX4_VOLUME_MAP="/github/workspace"
-        ${SUDOCMD} mkdir -p /netcdf-cxx4
-        ${SUDOCMD} cp -R /github/workspace/. /netcdf-cxx4
-        ${SUDOCMD} chown -R tester:tester /netcdf-cxx4
-    fi
-    if [ "${REPO_TYPE}" = "java" ]; then
-        export JAVA_VOLUME_MAP="/github/workspace"
-        ${SUDOCMD} mkdir -p /netcdf-java
-        ${SUDOCMD} cp -R /github/workspace/. /netcdf-java
-        ${SUDOCMD} chown -R tester:tester /netcdf-java
-    fi    
+        if [ "${REPO_TYPE}" = "c" ]; then
+            ${SUDOCMD} mkdir -p /netcdf-c
+            ${SUDOCMD} cp -R /github/workspace/. /netcdf-c
+            ${SUDOCMD} chown -R tester:tester /netcdf-c
 
+        fi
+        if [ "${REPO_TYPE}" = "fortran" ]; then
+            ${SUDOCMD} mkdir -p /netcdf-fortran
+            ${SUDOCMD} cp -R /github/workspace/. /netcdf-fortran
+            ${SUDOCMD} chown -R tester:tester /netcdf-fortran
+        fi
+        if [ "${REPO_TYPE}" = "cxx4" ]; then
+            ${SUDOCMD} mkdir -p /netcdf-cxx4
+            ${SUDOCMD} cp -R /github/workspace/. /netcdf-cxx4
+            ${SUDOCMD} chown -R tester:tester /netcdf-cxx4
+        fi
+        if [ "${REPO_TYPE}" = "java" ]; then
+            ${SUDOCMD} mkdir -p /netcdf-java
+            ${SUDOCMD} cp -R /github/workspace/. /netcdf-java
+            ${SUDOCMD} chown -R tester:tester /netcdf-java
+        fi    
+
+        echo "Contents of /netcdf-${REPO_TYPE}:"
+        ls /netcdf-${REPO_TYPE}
+        echo ""
+        echo "==================================="
+    fi
 fi
 
 if [ "${TESTPROC}" = "" ]; then
     export TESTPROC=$(nproc)
 fi
 
+export WORKING_DIRECTORY=${WORKING_DIRECTORY}/build-$(date +%s)
+
+if [ "${H5VER}" = "" ]; then
+    export H5VER=1.14.3
+fi
+
+
+
+
 dosummary
+
 
 
 
@@ -96,6 +112,17 @@ else
     exit 1
 fi
 
+if [ " ${USE_BUILDSYSTEM}" = "cmake" ]; then
+    export USECMAKE=TRUE
+    export USEAC=FALSE
+elif [ " ${USE_BUILDSYSTEM}" = "autotools" ]; then
+    export USECMAKE=FALSE
+    export USEAC=TRUE
+elif [ " x{USE_BUILDSYSTEM}" = "both" ]; then
+    export USECMAKE=TRUE
+    export USEAC=TRUE
+fi
+
 echo $(date)
 echo "Running Test Type: ${TESTTYPE}"
 echo "Using compiler: ${USE_CC}"
@@ -103,7 +130,7 @@ echo ""
 sleep 1
 
 cd /home/tester
-export WORKING_DIRECTORY=${WORKING_DIRECTORY}/build-$(date +%s)
+
 
 ${SUDOCMD} mkdir -p ${WORKING_DIRECTORY}
 ${SUDOCMD} chown -R tester:tester ${WORKING_DIRECTORY}
