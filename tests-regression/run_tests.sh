@@ -95,14 +95,6 @@ if [ "${H5VER}" = "" ]; then
     export H5VER=1.14.3
 fi
 
-
-
-
-dosummary
-
-
-
-
 if [ "x${USE_CC}" = "xmpicc" ]; then
     TESTTYPE="mpich"
 elif [ "x${USE_CC}" = "xgcc" -o "x${USE_CC}" = "xclang" ]; then
@@ -112,16 +104,18 @@ else
     exit 1
 fi
 
-if [ " ${USE_BUILDSYSTEM}" = "cmake" ]; then
+if [ "${USE_BUILDSYSTEM}" = "cmake" ]; then
     export USECMAKE=TRUE
     export USEAC=FALSE
-elif [ " ${USE_BUILDSYSTEM}" = "autotools" ]; then
+elif [ "${USE_BUILDSYSTEM}" = "autotools" ]; then
     export USECMAKE=FALSE
     export USEAC=TRUE
-elif [ " x{USE_BUILDSYSTEM}" = "both" ]; then
+elif [ "${USE_BUILDSYSTEM}" = "both" ]; then
     export USECMAKE=TRUE
     export USEAC=TRUE
 fi
+
+dosummary
 
 echo $(date)
 echo "Running Test Type: ${TESTTYPE}"

@@ -237,7 +237,7 @@ export LD_LIBRARY_PATH="${TARGDIR}/lib"
 export LIBDIR="${TARGDIR}/lib"
 export PATH="${TARGDIR}/bin:$PATH"
 export CMAKE_PREFIX_PATH="${TARGDIR}"
-
+export USE_FC="gfortran"
 ###
 # If we are using a parallel compiler (mpicc), 
 # set some additional variables. 
@@ -249,7 +249,8 @@ if [ "${USE_CC}" = "mpicc" ]; then
     export OMPI_CXX=$USE_CXX
     export CMAKE_PAR_OPTS="-DENABLE_PARALLEL_TESTS=${RUNC} -DENABLE_PNETCDF=${RUNC}"
     export CMAKE_PAR_OPTS_FORTRAN="-DCMAKE_Fortran_COMPILER=$(which mpif90)"
-    export AC_PAR_OPTS_FORTRAN="FC=$(which mpif90)"
+    export USE_FC=mpifort
+
     if [ "${RUNC}" = "TRUE" ]; then
         export AC_PAR_OPTS="--enable-parallel-tests --enable-pnetcdf"
     else
@@ -381,10 +382,6 @@ ${SUDOCMD} ldconfig
 ###
 if [ "x$RUNF" == "xTRUE" ]; then
 
-  if [ "x$FORTRAN_SERIAL_BUILD" != "x" ]; then
-      TESTPROC_FORTRAN="1"
-  fi
-
     while [[ $FCOUNT -le $FREPS ]]; do
 
         if [ "x$USECMAKE" = "xTRUE" ]; then
@@ -413,7 +410,7 @@ if [ "x$RUNF" == "xTRUE" ]; then
             if [ ! -f "configure" ]; then
                 autoreconf -if
             fi
-            CC=$USE_CC ${AC_PAR_OPTS_FORTRAN} ./configure "$AC_FOPTS"
+            CC=$USE_CC FC=${USE_FC} F77=${USE_FC} ./configure "$AC_FOPTS"
             make -j $TESTPROC_FORTRAN ; CHECKERR
             make check TESTS="" -j $TESTPROC_FORTRAN
             make check -j $TESTPROC_FORTRAN ; CHECKERR
