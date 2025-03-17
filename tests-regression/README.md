@@ -1,6 +1,7 @@
 # docker.unidata.ucar.edu/nctests - Regression Testing
 
-The Dockerfile and other information for this image may be found either by running the image interactively, or by going to the corresponding github repository: http://github.com/Unidata/docker-nctests
+This project contains the dockerfiles for two images, `docker.unidata.ucar.edu/nctests` and `docker.unidata.ucar.edu/ncabi`.  The documentaiton below relates to `nctests`.  Documentation for `ncabi` is forthcoming.
+
 
 ## Overview
 
@@ -53,7 +54,7 @@ NCO integration adds additional regression testing.
 
 You can specify an alternative branch for `netcdf-c` than `main` using the following syntax.
 
-    $ docker run -e CBRANCH="branch name" docker.unidata.ucar.edu/nctests:serial
+    $ docker run -e CBRANCH="branch name" docker.unidata.ucar.edu/nctests
 
 
 
@@ -61,7 +62,7 @@ You can specify an alternative branch for `netcdf-c` than `main` using the follo
 
 It is possible to use local directories instead of pulling from github. You do this by mounting your local git directory to the root of the docker image filesystem, e.g.
 
-    $ docker run -v $(pwd)/netcdf-c:/netcdf-c docker.unidata.ucar.edu/nctests:serial
+    $ docker run -v $(pwd)/netcdf-c:/netcdf-c docker.unidata.ucar.edu/nctests
 
 When the image runs, it will check for the existence of `/netcdf-c`, `/netcdf-fortran`, `/netcdf-cxx4` and `/netcdf4-python`.  If they exist, the image will clone from these instead of pulling from GitHub.
 
@@ -136,8 +137,9 @@ The following environmental variables can be used to control the behavior at run
 
 ### Build Systems to use
 ----
-* `USECMAKE` - Default to `TRUE`. When `TRUE`, run `cmake` builds.
-* `USEAC` - Default to `FALSE`. When `TRUE`, run *in-source* `autoconf`-based builds.
+* `USE_BUILDSYSTEM` - 'Defaults to 'cmake'.  Options are 'cmake', 'autotools', 'both'. 
+* ~~`USECMAKE` - Default to `TRUE`. When `TRUE`, run `cmake` builds.~~ **DEPRECATED**
+* ~~`USEAC` - Default to `FALSE`. When `TRUE`, run *in-source* `autoconf`-based builds.~~ **DEPRECATED**
 * `DISTCHECK` - Default to `FALSE`.  Requires `USEAC` to be `TRUE`.  Runs `make distcheck` after `make check`.
 
 
@@ -171,46 +173,50 @@ See [the section on environmental variables](#variables) for a complete list of 
 
 This will show you the help file for the docker image.
 
-    $ docker run --rm -it -e CMD=help docker.unidata.ucar.edu/nctests:serial
+    $ docker run --rm -it -e CMD=help docker.unidata.ucar.edu/nctests
 
 ### - Run a docker container *interactively*
 
 This will put you into the shell for the docker container.  Note that any changes you make will not persist once you exit.  
 
-    $ docker run --rm -it --entrypoint /bin/bash docker.unidata.ucar.edu/nctests:serial
+    $ docker run --rm -it --entrypoint /bin/bash docker.unidata.ucar.edu/nctests
 
 ### - Run all tests (standard use case)
 
-    $ docker run --rm -it docker.unidata.ucar.edu/nctests:serial
+    $ docker run --rm -it docker.unidata.ucar.edu/nctests
 
 ### - Run all tests (standard use case) using `clang` instead of `gcc`
 
-    $ docker run --rm -it -e USE_CC=clang -e USE_CXX=clang++ docker.unidata.ucar.edu/nctests:serial
+    $ docker run --rm -it -e USE_CC=clang -e USE_CXX=clang++ docker.unidata.ucar.edu/nctests
 
 ### - Run all tests against a specific branch
 
-    $ docker run --rm -it -e CBRANCH=working docker.unidata.ucar.edu/nctests:serial
+    $ docker run --rm -it -e CBRANCH=working docker.unidata.ucar.edu/nctests
 
 ### - Turn off DAP tests by passing in a cmake variable
 
-    $ docker run --rm -it -e COPTS="-DNETCDF_ENABLE_DAP=OFF" docker.unidata.ucar.edu/nctests:serial
+    $ docker run --rm -it -e COPTS="-DNETCDF_ENABLE_DAP=OFF" docker.unidata.ucar.edu/nctests
 
 ### - Run all of the tests but do not use the remote dashboard
 
-    $ docker run --rm -it -e USEDASH=OFF docker.unidata.ucar.edu/nctests:serial
+    $ docker run --rm -it -e USEDASH=OFF docker.unidata.ucar.edu/nctests
 
 ### - Run the tests against a local copy of the netcdf-c git repository instead of pulling from GitHub
 
 > Note that you will not switch branches inside the docker container when running like this; you must make sure your local repository (that you're at the root of, remember?) is on the branch you want to analyze.
 
-    $ docker run --rm -it -v $(pwd):/netcdf-c docker.unidata.ucar.edu/nctests:serial
+    $ docker run --rm -it -v $(pwd):/netcdf-c docker.unidata.ucar.edu/nctests
 
 ### - Run the tests against a local copy, and disable the fortran, c++ and remote dashboard.
-    $ docker run --rm -it -v $(pwd):/netcdf-c -e USEDASH=OFF -e RUNF=OFF -e RUNCXX=OFF docker.unidata.ucar.edu/nctests:serial
+    $ docker run --rm -it -v $(pwd):/netcdf-c -e USEDASH=OFF -e RUNF=OFF -e RUNCXX=OFF docker.unidata.ucar.edu/nctests
 
 ### - Run the NetCDF-C tests using Autootools instead of CMake, and repeat the build twice.
-    # docker run --rm -it -e USECMAKE=OFF -e USEAC=TRUE -e CREPS=2 docker.unidata.ucar.edu/nctests:serial
+    $ docker run --rm -it -e USE_BUILDSYSTEM=both -e CREPS=2 docker.unidata.ucar.edu/nctests
 
-#### Running non-serial tests
+### Running non-serial tests
+    $ docker run --rm -it -e USE_BUILDSYSTEM=cmake -e USE_CC=mpicc docker.unidata.ucar.edu/nctests
 
-> To run any of the above examples against a different environment, you would replace `nctests:serial` with one of `nctests:openmpi`, `nctests:mpich`, `nctests:serial32`, etc.
+### Running Java tests with internal data
+    $ docker run --rm -it -e CBRANCH=v4.9.2 -e RUNF=OFF -e RUNJAVA=TRUE -v /path/to/cdmUnitTest:/share/testdata/cdmUnitTest -v ./results:/results docker.unidata.ucar.edu/nctests
+
+    
