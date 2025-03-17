@@ -218,5 +218,3 @@ This will put you into the shell for the docker container.  Note that any change
 
 ### Running Java tests with internal data
     $ docker run --rm -it -e CBRANCH=v4.9.2 -e RUNF=OFF -e RUNJAVA=TRUE -v /path/to/cdmUnitTest:/share/testdata/cdmUnitTest -v ./results:/results docker.unidata.ucar.edu/nctests
-
-    

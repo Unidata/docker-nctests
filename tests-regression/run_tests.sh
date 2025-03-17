@@ -3,6 +3,13 @@
 # Depending on value of TESTTYPE, run the appropriate script.
 #
 
+
+if [ "${CMD}" = "help" -o "${CMD}" = "HELP" -o "${DOHELP}" != "" -o "${HELP}" != "" ]; then
+    cat /home/tester/README.md
+    exit 0
+fi
+
+
 function ERR {
     RES=$?
     if [ $RES -ne 0 ]; then

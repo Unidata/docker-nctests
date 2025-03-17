@@ -109,9 +109,13 @@ if [ -d "/netcdf-c" ]; then
     echo "Using local netcdf-c repository"
     if [ "x$USE_LOCAL_CP" == "xTRUE" ]; then
         cp -R /netcdf-c ${WORKING_DIRECTORY}
+        export CBRANCH='local-copy-$(date +%s)'
     else
         git config --global --add safe.directory /netcdf-c/.git
         git clone /netcdf-c ${WORKING_DIRECTORY}/netcdf-c
+        cd netcdf-c
+        export CBRANCH=$(echo $(git log | head -n 1 | cut -d " " -f 2| head -c 6 ))
+        cd ..
     fi
 else
     echo "Using remote netcdf-c repository"
@@ -125,9 +129,13 @@ if [ "x$RUNF" == "xTRUE" ]; then
         echo "Using local netcdf-fortran repository"
         if [ "x$USE_LOCAL_CP" != "xTRUE" ]; then
             cp -R /netcdf-fortran ${WORKING_DIRECTORY}
+            export FBRANCH='local-copy-$(date +%s)'
         else
             git config --global --add safe.directory /netcdf-fortran/.git
             git clone /netcdf-fortran ${WORKING_DIRECTORY}/netcdf-fortran
+            cd netcdf-fortran
+            export FBRANCH=$(echo $(git log | head -n 1 | cut -d " " -f 2| head -c 6 ))
+            cd ..
         fi
     else
         echo "Using remote netcdf-fortran repository"
@@ -145,9 +153,13 @@ if [ "x$RUNCXX4" == "xTRUE" ]; then
         echo "Using local netcdf-cxx4 repository"
         if [ "x$USE_LOCAL_CP" == "xTRUE" ]; then
             cp -R /netcdf-cxx4 ${WORKING_DIRECTORY}
+            export CXX4BRANCH='local-copy-$(date +%s)'
         else
             git config --global --add safe.directory /netcdf-cxx4/.git
             git clone /netcdf-cxx4 ${WORKING_DIRECTORY}/netcdf-cxx4
+            cd netcdf-cxx4
+            export CXX4BRANCH=$(echo $(git log | head -n 1 | cut -d " " -f 2| head -c 6 ))
+            cd ..
         fi
 
         else
@@ -166,9 +178,13 @@ if [ "x$RUNJAVA" == "xTRUE" ]; then
         echo "Using local netcdf-java repository"
         if [ "x$USE_LOCAL_JAVA" == "xTRUE" ]; then
             cp -R /netcdf-java ${WORKING_DIRECTORY}
+            export JAVABRANCH='local-copy-$(date +%s)'
         else
             git config --global --add safe.directory /netcdf-java/.git
             git clone /netcdf-java ${WORKING_DIRECTORY}/netcdf-java
+            cd netcdf-java
+            export JAVABRANCH=$(echo $(git log | head -n 1 | cut -d " " -f 2| head -c 6 ))
+            cd ..
         fi
 
         else
