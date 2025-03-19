@@ -83,6 +83,18 @@ CHECKERR() {
 
 }
 
+CHECKERR_AC() {
+
+    RES=$?
+
+    if [[ $RES -ne 0 ]]; then
+        echo "Error Caught: $RES"
+        find . -name 'test-suite.log' -exec cat {} \;
+        exit $RES
+    fi
+
+}
+
 ###
 # Print out version.
 ###
@@ -334,7 +346,7 @@ while [[ $CCOUNT -le $CREPS ]]; do
                     make ExperimentalSubmit
                 fi
             else
-                make -j $TESTPROC && ctest -j $TESTPROC ; CHECKERR
+                make -j $TESTPROC && ctest -j $TESTPROC; CHECKERR
                 if [ "x$USE_VALGRIND" == "xTRUE" ]; then
                     make ExperimentalMemCheck
                 fi
@@ -365,7 +377,7 @@ while [[ $CCOUNT -le $CREPS ]]; do
         make -j $TESTPROC ; CHECKERR
         if [ "x$RUNC" == "xTRUE" ]; then
             make check TESTS="" -j $TESTPROC ; CHECKERR
-            make check -j $TESTPROC ; CHECKERR
+            make check -j $TESTPROC ; CHECKERR_AC
 
             if [ "x$DISTCHECK" == "xTRUE" ]; then
                 DISTCHECK_CONFIGURE_FLAGS="--disable-hdf4 --enable-extra-tests --enable-mmap $AC_COPTS" make distcheck ; CHECKERR
@@ -429,7 +441,7 @@ if [ "x$RUNF" == "xTRUE" ]; then
             CC=$USE_CC FC=${USE_FC} F77=${USE_FC} ./configure "$AC_FOPTS"
             make -j $TESTPROC_FORTRAN ; CHECKERR
             make check TESTS="" -j $TESTPROC_FORTRAN
-            make check -j $TESTPROC_FORTRAN ; CHECKERR
+            make check -j $TESTPROC_FORTRAN ; CHECKERR_AC
 
             if [ "x$DISTCHECK" == "xTRUE" ]; then
                 DISTCHECK_CONFIGURE_FLAGS="$AC_FOPTS" make distcheck -j $TESTPROC_FORTRAN ; CHECKERR
