@@ -71,7 +71,7 @@ dosummary() {
 }
 
 dohelp() {
-echo -e ""
+    echo -e ""
     echo -e "Usage: $0 [options]"
     echo -e "Options:\n"
 

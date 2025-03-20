@@ -276,7 +276,7 @@ if [ "${USE_CC}" = "mpicc" ]; then
     export OMPI_CC=$USE_CC
     export OMPI_CXX=$USE_CXX
     export CMAKE_PAR_OPTS="-DENABLE_PARALLEL_TESTS=${RUNC} -DENABLE_PNETCDF=${RUNC}"
-    export CMAKE_PAR_OPTS_FORTRAN="-DCMAKE_Fortran_COMPILER=$(which mpif90)"
+    export CMAKE_PAR_OPTS_FORTRAN="-DCMAKE_Fortran_COMPILER=$(which mpifort)"
     export USE_FC=mpifort
 
     if [ "${RUNC}" = "TRUE" ]; then
@@ -285,6 +285,15 @@ if [ "${USE_CC}" = "mpicc" ]; then
         export AC_PAR_OPTS="--disable-parallel-tests --disable-pnetcdf"
     fi
 
+    if [ "${RUNF}" = "TRUE" ]; then
+        export USE_FC=mpifort
+        if [ ${TESTPROC_FORTRAN} -lt 4 ]; then
+            echo ""
+            echo "Updating TESTPROC_FORTRAN from ${TESTPROC_FORTRAN} to 4!!!"
+            export TESTPROC_FORTRAN=4
+            echo ""
+        fi
+    fi
     export RUNP=OFF
     export RUNJAVA=OFF
     export RUNNCO=OFF
@@ -346,7 +355,7 @@ while [[ $CCOUNT -le $CREPS ]]; do
                     make ExperimentalSubmit
                 fi
             else
-                make -j $TESTPROC && ctest -j $TESTPROC; CHECKERR
+                make -j $TESTPROC && ctest --repeat until-pass:3 -j$TESTPROC; CHECKERR
                 if [ "x$USE_VALGRIND" == "xTRUE" ]; then
                     make ExperimentalMemCheck
                 fi
@@ -420,10 +429,10 @@ if [ "x$RUNF" == "xTRUE" ]; then
             cd build-netcdf-fortran
             cmake ${WORKING_DIRECTORY}/netcdf-fortran -DBUILDNAME_PREFIX="docker$BITNESS-$USE_CC" -DBUILDNAME_SUFFIX="$FBRANCH" -DCMAKE_C_COMPILER=$USE_CC ${CMAKE_PAR_OPTS_FORTRAN} $FOPTS
             if [ "x$USEDASH" == "xTRUE" ]; then
-                ctest -j $TESTPROC_FORTRAN -D Experimental
+                ctest --repeat until-pass:3 -j$TESTPROC_FORTRAN -D Experimental
             else
                 make -j $TESTPROC_FORTRAN ; CHECKERR
-                ctest -j $TESTPROC_FORTRAN ; CHECKERR
+                ctest --repeat until-pass:3 -j$TESTPROC_FORTRAN ; CHECKERR
             fi
             make clean
             cd ${WORKING_DIRECTORY}

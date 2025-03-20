@@ -96,6 +96,10 @@ if [ "${TESTPROC}" = "" ]; then
     export TESTPROC=$(nproc)
 fi
 
+if [ "${TESTPROC_FORTRAN}" = "" ]; then
+    export TESTPROC_FORTRAN=$(nproc)
+fi
+
 export WORKING_DIRECTORY=${WORKING_DIRECTORY}/build-$(date +%s)
 
 if [ "${H5VER}" = "" ]; then
