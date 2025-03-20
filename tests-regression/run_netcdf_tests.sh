@@ -83,10 +83,26 @@ CHECKERR() {
 
 }
 
+CHECKERR_AC() {
+
+    RES=$?
+
+    if [[ $RES -ne 0 ]]; then
+        echo "Error Caught: $RES"
+        find . -name 'test-suite.log' -exec cat {} \;
+        exit $RES
+    fi
+
+}
+
 ###
 # Print out version.
 ###
 cat /home/tester/VERSION.md
+if [ "${USE_CC}" = "mpicc" -a "${MPICHVER}" != "" ]; then
+    echo "Using MPICH version: ${MPICHVER}"
+fi
+
 echo "Using HDF5 version: ${H5VER}"
 echo ""
 sleep 3
@@ -232,6 +248,13 @@ fi
 export TARGDIR="/environments/${H5VER}-${CBRANCH}-${USE_CC}"
 echo "Using TARGDIR=${TARGDIR}"
 
+###
+# Install specific version of MPICH
+###
+if [ "${USE_CC}" = "mpicc" -a "${MPICHVER}" != "" ]; then
+    ${SUDOCMD} /home/tester/install_mpich.sh -v ${MPICHVER}
+fi
+
 ##
 # Allow us to build dependencies from source.
 # For now, just HDF5
@@ -264,7 +287,7 @@ if [ "${USE_CC}" = "mpicc" ]; then
     export OMPI_CC=$USE_CC
     export OMPI_CXX=$USE_CXX
     export CMAKE_PAR_OPTS="-DENABLE_PARALLEL_TESTS=${RUNC} -DENABLE_PNETCDF=${RUNC}"
-    export CMAKE_PAR_OPTS_FORTRAN="-DCMAKE_Fortran_COMPILER=$(which mpif90)"
+    export CMAKE_PAR_OPTS_FORTRAN="-DCMAKE_Fortran_COMPILER=$(which mpifort)"
     export USE_FC=mpifort
 
     if [ "${RUNC}" = "TRUE" ]; then
@@ -273,6 +296,15 @@ if [ "${USE_CC}" = "mpicc" ]; then
         export AC_PAR_OPTS="--disable-parallel-tests --disable-pnetcdf"
     fi
 
+    if [ "${RUNF}" = "TRUE" ]; then
+        export USE_FC=mpifort
+        if [ ${TESTPROC_FORTRAN} -lt 4 ]; then
+            echo ""
+            echo "Updating TESTPROC_FORTRAN from ${TESTPROC_FORTRAN} to 4!!!"
+            export TESTPROC_FORTRAN=4
+            echo ""
+        fi
+    fi
     export RUNP=OFF
     export RUNJAVA=OFF
     export RUNNCO=OFF
@@ -334,7 +366,7 @@ while [[ $CCOUNT -le $CREPS ]]; do
                     make ExperimentalSubmit
                 fi
             else
-                make -j $TESTPROC && ctest -j $TESTPROC ; CHECKERR
+                make -j $TESTPROC && ctest --repeat until-pass:${CTEST_REPEAT} -j$TESTPROC; CHECKERR
                 if [ "x$USE_VALGRIND" == "xTRUE" ]; then
                     make ExperimentalMemCheck
                 fi
@@ -365,7 +397,7 @@ while [[ $CCOUNT -le $CREPS ]]; do
         make -j $TESTPROC ; CHECKERR
         if [ "x$RUNC" == "xTRUE" ]; then
             make check TESTS="" -j $TESTPROC ; CHECKERR
-            make check -j $TESTPROC ; CHECKERR
+            make check -j $TESTPROC ; CHECKERR_AC
 
             if [ "x$DISTCHECK" == "xTRUE" ]; then
                 DISTCHECK_CONFIGURE_FLAGS="--disable-hdf4 --enable-extra-tests --enable-mmap $AC_COPTS" make distcheck ; CHECKERR
@@ -379,20 +411,29 @@ while [[ $CCOUNT -le $CREPS ]]; do
     CCOUNT=$[$CCOUNT+1]
 done
 
+if [ "${RUNF}" = "TRUE" -o "${RUNJAVA}" = "TRUE" -o "${RUNNCO}" = "TRUE" -o "${RUNP}" = "TRUE" -o "${RUNCXX4}" = "TRUE" ]; then
+    echo ""
+    echo -e "o RUNF: ${RUNF}"
+    echo -e "o RUNJAVA: ${RUNJAVA}"
+    echo -e "o RUNNCO: ${RUNNCO}"
+    echo -e "o RUNP: ${RUNP}"
+    echo -e "o RUNCXX4: ${RUNCXX4}"
+    echo ""
 
-if [ "x$USECMAKE" = "xTRUE" ]; then
-    cd build-netcdf-c
-    make -j "${TESTPROC}"
-    ${SUDOCMD} make install
-elif [ "x$USEAC" = "xTRUE" ]; then
-    cd netcdf-c
-    ${SUDOCMD} make install -j $TESTPROC
+
+    if [ "x$USECMAKE" = "xTRUE" ]; then
+        cd build-netcdf-c
+        make -j "${TESTPROC}"
+        ${SUDOCMD} make install
+    elif [ "x$USEAC" = "xTRUE" ]; then
+        cd netcdf-c
+        ${SUDOCMD} make install -j $TESTPROC
+    fi
+
+    cd ${WORKING_DIRECTORY}
+
+    ${SUDOCMD} ldconfig
 fi
-
-cd ${WORKING_DIRECTORY}
-
-${SUDOCMD} ldconfig
-
 ###
 # Build & test netcdf-fortran
 ###
@@ -408,10 +449,10 @@ if [ "x$RUNF" == "xTRUE" ]; then
             cd build-netcdf-fortran
             cmake ${WORKING_DIRECTORY}/netcdf-fortran -DBUILDNAME_PREFIX="docker$BITNESS-$USE_CC" -DBUILDNAME_SUFFIX="$FBRANCH" -DCMAKE_C_COMPILER=$USE_CC ${CMAKE_PAR_OPTS_FORTRAN} $FOPTS
             if [ "x$USEDASH" == "xTRUE" ]; then
-                ctest -j $TESTPROC_FORTRAN -D Experimental
+                ctest --repeat until-pass:${CTEST_REPEAT} -j$TESTPROC_FORTRAN -D Experimental
             else
                 make -j $TESTPROC_FORTRAN ; CHECKERR
-                ctest -j $TESTPROC_FORTRAN ; CHECKERR
+                ctest --repeat until-pass:${CTEST_REPEAT} -j$TESTPROC_FORTRAN ; CHECKERR
             fi
             make clean
             cd ${WORKING_DIRECTORY}
@@ -429,7 +470,7 @@ if [ "x$RUNF" == "xTRUE" ]; then
             CC=$USE_CC FC=${USE_FC} F77=${USE_FC} ./configure "$AC_FOPTS"
             make -j $TESTPROC_FORTRAN ; CHECKERR
             make check TESTS="" -j $TESTPROC_FORTRAN
-            make check -j $TESTPROC_FORTRAN ; CHECKERR
+            make check -j $TESTPROC_FORTRAN ; CHECKERR_AC
 
             if [ "x$DISTCHECK" == "xTRUE" ]; then
                 DISTCHECK_CONFIGURE_FLAGS="$AC_FOPTS" make distcheck -j $TESTPROC_FORTRAN ; CHECKERR

@@ -131,6 +131,7 @@ The following environmental variables can be used to control the behavior at run
 * `CXXREPS` - Default 1.  How many times to repeat the `netcdf-cxx4` build and tests.
 * `PREPS` - Default 1.  How many times to repeat the `netcdf4-python` build and tests.
 * `NCOREPS` - Default 1.  How many times to repeat the `NCO` build and tests.
+* `CTEST_REPEAT` - Default 3.  How many times a `ctest` should repeat until success.
 
 > Note that `USECMAKE` and `USEAC` may be used concurrently and, when coupled with `CREPS` and other loop control options, we can see if the different build systems interfere with each other.
 
@@ -216,5 +217,7 @@ This will put you into the shell for the docker container.  Note that any change
 ### Running non-serial tests
     $ docker run --rm -it -e USE_BUILDSYSTEM=cmake -e USE_CC=mpicc docker.unidata.ucar.edu/nctests
 
-### Running Java tests with internal data
-    $ docker run --rm -it -e CBRANCH=v4.9.2 -e RUNF=OFF -e RUNJAVA=TRUE -v /path/to/cdmUnitTest:/share/testdata/cdmUnitTest -v ./results:/results docker.unidata.ucar.edu/nctests
+### Running Java tests with internal data and ctest repeats 3 times to try to get success.
+    $ docker run --rm -it -e CBRANCH=v4.9.2 -e RUNF=OFF -e CTEST_REPEAT=3 -e RUNJAVA=TRUE -v /path/to/cdmUnitTest:/share/testdata/cdmUnitTest -v ./results:/results docker.unidata.ucar.edu/nctests
+
+    
