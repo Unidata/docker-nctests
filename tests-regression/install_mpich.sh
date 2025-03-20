@@ -105,9 +105,9 @@ wget "${MPICHURL}"
 ###
 # Clean up any existing versions.
 ###
-sudo apt update 
-sudo apt remove -y mpich
-sudo apt autoremove -y
+apt update 
+apt remove -y mpich
+apt autoremove -y
 
 ###
 # Install Python3 Dependency
@@ -121,5 +121,5 @@ tar -zxf "${MPICHFILE}"
 cd "${MPICHDIR}"
 ./configure --prefix="${TARGDIR}"
 make -j "${NUMPROC}"
-sudo make install -j "${NUMPROC}"
+make install -j "${NUMPROC}"
 echo "Finished"

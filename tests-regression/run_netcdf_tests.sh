@@ -99,7 +99,7 @@ CHECKERR_AC() {
 # Print out version.
 ###
 cat /home/tester/VERSION.md
-if [ "${USE_CC}" = "mpicc" ]; then
+if [ "${USE_CC}" = "mpicc" -a "${MPICHVER}" != "" ]; then
     echo "Using MPICH version: ${MPICHVER}"
 fi
 
@@ -251,8 +251,8 @@ echo "Using TARGDIR=${TARGDIR}"
 ###
 # Install specific version of MPICH
 ###
-if [ "${USE_CC}" = "mpicc" ]; then
-    /home/tester/install_mpich.sh -v ${MPICHVER}
+if [ "${USE_CC}" = "mpicc" -a "${MPICHVER}" != "" ]; then
+    ${SUDOCMD} /home/tester/install_mpich.sh -v ${MPICHVER}
 fi
 
 ##
@@ -366,7 +366,7 @@ while [[ $CCOUNT -le $CREPS ]]; do
                     make ExperimentalSubmit
                 fi
             else
-                make -j $TESTPROC && ctest --repeat until-pass:3 -j$TESTPROC; CHECKERR
+                make -j $TESTPROC && ctest --repeat until-pass:${CTEST_REPEAT} -j$TESTPROC; CHECKERR
                 if [ "x$USE_VALGRIND" == "xTRUE" ]; then
                     make ExperimentalMemCheck
                 fi
@@ -411,7 +411,16 @@ while [[ $CCOUNT -le $CREPS ]]; do
     CCOUNT=$[$CCOUNT+1]
 done
 
-if [ "${RUNF}" != "" -o "${RUNJAVA}" != "" -o "${RUNNCO}" != "" -o "${RUNP}" != "" -o "${RUNCXX4}" != "" ]; then
+if [ "${RUNF}" = "TRUE" -o "${RUNJAVA}" = "TRUE" -o "${RUNNCO}" = "TRUE" -o "${RUNP}" = "TRUE" -o "${RUNCXX4}" = "TRUE" ]; then
+    echo ""
+    echo -e "o RUNF: ${RUNF}"
+    echo -e "o RUNJAVA: ${RUNJAVA}"
+    echo -e "o RUNNCO: ${RUNNCO}"
+    echo -e "o RUNP: ${RUNP}"
+    echo -e "o RUNCXX4: ${RUNCXX4}"
+    echo ""
+
+
     if [ "x$USECMAKE" = "xTRUE" ]; then
         cd build-netcdf-c
         make -j "${TESTPROC}"
@@ -440,10 +449,10 @@ if [ "x$RUNF" == "xTRUE" ]; then
             cd build-netcdf-fortran
             cmake ${WORKING_DIRECTORY}/netcdf-fortran -DBUILDNAME_PREFIX="docker$BITNESS-$USE_CC" -DBUILDNAME_SUFFIX="$FBRANCH" -DCMAKE_C_COMPILER=$USE_CC ${CMAKE_PAR_OPTS_FORTRAN} $FOPTS
             if [ "x$USEDASH" == "xTRUE" ]; then
-                ctest --repeat until-pass:3 -j$TESTPROC_FORTRAN -D Experimental
+                ctest --repeat until-pass:${CTEST_REPEAT} -j$TESTPROC_FORTRAN -D Experimental
             else
                 make -j $TESTPROC_FORTRAN ; CHECKERR
-                ctest --repeat until-pass:3 -j$TESTPROC_FORTRAN ; CHECKERR
+                ctest --repeat until-pass:${CTEST_REPEAT} -j$TESTPROC_FORTRAN ; CHECKERR
             fi
             make clean
             cd ${WORKING_DIRECTORY}

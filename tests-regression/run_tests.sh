@@ -3,6 +3,7 @@
 # Depending on value of TESTTYPE, run the appropriate script.
 #
 
+set -e
 
 if [ "${CMD}" = "help" -o "${CMD}" = "HELP" -o "${DOHELP}" != "" -o "${HELP}" != "" ]; then
     cat /home/tester/README.md
@@ -13,11 +14,7 @@ fi
 function ERR {
     RES=$?
     if [ $RES -ne 0 ]; then
-        git stash
-        git clean -fd
-        git reset --hard
-        echo "$(git status | head -n 1): Error found: $RES"
-        echo -e "\t[x] $(git status | head -n 1): Error found: $RES" >> "${LOGFILE}"
+        echo "Error Found: ${RES}"
         exit $RES
     fi
 

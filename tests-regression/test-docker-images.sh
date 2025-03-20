@@ -4,6 +4,8 @@
 # netcdf-java directories.
 #
 
+set -e
+
 CHECKERR() {
 
     RES=$?
@@ -75,7 +77,7 @@ echo -e "\to NetCDF-C: ${NCVER}"
 echo -e "\to NetCDF-Fortran: ${NFVER}"
 echo -e "\to NetCDF-Java: ${NJVER}"
 echo -e "\to command: ${DCMD}"
-${DCMD} >> ${LOGFILE} 2>&1 ;
+${DCMD} >> ${LOGFILE} 2>&1 ; CHECKERR
 echo ""
 
 DCMD="docker run --rm -it -v ${NCDIR}:/netcdf-c -v ${NFDIR}:/netcdf-fortran -v ${NJVER}:/netcdf-java -v ${ENVDIR}:/environments -e USE_CC=clang docker.unidata.ucar.edu/nctests"
@@ -86,20 +88,31 @@ echo -e "\to NetCDF-C: ${NCVER}"
 echo -e "\to NetCDF-Fortran: ${NFVER}"
 echo -e "\to NetCDF-Java: ${NJVER}"
 echo -e "\to command: ${DCMD}"
-${DCMD} >> ${LOGFILE} 2>&1 ;
+${DCMD} >> ${LOGFILE} 2>&1 ; CHECKERR
 echo ""
 
 DCMD="docker run --rm -it -v ${NCDIR}:/netcdf-c -v ${NFDIR}:/netcdf-fortran -v ${NJVER}:/netcdf-java -v ${ENVDIR}:/environments -e USE_CC=clang docker.unidata.ucar.edu/nctests"
 echo ""
-echo -e "Running Baseline Docker Test (mpicc):"
+echo -e "Running Baseline Docker Test (mpicc) (default version):"
 echo -e "======================================"
 echo -e "\to NetCDF-C: ${NCVER}"
 echo -e "\to NetCDF-Fortran: ${NFVER}"
 echo -e "\to NetCDF-Java: ${NJVER}"
 echo -e "\to command: ${DCMD}"
-${DCMD} >> ${LOGFILE} 2>&1 ;
+${DCMD} >> ${LOGFILE} 2>&1 ; CHECKERR
 echo ""
 
+MPIVER="4.3.0"
+DCMD="docker run --rm -it -v ${NCDIR}:/netcdf-c -v ${NFDIR}:/netcdf-fortran -v ${NJVER}:/netcdf-java -v ${ENVDIR}:/environments -e MPICHVER=${MPIVER} -e USE_CC=clang docker.unidata.ucar.edu/nctests"
+echo ""
+echo -e "Running Baseline Docker Test (mpicc) (version ${MPIVER}):"
+echo -e "======================================"
+echo -e "\to NetCDF-C: ${NCVER}"
+echo -e "\to NetCDF-Fortran: ${NFVER}"
+echo -e "\to NetCDF-Java: ${NJVER}"
+echo -e "\to command: ${DCMD}"
+${DCMD} >> ${LOGFILE} 2>&1 ; CHECKERR
+echo ""
 
 ###
 # Done Testing
