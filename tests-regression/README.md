@@ -131,7 +131,7 @@ The following environmental variables can be used to control the behavior at run
 * `CXXREPS` - Default 1.  How many times to repeat the `netcdf-cxx4` build and tests.
 * `PREPS` - Default 1.  How many times to repeat the `netcdf4-python` build and tests.
 * `NCOREPS` - Default 1.  How many times to repeat the `NCO` build and tests.
-* `CTEST_REPEAT` - Default 1.  How many times a `ctest` should repeat until success.
+* `CTEST_REPEAT` - Default 3.  How many times a `ctest` should repeat until success.
 
 > Note that `USECMAKE` and `USEAC` may be used concurrently and, when coupled with `CREPS` and other loop control options, we can see if the different build systems interfere with each other.
 
