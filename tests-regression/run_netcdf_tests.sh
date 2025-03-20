@@ -99,6 +99,10 @@ CHECKERR_AC() {
 # Print out version.
 ###
 cat /home/tester/VERSION.md
+if [ "${USE_CC}" = "mpicc" ]; then
+    echo "Using MPICH version: ${MPICHVER}"
+fi
+
 echo "Using HDF5 version: ${H5VER}"
 echo ""
 sleep 3
@@ -244,6 +248,13 @@ fi
 export TARGDIR="/environments/${H5VER}-${CBRANCH}-${USE_CC}"
 echo "Using TARGDIR=${TARGDIR}"
 
+###
+# Install specific version of MPICH
+###
+if [ "${USE_CC}" = "mpicc" ]; then
+    /home/tester/install_mpich.sh -v ${MPICHVER}
+fi
+
 ##
 # Allow us to build dependencies from source.
 # For now, just HDF5
@@ -278,11 +289,6 @@ if [ "${USE_CC}" = "mpicc" ]; then
     export CMAKE_PAR_OPTS="-DENABLE_PARALLEL_TESTS=${RUNC} -DENABLE_PNETCDF=${RUNC}"
     export CMAKE_PAR_OPTS_FORTRAN="-DCMAKE_Fortran_COMPILER=$(which mpifort)"
     export USE_FC=mpifort
-
-    ###
-    # Install specific version of MPICH
-    ###
-    /home/tester/install_mpich -v ${MPICHVER}
 
     if [ "${RUNC}" = "TRUE" ]; then
         export AC_PAR_OPTS="--enable-parallel-tests --enable-pnetcdf"
@@ -405,20 +411,20 @@ while [[ $CCOUNT -le $CREPS ]]; do
     CCOUNT=$[$CCOUNT+1]
 done
 
+if [ "${RUNF}" != "" -o "${RUNJAVA}" != "" -o "${RUNNCO}" != "" -o "${RUNP}" != "" -o "${RUNCXX4}" != "" ]; then
+    if [ "x$USECMAKE" = "xTRUE" ]; then
+        cd build-netcdf-c
+        make -j "${TESTPROC}"
+        ${SUDOCMD} make install
+    elif [ "x$USEAC" = "xTRUE" ]; then
+        cd netcdf-c
+        ${SUDOCMD} make install -j $TESTPROC
+    fi
 
-if [ "x$USECMAKE" = "xTRUE" ]; then
-    cd build-netcdf-c
-    make -j "${TESTPROC}"
-    ${SUDOCMD} make install
-elif [ "x$USEAC" = "xTRUE" ]; then
-    cd netcdf-c
-    ${SUDOCMD} make install -j $TESTPROC
+    cd ${WORKING_DIRECTORY}
+
+    ${SUDOCMD} ldconfig
 fi
-
-cd ${WORKING_DIRECTORY}
-
-${SUDOCMD} ldconfig
-
 ###
 # Build & test netcdf-fortran
 ###

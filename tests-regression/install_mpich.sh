@@ -98,6 +98,11 @@ MPICHFILE="${MPICHDIR}.tar.gz"
 MPICHURL="https://www.mpich.org/static/downloads/${MPICHVER}/${MPICHFILE}"
 
 ###
+# Fetch the file
+###
+wget "${MPICHURL}"
+
+###
 # Clean up any existing versions.
 ###
 sudo apt update 
@@ -110,9 +115,8 @@ sudo apt autoremove -y
 sudo apt install -y python3
 
 ###
-# Fetch the file
+# Install mpich
 ###
-wget "${MPICHURL}"
 tar -zxf "${MPICHFILE}"
 cd "${MPICHDIR}"
 ./configure --prefix="${TARGDIR}"
