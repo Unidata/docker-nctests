@@ -15,7 +15,7 @@ dosummary() {
     echo
     
     echo -e ""
-    echo -e "Installing to:\n\to ${TARGDIR}"
+    echo -e "Installing to:\to ${TARGDIR}"
     sleep 3
 }
 
@@ -52,7 +52,9 @@ dohelp() {
 
 if [ $# -lt 1 ]; then
     dohelp
-    exit
+    echo ""
+    echo "Press [Return to continue]"
+    read
 fi
 
 ALLARGS="$@"
@@ -75,6 +77,7 @@ do
         -v | --version)
             MPICHVER="${2}"
             shift 2
+            ;;
         --) shift; break;;
         *)
             dohelp

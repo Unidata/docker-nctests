@@ -279,6 +279,11 @@ if [ "${USE_CC}" = "mpicc" ]; then
     export CMAKE_PAR_OPTS_FORTRAN="-DCMAKE_Fortran_COMPILER=$(which mpifort)"
     export USE_FC=mpifort
 
+    ###
+    # Install specific version of MPICH
+    ###
+    /home/tester/install_mpich -v ${MPICHVER}
+
     if [ "${RUNC}" = "TRUE" ]; then
         export AC_PAR_OPTS="--enable-parallel-tests --enable-pnetcdf"
     else
