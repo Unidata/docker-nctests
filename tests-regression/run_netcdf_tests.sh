@@ -99,7 +99,7 @@ CHECKERR_AC() {
 # Print out version.
 ###
 cat /home/tester/VERSION.md
-if [ "${USE_CC}" = "mpicc" -a "${MPICHVER}" != "" ]; then
+if [ "${USE_CC}" = "mpicc" ]; then
     echo "Using MPICH version: ${MPICHVER}"
 fi
 
@@ -247,18 +247,14 @@ fi
 ##
 export TARGDIR="/environments/${H5VER}-${CBRANCH}-${USE_CC}"
 if [ "${USE_CC}" = "mpicc" ]; then
-    if [ "${MPICHVER}" = "" ]; then
-       export TARGDIR="${TARGDIR}.default"
-    else 
-        export TARGDIR="${TARGDIR}.${MPICHVER}"
-    fi
+    export TARGDIR="${TARGDIR}.${MPICHVER}"
 fi
 echo "Using TARGDIR=${TARGDIR}"
 
 ###
 # Install specific version of MPICH
 ###
-if [ "${USE_CC}" = "mpicc" -a "${MPICHVER}" != "" ]; then
+if [ "${USE_CC}" = "mpicc" -a "${MPICHVER}" != "default" ]; then
     ${SUDOCMD} /home/tester/install_mpich.sh -v ${MPICHVER}
 fi
 

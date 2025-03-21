@@ -34,7 +34,7 @@ ENV PBRANCH=master
 ENV NCOBRANCH=master
 ENV JAVABRANCH=maint-5.x
 ENV JDKVER=8
-ENV MPICHVER=""
+ENV MPICHVER=default
 ##
 # Specify the locations for local mapped volumes if we want to skip git checkout.
 # This will allow us to change it dynamically if we are running on Github Actions or some
