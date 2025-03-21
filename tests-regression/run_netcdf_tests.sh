@@ -246,6 +246,13 @@ fi
 # Set Target Dir
 ##
 export TARGDIR="/environments/${H5VER}-${CBRANCH}-${USE_CC}"
+if [ "${USE_CC}" = "mpicc" ]; then
+    if [ "${MPICHVER}" = "" ]; then
+       export TARGDIR="${TARGDIR}.default"
+    else 
+        export TARGDIR="${TARGDIR}.${MPICHVER}"
+    fi
+fi
 echo "Using TARGDIR=${TARGDIR}"
 
 ###
@@ -306,7 +313,7 @@ if [ "${USE_CC}" = "mpicc" ]; then
         fi
     fi
     export RUNP=OFF
-    export RUNJAVA=OFF
+    #export RUNJAVA=OFF
     export RUNNCO=OFF
 
 fi
