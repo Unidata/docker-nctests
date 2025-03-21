@@ -118,8 +118,10 @@ sudo apt install -y python3
 # Install mpich
 ###
 tar -zxf "${MPICHFILE}"
-cd "${MPICHDIR}"
+pushd "${MPICHDIR}"
 ./configure --prefix="${TARGDIR}"
 make -j "${NUMPROC}"
 make install -j "${NUMPROC}"
+popd
+rm -rf "${MPICHDIR}"
 echo "Finished"

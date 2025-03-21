@@ -99,6 +99,17 @@ ENV TZ=America/Denver
 RUN apt-get update
 RUN apt-get install -y tzdata
 
+###
+# Custom mpich install.
+# Doing it dynamically takes a significant amount of time on Github Actions."
+##
+COPY install_mpich.sh ${HOME}/
+RUN chmod 755 ${HOME}/install_mpich.sh
+
+###
+# Base provision
+###
+
 COPY provision_base_ubuntu.sh ${HOME}/
 RUN chmod 755 ${HOME}/provision_base_ubuntu.sh
 RUN ${HOME}/provision_base_ubuntu.sh
@@ -118,6 +129,7 @@ COPY run_netcdf_tests.sh ${HOME}/
 COPY run_tests.sh ${HOME}/
 COPY install_hdf5.sh ${HOME}/
 COPY install_mpich.sh ${HOME}/
+
 COPY README.md ${HOME}/
 
 RUN echo "Version:\n\tunidata/nctests ($BITNESS) :\t$NCTEST_VERSION\t$(date)" > "/home/tester/${VERSION_FILE}"
@@ -130,7 +142,8 @@ RUN dos2unix ${HOME}/run_tests.sh
 RUN dos2unix ${HOME}/run_netcdf_tests.sh 
 RUN dos2unix ${HOME}/install_hdf5.sh
 RUN dos2unix ${HOME}/install_mpich.sh
-RUN chmod 755 ${HOME}/install_hdf5.sh
 RUN chmod 755 ${HOME}/install_mpich.sh
+RUN chmod 755 ${HOME}/install_hdf5.sh
+
 
 ENTRYPOINT ["/bin/bash", "-l", "-e", "/home/tester/run_tests.sh"]
