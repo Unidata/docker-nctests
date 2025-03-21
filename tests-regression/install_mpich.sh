@@ -7,6 +7,16 @@ MPICHVER=4.3.0
 TARGDIR="/usr"
 NUMPROC=$(nproc)
 
+
+# Check if 'apt' is available
+if ! command -v apt &> /dev/null; then
+    echo ""
+    echo "Error: 'apt' is not available on the system."
+    echo "This command is meant for Debian/Ubuntu-based systems."
+    echo ""
+    exit 1
+fi
+
 dosummary() {
     echo -e ""
     echo -e "MPICH Version to be installed:\t${MPICHVER}"
@@ -118,8 +128,10 @@ sudo apt install -y python3
 # Install mpich
 ###
 tar -zxf "${MPICHFILE}"
-cd "${MPICHDIR}"
+pushd "${MPICHDIR}"
 ./configure --prefix="${TARGDIR}"
 make -j "${NUMPROC}"
 make install -j "${NUMPROC}"
+popd
+rm -rf "${MPICHDIR}"
 echo "Finished"
