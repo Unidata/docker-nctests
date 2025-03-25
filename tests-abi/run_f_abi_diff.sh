@@ -28,9 +28,20 @@ if [ "x$NEWVER" == "x" ]; then
 fi
 
 
+
 TOPDIR=$(pwd)
 OLDBUILD="build-$OLDVER"
 NEWBUILD="build-$NEWVER"
+
+##
+# First install libnetcdf-c
+##
+
+export NCVER=v4.9.3
+git clone https://github.com/Unidata/netcdf-c && cd netcdf-c && git checkout ${NCVER} && mkdir build && cd build && cmake .. -DENABLE_TESTS=OFF -DCMAKE_INSTALL_PREFIX=/usr && make -j 100 && sudo make install
+##
+# End install netCDF-C
+##
 
 TDIR="netcdf-fortran"
 
