@@ -131,11 +131,12 @@ if [ -d "/netcdf-c" ]; then
         git clone /netcdf-c ${WORKING_DIRECTORY}/netcdf-c
         cd netcdf-c
         export CBRANCH=$(echo $(git log | head -n 1 | cut -d " " -f 2| head -c 6 ))
+        echo "Detecting local CBRANCH: ${CBRANCH}"
         cd ..
     fi
 else
-    echo "Using remote netcdf-c repository"
-    git clone http://www.github.com/Unidata/netcdf-c --single-branch --branch $CBRANCH --depth=1 $CBRANCH
+    echo "Using remote netcdf-c repository, checking out branch: ${CBRANCH}"
+    git clone http://www.github.com/Unidata/netcdf-c --branch $CBRANCH --depth=1 $CBRANCH
     mv $CBRANCH netcdf-c
 fi
 
@@ -151,11 +152,12 @@ if [ "x$RUNF" == "xTRUE" ]; then
             git clone /netcdf-fortran ${WORKING_DIRECTORY}/netcdf-fortran
             cd netcdf-fortran
             export FBRANCH=$(echo $(git log | head -n 1 | cut -d " " -f 2| head -c 6 ))
+            echo "Detecting local FBRANCH: ${FBRANCH}"
             cd ..
         fi
     else
-        echo "Using remote netcdf-fortran repository"
-        git clone http://www.github.com/Unidata/netcdf-fortran --single-branch --branch $FBRANCH --depth=1 $FBRANCH
+        echo "Using remote netcdf-fortran repository, checking out branch: ${FBRANCH}"
+        git clone http://www.github.com/Unidata/netcdf-fortran --branch $FBRANCH --depth=1 $FBRANCH
         mv $FBRANCH netcdf-fortran
     fi
 else
