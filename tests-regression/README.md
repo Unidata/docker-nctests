@@ -137,6 +137,14 @@ The following environmental variables can be used to control the behavior at run
 * ~~`USEAC` - Default to `FALSE`. When `TRUE`, run *in-source* `autoconf`-based builds.~~ **DEPRECATED**
 * `DISTCHECK` - Default to `FALSE`.  Requires `USE_BUILDSYSTEM` to be `autotools` or `both`.  Runs `make distcheck` after `make check`.
 
+### Documentation generation
+---
+
+In order to build documentation for `netcdf-c` and `netcdf-fortran`, you must specify either or both of the variables below to
+`TRUE` or `ON`, and also create a volume mapping to `/docs` in the container, e.g. `-v [path on host]:/docs`.
+
+* `CDOCS` - Default: `FALSE`
+* `FDOCS` - Default: `FALSE`
 
 ### Advanced Options
 ---
