@@ -134,6 +134,7 @@ COPY install_hdf5.sh ${HOME}/
 COPY install_mpich.sh ${HOME}/
 
 COPY README.md ${HOME}/
+COPY Dockerfile.nctests ${HOME}/
 
 RUN echo "Version:\n\tunidata/nctests ($BITNESS) :\t$NCTEST_VERSION\t$(date)" > "/home/tester/${VERSION_FILE}"
 

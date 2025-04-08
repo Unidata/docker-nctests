@@ -407,17 +407,18 @@ while [[ $CCOUNT -le $CREPS ]]; do
                 fi
             else
                 make -j $TESTPROC && ctest --repeat until-pass:${CTEST_REPEAT} -j$TESTPROC; CHECKERR
+                if [ "x${CDOCS}" = "TRUE" -o "${CDOCS}" = "ON" ]; then
+                    CDOCDIR="${DOCDIR}/docs-cmake"
+                    mkdir -p "${CDOCDIR}"
+                    cp -R ./docs/html/* "${CDOCDIR}"
+                fi
                 if [ "x$USE_VALGRIND" == "xTRUE" ]; then
                     make ExperimentalMemCheck
                 fi
             fi
         fi
 
-        if [ "x${CDOCS}" = "TRUE" -o "${CDOCS}" = "ON" ]; then
-            CDOCDIR="${DOCDIR}/docs-cmake"
-            mkdir -P "${CDOCDIR}"
-            cp -R ./docs/html/* "${CDOCDIR}"
-        fi
+
         cd ${WORKING_DIRECTORY}
         echo ""
     fi
@@ -461,6 +462,8 @@ while [[ $CCOUNT -le $CREPS ]]; do
     CCOUNT=$[$CCOUNT+1]
 done
 
+cd "${WORKING_DIRECTORY}"
+
 if [ "${RUNF}" = "TRUE" -o "${RUNJAVA}" = "TRUE" -o "${RUNNCO}" = "TRUE" -o "${RUNP}" = "TRUE" -o "${RUNCXX4}" = "TRUE" ]; then
     echo ""
     echo -e "o RUNF: ${RUNF}"
@@ -494,10 +497,24 @@ if [ "x$RUNF" == "xTRUE" ]; then
         if [ "x$USECMAKE" = "xTRUE" ]; then
             echo "[$FCOUNT | $FREPS] Testing netCDF-Fortran - CMAKE"
             echo "----------------------------------"
+
+            echo -e "o WORKING_DIRECTORY:\t${WORKING_DIRECTORY}"
             cd ${WORKING_DIRECTORY}
+            echo ""
+            pwd
+            echo ""
+            ls
+            echo ""
+
+
             mkdir -p build-netcdf-fortran
             cd build-netcdf-fortran
-            cmake ${WORKING_DIRECTORY}/netcdf-fortran -DBUILDNAME_PREFIX="docker$BITNESS-$USE_CC" "${CMAKE_FDOC_OPTS}" -DBUILDNAME_SUFFIX="$FBRANCH" -DCMAKE_C_COMPILER=$USE_CC ${CMAKE_PAR_OPTS_FORTRAN} $FOPTS
+            set -x
+
+            cmake ${WORKING_DIRECTORY}/netcdf-fortran -DBUILDNAME_PREFIX="docker$BITNESS-$USE_CC" ${CMAKE_FDOC_OPTS} -DBUILDNAME_SUFFIX="$FBRANCH" -DCMAKE_C_COMPILER=$USE_CC ${CMAKE_PAR_OPTS_FORTRAN} $FOPTS
+            
+            set +x
+
             if [ "x$USEDASH" == "xTRUE" ]; then
                 ctest --repeat until-pass:${CTEST_REPEAT} -j$TESTPROC_FORTRAN -D Experimental
             else
@@ -507,7 +524,7 @@ if [ "x$RUNF" == "xTRUE" ]; then
             make clean
             if [ "${FDOCS}" = "TRUE" -o "${FDOCS}" = "ON" ]; then
                 FDOCDIR="${DOCDIR}/docs-cmake"
-                mkdir -P "${FDOCDIR}"
+                mkdir -p "${FDOCDIR}"
                 cp -R ./docs/html/* "${FDOCDIR}"
             fi
             
@@ -523,7 +540,7 @@ if [ "x$RUNF" == "xTRUE" ]; then
             if [ ! -f "configure" ]; then
                 autoreconf -if
             fi
-            CC=$USE_CC FC=${USE_FC} F77=${USE_FC} ./configure "$AC_FOPTS" "${AC_FDOC_OPTS}"
+            CC=$USE_CC FC=${USE_FC} F77=${USE_FC} ./configure "$AC_FOPTS" ${AC_FDOC_OPTS}
             make -j $TESTPROC_FORTRAN ; CHECKERR
             make check TESTS="" -j $TESTPROC_FORTRAN
             make check -j $TESTPROC_FORTRAN ; CHECKERR_AC
@@ -534,7 +551,7 @@ if [ "x$RUNF" == "xTRUE" ]; then
 
             if [ "${FDOCS}" = "TRUE" -o "${FDOCS}" = "ON" ]; then
                 FDOCDIR="${DOCDIR}/docs-autotools"
-                mkdir -P "${FDOCDIR}"
+                mkdir -p "${FDOCDIR}"
                 cp -R ./docs/html/* "${FDOCDIR}"
             fi
 
