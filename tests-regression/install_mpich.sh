@@ -7,7 +7,6 @@ MPICHVER=4.3.0
 TARGDIR="/usr"
 NUMPROC=$(nproc)
 
-
 # Check if 'apt' is available
 if ! command -v apt &> /dev/null; then
     echo ""
