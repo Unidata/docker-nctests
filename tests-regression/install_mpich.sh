@@ -1,7 +1,7 @@
 #!/bin/bash
 #
 # Install mpich, after uninstalling current version.
-set -e
+#set -e
 
 MPICHVER=4.3.0
 TARGDIR="/usr"
