@@ -112,7 +112,10 @@ RUN chmod 755 ${HOME}/install_mpich.sh
 
 COPY provision_base_ubuntu.sh ${HOME}/
 RUN chmod 755 ${HOME}/provision_base_ubuntu.sh
-RUN ${HOME}/provision_base_ubuntu.sh
+RUN apt update
+RUN apt install -y dos2unix
+RUN dos2unix /root/provision_base_ubuntu.sh
+RUN /bin/sh -x /root/provision_base_ubuntu.sh
 
 #####
 # Configure system and environment.
