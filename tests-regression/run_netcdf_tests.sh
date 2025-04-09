@@ -373,19 +373,20 @@ if [ "${CDOCS_DEV}" != "FALSE" ]; then
     cd "${WORKING_DIRECTORY}/netcdf-c"
     doxygen docs/Doxyfile.developer
     CDOCDIR="${DOCDIR}/c-developer-docs-cmake"
-    mkdir -p "${CDOCDIR}"
-    cp -R ./html/* "${CDOCDIR}"
+    mv -v ./html/ "${CDOCDIR}"
 fi    
 
 if [ "${FDOCS_DEV}" != "FALSE" -a "${RUNF}" != "FALSE" ]; then
     cd "${WORKING_DIRECTORY}/netcdf-fortran"
     doxygen docs/Doxyfile.developer
     FDOCDIR="${DOCDIR}/fortran-developer-docs-cmake"
-    mkdir -p "${FDOCDIR}"
-    cp -R ./html/* "${CDOCDIR}"
+    mv -v ./html/ "${FDOCDIR}"
 fi  
-# CREPS is defined as an environmental variable.
 
+cd ${WORKING_DIRECTORY}
+
+
+# CREPS is defined as an environmental variable.
 ###
 # Determine if we are doing memory checks.
 ###
@@ -466,7 +467,7 @@ while [[ $CCOUNT -le $CREPS ]]; do
         fi
         if [ "${CDOCS}" = "TRUE" -o "${CDOCS}" = "ON" ]; then
             CDOCDIR="${DOCDIR}/c-docs-autotools"
-            mkdir -P "${CDOCDIR}"
+            mkdir -p "${CDOCDIR}"
             cp -R ./docs/html/* "${CDOCDIR}"
         fi
         cd ${WORKING_DIRECTORY}
