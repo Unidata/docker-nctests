@@ -5,10 +5,10 @@
 ###
 set -e
 
-apt-get update
-apt-get -y upgrade
-apt-get -y install --no-install-recommends sudo adduser
-apt-get -y install ca-certificates
+apt update
+apt -y upgrade
+apt -y install --no-install-recommends sudo adduser
+apt -y install ca-certificates
 ##
 # Set up a non-root admin to run the tests as.
 ##
@@ -27,7 +27,7 @@ sudo apt-get -y install --no-install-recommends bzip2 g++ gfortran libtool autom
 ###
 # Custom mpich installs
 ###
-/bin/sh -x /root/install_mpich.sh -v 4.3.0 -j $(nproc)
+sudo bash -x  /root/install_mpich.sh -v 4.3.0 -j $(nproc)
 
 
 ##
