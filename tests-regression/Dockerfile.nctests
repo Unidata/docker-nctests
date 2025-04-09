@@ -9,7 +9,7 @@ ENV HOME=/root
 WORKDIR /root
 LABEL maintainer="Ward Fisher <wfisher@ucar.edu>"
 
-ENV NCTEST_VERSION="1.11.2 - development"
+ENV NCTEST_VERSION="1.11.3 - development"
 
 ENV VERSION_FILE=VERSION.md
 
