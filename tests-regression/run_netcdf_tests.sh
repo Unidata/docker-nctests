@@ -464,7 +464,7 @@ while [[ $CCOUNT -le $CREPS ]]; do
             fi
 
         fi
-        if [ "x${CDOCS}" = "TRUE" -o "${CDOCS}" = "ON" ]; then
+        if [ "${CDOCS}" = "TRUE" -o "${CDOCS}" = "ON" ]; then
             CDOCDIR="${DOCDIR}/c-docs-autotools"
             mkdir -P "${CDOCDIR}"
             cp -R ./docs/html/* "${CDOCDIR}"
