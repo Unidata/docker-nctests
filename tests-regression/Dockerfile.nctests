@@ -34,7 +34,8 @@ ENV PBRANCH=master
 ENV NCOBRANCH=master
 ENV JAVABRANCH=maint-5.x
 ENV JDKVER=8
-ENV MPICHVER=""
+ENV MPICHVER=default
+
 ##
 # Specify the locations for local mapped volumes if we want to skip git checkout.
 # This will allow us to change it dynamically if we are running on Github Actions or some
@@ -66,6 +67,10 @@ ENV RUNP=FALSE
 ENV RUNNCO=FALSE
 ENV RUNJAVA=FALSE
 ENV RUNCXX4=FALSE
+ENV CDOCS=FALSE
+ENV CDOCS_DEV=FALSE
+ENV FDOCS=FALSE
+ENV FDOCS_DEV=FALSE
 
 ENV USEDASH=FALSE
 
@@ -134,6 +139,7 @@ COPY install_hdf5.sh ${HOME}/
 COPY install_mpich.sh ${HOME}/
 
 COPY README.md ${HOME}/
+COPY Dockerfile.nctests ${HOME}/
 
 RUN echo "Version:\n\tunidata/nctests ($BITNESS) :\t$NCTEST_VERSION\t$(date)" > "/home/tester/${VERSION_FILE}"
 

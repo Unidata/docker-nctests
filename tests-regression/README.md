@@ -50,12 +50,9 @@ NCO integration adds additional regression testing.
 
 ## Specifying an Alternative netcdf-c Branch
 
-
-
 You can specify an alternative branch for `netcdf-c` than `main` using the following syntax.
 
     $ docker run -e CBRANCH="branch name" docker.unidata.ucar.edu/nctests
-
 
 
 ## Working with local copies instead of pulling from GitHub
@@ -77,7 +74,8 @@ The following environmental variables can be used to control the behavior at run
 * `HELP` - If non-zero, the `help` information will be printed to standard out.
 
 ### Branch Control
-----
+---
+
 * `CBRANCH` - Git branch for `netcdf-c`
 * `FBRANCH` - Git branch for `netcdf-fortran`
 * `CXXBRANCH` - Git branch for `netcdf-cxx4`
@@ -89,6 +87,7 @@ The following environmental variables can be used to control the behavior at run
     * Default: `4.5.4`.
 
 ### Select HDF5 Version to Use
+---
 
 * `H5VER` - Set to the version you want to use. Default: `1.14.3`
   * Introduced in version `1.9.3`. 
@@ -96,10 +95,13 @@ The following environmental variables can be used to control the behavior at run
     * Example: -e HDF5SRC="1.14.3"
 
 ### Compiler Option
-----
+---
+
 * `USE_CC` - `C` language compiler to use.
 	* `gcc` - Default
 	* `clang`
+    * `mpicc`
+        * `MPICHVER` - Version of MPICH to use.  Options are `default` or numeric version, e.g. `4.2.0`.
 * `USE_CXX` - `C++` language compiler to use.
 	* `g++` - Default
 	* `clang++`
@@ -107,7 +109,8 @@ The following environmental variables can be used to control the behavior at run
 > Note that these options are currently only honored by the `serial` and `serial32` images.  How they function with the parallel images is TBD.
 
 ### CFlags for CMake, autotools-based builds.
-----
+---
+
 * `COPTS` - CMake options for `netcdf-c`
 * `FOPTS` - CMake options for `netcdf-fortran`
 * `CXXOPTS` - CMake options for `netcdf-cxx4`
@@ -116,7 +119,8 @@ The following environmental variables can be used to control the behavior at run
 * `AC_CXXOPTS` - Autoconf options for `netcdf-cxx4`
 
 ### Which Tests to run
-----
+---
+
 * `RUNC` - Set to `OFF`, `FALSE`, anything but `TRUE`, to disable running `netcdf-c` tests. NetCDF-C is still downloaded, compiled and installed.
 * `RUNF` - Set to `OFF`, `FALSE`, anything but `TRUE`, to disable running `netcdf-fortran` tests.
 * `RUNCXX` - Set to `OFF`, `FALSE`, anything but `TRUE`, to disable running `netcdf-cxx4` tests.
@@ -124,28 +128,29 @@ The following environmental variables can be used to control the behavior at run
 * `RUNP` - Set to `OFF`, `FALSE`, anything but `TRUE`, to disable running `netcdf4-python` tests.
 * `RUNNCO` - Set to `OFF`, `FALSE`, anything but `TRUE`, to disable running `NCO` tests.
 
-### Repeat tests
-----
-* `CREPS` - Default 1.  How many times to repeat the `netcdf-c` build and tests.
-* `FREPS` - Default 1.  How many times to repeat the `netcdf-fortran` build and tests.
-* `CXXREPS` - Default 1.  How many times to repeat the `netcdf-cxx4` build and tests.
-* `PREPS` - Default 1.  How many times to repeat the `netcdf4-python` build and tests.
-* `NCOREPS` - Default 1.  How many times to repeat the `NCO` build and tests.
-* `CTEST_REPEAT` - Default 3.  How many times a `ctest` should repeat until success.
-
-> Note that `USECMAKE` and `USEAC` may be used concurrently and, when coupled with `CREPS` and other loop control options, we can see if the different build systems interfere with each other.
-
 
 ### Build Systems to use
-----
-* `USE_BUILDSYSTEM` - 'Defaults to 'cmake'.  Options are 'cmake', 'autotools', 'both'. 
+---
+
+* `USE_BUILDSYSTEM` - 'Defaults to 'cmake'.  Options are `cmake`, `autotools`, `both`. 
 * ~~`USECMAKE` - Default to `TRUE`. When `TRUE`, run `cmake` builds.~~ **DEPRECATED**
 * ~~`USEAC` - Default to `FALSE`. When `TRUE`, run *in-source* `autoconf`-based builds.~~ **DEPRECATED**
-* `DISTCHECK` - Default to `FALSE`.  Requires `USEAC` to be `TRUE`.  Runs `make distcheck` after `make check`.
+* `DISTCHECK` - Default to `FALSE`.  Requires `USE_BUILDSYSTEM` to be `autotools` or `both`.  Runs `make distcheck` after `make check`.
 
+### Documentation generation
+---
+
+In order to build documentation for `netcdf-c` and `netcdf-fortran`, you must specify either or both of the variables below to
+`TRUE` or `ON`, and also create a volume mapping to `/docs` in the container, e.g. `-v [path on host]:/docs`.
+
+* `CDOCS` - Default: `FALSE`
+* `FDOCS` - Default: `FALSE`
+* `CDOCS_DEV` - Default: `FALSE`
+* `FDOCS_DEV` - Default: `FALSE`
 
 ### Advanced Options
-----
+---
+
 * `NCOMAKETEST` - **ADVANCED** Default to `FALSE`. When `TRUE`, run `make test` for the `NCO` package and parse the output for `Unidata`-related output.
 * `TESTPROC` - **ADVANCED** Default to `1`.  Defines the number of processors to use when building and testing.
 * `TESTPROC_FORTRAN` - **ADVANCED** Default to `1`. Defines the number of processors to use when building and testing.
@@ -156,6 +161,7 @@ The following environmental variables can be used to control the behavior at run
 ## Examples
 
 ### Important Information for the Examples
+---
 
 > For these examples, we will assume you are working on a command line, and located in the root `netcdf-c` directory, such that `$(pwd)` resolves to /location/to/root/netcdf/directory.
 
@@ -165,8 +171,6 @@ The following environmental variables can be used to control the behavior at run
 * `-it`: Run as an interactive shell. This allows us to `ctrl-c` a running docker instance.
 * `-v`: Mount a local volume to the docker image.
 * `-e`: Set an environmental variable.
-
-
 
 See [the section on environmental variables](#variables) for a complete list of variables understood by `docker.unidata.ucar.edu/nctests`.
 
@@ -209,15 +213,19 @@ This will put you into the shell for the docker container.  Note that any change
     $ docker run --rm -it -v $(pwd):/netcdf-c docker.unidata.ucar.edu/nctests
 
 ### - Run the tests against a local copy, and disable the fortran, c++ and remote dashboard.
+
     $ docker run --rm -it -v $(pwd):/netcdf-c -e USEDASH=OFF -e RUNF=OFF -e RUNCXX=OFF docker.unidata.ucar.edu/nctests
 
 ### - Run the NetCDF-C tests using Autootools instead of CMake, and repeat the build twice.
+
     $ docker run --rm -it -e USE_BUILDSYSTEM=both -e CREPS=2 docker.unidata.ucar.edu/nctests
 
 ### Running non-serial tests
+
     $ docker run --rm -it -e USE_BUILDSYSTEM=cmake -e USE_CC=mpicc docker.unidata.ucar.edu/nctests
 
 ### Running Java tests with internal data and ctest repeats 3 times to try to get success.
+
     $ docker run --rm -it -e CBRANCH=v4.9.2 -e RUNF=OFF -e CTEST_REPEAT=3 -e RUNJAVA=TRUE -v /path/to/cdmUnitTest:/share/testdata/cdmUnitTest -v ./results:/results docker.unidata.ucar.edu/nctests
 
     

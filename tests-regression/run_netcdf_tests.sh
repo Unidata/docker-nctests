@@ -99,7 +99,7 @@ CHECKERR_AC() {
 # Print out version.
 ###
 cat /home/tester/VERSION.md
-if [ "${USE_CC}" = "mpicc" -a "${MPICHVER}" != "" ]; then
+if [ "${USE_CC}" = "mpicc" ]; then
     echo "Using MPICH version: ${MPICHVER}"
 fi
 
@@ -121,6 +121,26 @@ sleep 3
 # specified by "CBRANCH", "FBRANCH", "CXXBRANCH"
 ###
 
+###
+# Check to see if we're generating documentation. If we are, /docs must exist.
+# If it doesn't, bail.
+###
+if [ "x${CDOCS}" = "TRUE" -o "${CDOCS}" = "ON" -o "${FDOCS}" = "TRUE" -o "${FDOCS}" = "ON" -o "${CDOCS_DEV}" != "FALSE" -o "${FDOCS_DEV}" != "FALSE" ]; then
+    if [ ! -d /docs ]; then
+        echo ""
+        echo "Error! Documentation generation requested, but /docs was not mapped."
+        echo "Please re-run with -v [host-path]:/docs"
+        echo ""
+        echo -e "o CDOCS:\t${CDOCS}"
+        echo -e "o FDOCS:\t${FDOCS}"
+        echo ""
+        exit 1
+    else
+        export DOCDIR="/docs/docs-$(date +%s | cut -c 4-)"
+        mkdir -p "${DOCDIR}"
+    fi
+fi
+
 if [ -d "/netcdf-c" ]; then
     echo "Using local netcdf-c repository"
     if [ "x$USE_LOCAL_CP" == "xTRUE" ]; then
@@ -131,11 +151,12 @@ if [ -d "/netcdf-c" ]; then
         git clone /netcdf-c ${WORKING_DIRECTORY}/netcdf-c
         cd netcdf-c
         export CBRANCH=$(echo $(git log | head -n 1 | cut -d " " -f 2| head -c 6 ))
+        echo "Detecting local CBRANCH: ${CBRANCH}"
         cd ..
     fi
 else
-    echo "Using remote netcdf-c repository"
-    git clone http://www.github.com/Unidata/netcdf-c --single-branch --branch $CBRANCH --depth=1 $CBRANCH
+    echo "Using remote netcdf-c repository, checking out branch: ${CBRANCH}"
+    git clone http://www.github.com/Unidata/netcdf-c --branch $CBRANCH --depth=1 $CBRANCH
     mv $CBRANCH netcdf-c
 fi
 
@@ -151,11 +172,12 @@ if [ "x$RUNF" == "xTRUE" ]; then
             git clone /netcdf-fortran ${WORKING_DIRECTORY}/netcdf-fortran
             cd netcdf-fortran
             export FBRANCH=$(echo $(git log | head -n 1 | cut -d " " -f 2| head -c 6 ))
+            echo "Detecting local FBRANCH: ${FBRANCH}"
             cd ..
         fi
     else
-        echo "Using remote netcdf-fortran repository"
-        git clone http://www.github.com/Unidata/netcdf-fortran --single-branch --branch $FBRANCH --depth=1 $FBRANCH
+        echo "Using remote netcdf-fortran repository, checking out branch: ${FBRANCH}"
+        git clone http://www.github.com/Unidata/netcdf-fortran --branch $FBRANCH --depth=1 $FBRANCH
         mv $FBRANCH netcdf-fortran
     fi
 else
@@ -247,18 +269,14 @@ fi
 ##
 export TARGDIR="/environments/${H5VER}-${CBRANCH}-${USE_CC}"
 if [ "${USE_CC}" = "mpicc" ]; then
-    if [ "${MPICHVER}" = "" ]; then
-       export TARGDIR="${TARGDIR}.default"
-    else 
-        export TARGDIR="${TARGDIR}.${MPICHVER}"
-    fi
+    export TARGDIR="${TARGDIR}.${MPICHVER}"
 fi
 echo "Using TARGDIR=${TARGDIR}"
 
 ###
 # Install specific version of MPICH
 ###
-if [ "${USE_CC}" = "mpicc" -a "${MPICHVER}" != "" ]; then
+if [ "${USE_CC}" = "mpicc" -a "${MPICHVER}" != "default" ]; then
     ${SUDOCMD} /home/tester/install_mpich.sh -v ${MPICHVER}
 fi
 
@@ -284,6 +302,17 @@ export LIBDIR="${TARGDIR}/lib"
 export PATH="${TARGDIR}/bin:$PATH"
 export CMAKE_PREFIX_PATH="${TARGDIR}"
 export USE_FC="gfortran"
+
+if [ "${CDOCS}" = "TRUE" -o "${CDOCS}" = "ON" ]; then
+    export CMAKE_CDOC_OPTS="-DENABLE_DOXYGEN=TRUE"
+    export AC_CDOC_OPTS="--enable-doxygen"
+fi
+
+if [ "${FDOCS}" = "TRUE" -o "${FDOCS}" = "ON" ]; then
+    export CMAKE_FDOC_OPTS="-DENABLE_DOXYGEN=TRUE"
+    export AC_FDOC_OPTS="--enable-doxygen"
+fi
+
 ###
 # If we are using a parallel compiler (mpicc), 
 # set some additional variables. 
@@ -336,9 +365,28 @@ NCOCOUNT=1
 
 cd ${WORKING_DIRECTORY}
 
+###
+# If we have specified CDOCS_DEV or FDOCS_DEV, we will generate this documentation first.
+###
+
+if [ "${CDOCS_DEV}" != "FALSE" ]; then
+    cd "${WORKING_DIRECTORY}/netcdf-c"
+    doxygen docs/Doxyfile.developer
+    CDOCDIR="${DOCDIR}/c-developer-docs-cmake"
+    mv -v ./html/ "${CDOCDIR}"
+fi    
+
+if [ "${FDOCS_DEV}" != "FALSE" -a "${RUNF}" != "FALSE" ]; then
+    cd "${WORKING_DIRECTORY}/netcdf-fortran"
+    doxygen docs/Doxyfile.developer
+    FDOCDIR="${DOCDIR}/fortran-developer-docs-cmake"
+    mv -v ./html/ "${FDOCDIR}"
+fi  
+
+cd ${WORKING_DIRECTORY}
+
 
 # CREPS is defined as an environmental variable.
-
 ###
 # Determine if we are doing memory checks.
 ###
@@ -361,7 +409,7 @@ while [[ $CCOUNT -le $CREPS ]]; do
         sleep 2
         mkdir -p build-netcdf-c
         cd build-netcdf-c
-        cmake ${WORKING_DIRECTORY}/netcdf-c -DCMAKE_INSTALL_PREFIX=${TARGDIR} -DNETCDF_ENABLE_HDF4=OFF -DNETCDF_ENABLE_MMAP=ON -DBUILDNAME_PREFIX="docker$BITNESS-$USE_CC" -DBUILDNAME_SUFFIX="$CBRANCH" -DCMAKE_C_COMPILER=$USE_CC ${CMAKE_PAR_OPTS} $COPTS -DCMAKE_C_FLAGS="${CMEM}" -DENABLE_TESTS="${RUNC}"; CHECKERR
+        cmake ${WORKING_DIRECTORY}/netcdf-c -DCMAKE_INSTALL_PREFIX=${TARGDIR} ${CMAKE_CDOC_OPTS} -DNETCDF_ENABLE_HDF4=OFF -DNETCDF_ENABLE_MMAP=ON -DBUILDNAME_PREFIX="docker$BITNESS-$USE_CC" -DBUILDNAME_SUFFIX="$CBRANCH" -DCMAKE_C_COMPILER=$USE_CC ${CMAKE_PAR_OPTS} $COPTS -DCMAKE_C_FLAGS="${CMEM}" -DENABLE_TESTS="${RUNC}"; CHECKERR
         make clean
 
         if [ "x$RUNC" == "xTRUE" ]; then
@@ -374,12 +422,18 @@ while [[ $CCOUNT -le $CREPS ]]; do
                 fi
             else
                 make -j $TESTPROC && ctest --repeat until-pass:${CTEST_REPEAT} -j$TESTPROC; CHECKERR
+                if [ "${CDOCS}" = "TRUE" -o "${CDOCS}" = "ON" ]; then
+                    CDOCDIR="${DOCDIR}/c-docs-cmake"
+                    mkdir -p "${CDOCDIR}"
+                    cp -R ./docs/html/* "${CDOCDIR}"
+                fi
                 if [ "x$USE_VALGRIND" == "xTRUE" ]; then
                     make ExperimentalMemCheck
                 fi
             fi
-
         fi
+
+
         cd ${WORKING_DIRECTORY}
         echo ""
     fi
@@ -399,7 +453,7 @@ while [[ $CCOUNT -le $CREPS ]]; do
         if [ ! -f "configure" ]; then
             autoreconf -if
         fi
-        CC=$USE_CC ./configure --prefix=${TARGDIR} ${AC_PAR_OPTS} --disable-hdf4 --enable-extra-tests --enable-mmap $AC_COPTS
+        CC=$USE_CC ./configure --prefix=${TARGDIR} ${AC_PAR_OPTS} ${AC_CDOC_OPTS} --disable-hdf4 --enable-extra-tests --enable-mmap $AC_COPTS
         make clean
         make -j $TESTPROC ; CHECKERR
         if [ "x$RUNC" == "xTRUE" ]; then
@@ -411,12 +465,19 @@ while [[ $CCOUNT -le $CREPS ]]; do
             fi
 
         fi
+        if [ "${CDOCS}" = "TRUE" -o "${CDOCS}" = "ON" ]; then
+            CDOCDIR="${DOCDIR}/c-docs-autotools"
+            mkdir -p "${CDOCDIR}"
+            cp -R ./docs/html/* "${CDOCDIR}"
+        fi
         cd ${WORKING_DIRECTORY}
         echo ""
     fi
 
     CCOUNT=$[$CCOUNT+1]
 done
+
+cd "${WORKING_DIRECTORY}"
 
 if [ "${RUNF}" = "TRUE" -o "${RUNJAVA}" = "TRUE" -o "${RUNNCO}" = "TRUE" -o "${RUNP}" = "TRUE" -o "${RUNCXX4}" = "TRUE" ]; then
     echo ""
@@ -451,10 +512,24 @@ if [ "x$RUNF" == "xTRUE" ]; then
         if [ "x$USECMAKE" = "xTRUE" ]; then
             echo "[$FCOUNT | $FREPS] Testing netCDF-Fortran - CMAKE"
             echo "----------------------------------"
+
+            echo -e "o WORKING_DIRECTORY:\t${WORKING_DIRECTORY}"
             cd ${WORKING_DIRECTORY}
+            echo ""
+            pwd
+            echo ""
+            ls
+            echo ""
+
+
             mkdir -p build-netcdf-fortran
             cd build-netcdf-fortran
-            cmake ${WORKING_DIRECTORY}/netcdf-fortran -DBUILDNAME_PREFIX="docker$BITNESS-$USE_CC" -DBUILDNAME_SUFFIX="$FBRANCH" -DCMAKE_C_COMPILER=$USE_CC ${CMAKE_PAR_OPTS_FORTRAN} $FOPTS
+            set -x
+
+            cmake ${WORKING_DIRECTORY}/netcdf-fortran -DBUILDNAME_PREFIX="docker$BITNESS-$USE_CC" ${CMAKE_FDOC_OPTS} -DBUILDNAME_SUFFIX="$FBRANCH" -DCMAKE_C_COMPILER=$USE_CC ${CMAKE_PAR_OPTS_FORTRAN} $FOPTS
+            
+            set +x
+
             if [ "x$USEDASH" == "xTRUE" ]; then
                 ctest --repeat until-pass:${CTEST_REPEAT} -j$TESTPROC_FORTRAN -D Experimental
             else
@@ -462,6 +537,12 @@ if [ "x$RUNF" == "xTRUE" ]; then
                 ctest --repeat until-pass:${CTEST_REPEAT} -j$TESTPROC_FORTRAN ; CHECKERR
             fi
             make clean
+            if [ "${FDOCS}" = "TRUE" -o "${FDOCS}" = "ON" ]; then
+                FDOCDIR="${DOCDIR}/fortran-docs-cmake"
+                mkdir -p "${FDOCDIR}"
+                cp -R ./docs/html/* "${FDOCDIR}"
+            fi
+            
             cd ${WORKING_DIRECTORY}
             echo ""
         fi
@@ -474,13 +555,19 @@ if [ "x$RUNF" == "xTRUE" ]; then
             if [ ! -f "configure" ]; then
                 autoreconf -if
             fi
-            CC=$USE_CC FC=${USE_FC} F77=${USE_FC} ./configure "$AC_FOPTS"
+            CC=$USE_CC FC=${USE_FC} F77=${USE_FC} ./configure "$AC_FOPTS" ${AC_FDOC_OPTS}
             make -j $TESTPROC_FORTRAN ; CHECKERR
             make check TESTS="" -j $TESTPROC_FORTRAN
             make check -j $TESTPROC_FORTRAN ; CHECKERR_AC
 
             if [ "x$DISTCHECK" == "xTRUE" ]; then
                 DISTCHECK_CONFIGURE_FLAGS="$AC_FOPTS" make distcheck -j $TESTPROC_FORTRAN ; CHECKERR
+            fi
+
+            if [ "${FDOCS}" = "TRUE" -o "${FDOCS}" = "ON" ]; then
+                FDOCDIR="${DOCDIR}/fortran-docs-autotools"
+                mkdir -p "${FDOCDIR}"
+                cp -R ./docs/html/* "${FDOCDIR}"
             fi
 
             make clean
