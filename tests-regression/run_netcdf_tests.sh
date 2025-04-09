@@ -125,7 +125,7 @@ sleep 3
 # Check to see if we're generating documentation. If we are, /docs must exist.
 # If it doesn't, bail.
 ###
-if [ "x${CDOCS}" = "TRUE" -o "${CDOCS}" = "ON" -o "${FDOCS}" = "TRUE" -o "${FDOCS}" = "ON" ]; then
+if [ "x${CDOCS}" = "TRUE" -o "${CDOCS}" = "ON" -o "${FDOCS}" = "TRUE" -o "${FDOCS}" = "ON" -o "${CDOCS_DEV}" != "FALSE" -o "${FDOCS_DEV}" != "FALSE" ]; then
     if [ ! -d /docs ]; then
         echo ""
         echo "Error! Documentation generation requested, but /docs was not mapped."
@@ -302,10 +302,6 @@ export LIBDIR="${TARGDIR}/lib"
 export PATH="${TARGDIR}/bin:$PATH"
 export CMAKE_PREFIX_PATH="${TARGDIR}"
 export USE_FC="gfortran"
-export CMAKE_CDOC_OPTS=""
-export AC_CDOC_OPTS=""
-export CMAKE_FDOC_OPTS=""
-export AC_FDOC_OPTS=""
 
 if [ "${CDOCS}" = "TRUE" -o "${CDOCS}" = "ON" ]; then
     export CMAKE_CDOC_OPTS="-DENABLE_DOXYGEN=TRUE"
@@ -313,8 +309,8 @@ if [ "${CDOCS}" = "TRUE" -o "${CDOCS}" = "ON" ]; then
 fi
 
 if [ "${FDOCS}" = "TRUE" -o "${FDOCS}" = "ON" ]; then
-    export CMAKE_CDOC_OPTS="-DENABLE_DOXYGEN=TRUE"
-    export AC_CDOC_OPTS="--enable-doxygen"
+    export CMAKE_FDOC_OPTS="-DENABLE_DOXYGEN=TRUE"
+    export AC_FDOC_OPTS="--enable-doxygen"
 fi
 
 ###
@@ -369,7 +365,25 @@ NCOCOUNT=1
 
 cd ${WORKING_DIRECTORY}
 
+###
+# If we have specified CDOCS_DEV or FDOCS_DEV, we will generate this documentation first.
+###
 
+if [ "${CDOCS_DEV}" != "FALSE" ]; then
+    cd "${WORKING_DIRECTORY}/netcdf-c"
+    doxygen docs/Doxyfile.developer
+    CDOCDIR="${DOCDIR}/c-developer-docs-cmake"
+    mkdir -p "${CDOCDIR}"
+    cp -R ./html/* "${CDOCDIR}"
+fi    
+
+if [ "${FDOCS_DEV}" != "FALSE" -a "${RUNF}" != "FALSE" ]; then
+    cd "${WORKING_DIRECTORY}/netcdf-fortran"
+    doxygen docs/Doxyfile.developer
+    FDOCDIR="${DOCDIR}/fortran-developer-docs-cmake"
+    mkdir -p "${FDOCDIR}"
+    cp -R ./html/* "${CDOCDIR}"
+fi  
 # CREPS is defined as an environmental variable.
 
 ###
@@ -407,8 +421,8 @@ while [[ $CCOUNT -le $CREPS ]]; do
                 fi
             else
                 make -j $TESTPROC && ctest --repeat until-pass:${CTEST_REPEAT} -j$TESTPROC; CHECKERR
-                if [ "x${CDOCS}" = "TRUE" -o "${CDOCS}" = "ON" ]; then
-                    CDOCDIR="${DOCDIR}/docs-cmake"
+                if [ "${CDOCS}" = "TRUE" -o "${CDOCS}" = "ON" ]; then
+                    CDOCDIR="${DOCDIR}/c-docs-cmake"
                     mkdir -p "${CDOCDIR}"
                     cp -R ./docs/html/* "${CDOCDIR}"
                 fi
@@ -451,7 +465,7 @@ while [[ $CCOUNT -le $CREPS ]]; do
 
         fi
         if [ "x${CDOCS}" = "TRUE" -o "${CDOCS}" = "ON" ]; then
-            CDOCDIR="${DOCDIR}/docs-autotools"
+            CDOCDIR="${DOCDIR}/c-docs-autotools"
             mkdir -P "${CDOCDIR}"
             cp -R ./docs/html/* "${CDOCDIR}"
         fi
@@ -523,7 +537,7 @@ if [ "x$RUNF" == "xTRUE" ]; then
             fi
             make clean
             if [ "${FDOCS}" = "TRUE" -o "${FDOCS}" = "ON" ]; then
-                FDOCDIR="${DOCDIR}/docs-cmake"
+                FDOCDIR="${DOCDIR}/fortran-docs-cmake"
                 mkdir -p "${FDOCDIR}"
                 cp -R ./docs/html/* "${FDOCDIR}"
             fi
@@ -550,7 +564,7 @@ if [ "x$RUNF" == "xTRUE" ]; then
             fi
 
             if [ "${FDOCS}" = "TRUE" -o "${FDOCS}" = "ON" ]; then
-                FDOCDIR="${DOCDIR}/docs-autotools"
+                FDOCDIR="${DOCDIR}/fortran-docs-autotools"
                 mkdir -p "${FDOCDIR}"
                 cp -R ./docs/html/* "${FDOCDIR}"
             fi

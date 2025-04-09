@@ -145,6 +145,8 @@ In order to build documentation for `netcdf-c` and `netcdf-fortran`, you must sp
 
 * `CDOCS` - Default: `FALSE`
 * `FDOCS` - Default: `FALSE`
+* `CDOCS_DEV` - Default: `FALSE`
+* `FDOCS_DEV` - Default: `FALSE`
 
 ### Advanced Options
 ---
