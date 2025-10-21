@@ -11,6 +11,7 @@ if [ "${CMD}" = "help" -o "${CMD}" = "HELP" -o "${DOHELP}" != "" -o "${HELP}" !=
 fi
 
 
+
 function ERR {
     RES=$?
     if [ $RES -ne 0 ]; then
@@ -53,6 +54,14 @@ dosummary() {
     ls -alh ${WORKING_DIRECTOR}
     echo -e "===================================="
 }
+
+# Check if any docs environment variables are set and validate /docs directory exists
+if [ -n "${FDOCS}" ] || [ -n "${CDOCS}" ] || [ -n "${CDOCS_DEV}" ] || [ -n "${FDOCS_DEV}" ]; then
+    if [ ! -d "/docs" ]; then
+        echo "Error: /docs directory does not exist but docs environment variables are set"
+        exit 1
+    fi
+fi
 
 if [ "${GITHUB_ACTIONS}" = "true" -o "${GITHUB_ACTIONS}" = "TRUE" ]; then
     if [ "${REPO_TYPE}" != "" ]; then
@@ -97,7 +106,10 @@ if [ "${TESTPROC_FORTRAN}" = "" ]; then
     export TESTPROC_FORTRAN=$(nproc)
 fi
 
-export WORKING_DIRECTORY=${WORKING_DIRECTORY}/build-$(date +%s)
+TMPSUF=$(date +%s)
+export WORKING_DIRECTORY=${WORKING_DIRECTORY}/build-${TMPSUF}
+
+ln -s ${WORKING_DIRECTORY} /home/tester/workdir-${TMPSUF} 
 
 if [ "${H5VER}" = "" ]; then
     export H5VER=1.14.3
