@@ -125,6 +125,11 @@ sleep 3
 # Check to see if we're generating documentation. If we are, /docs must exist.
 # If it doesn't, bail.
 ###
+if [ -d "/docs" ]; then
+    export DOCDIR="/docs/docs-$(date +%s | cut -c 4-)"
+    mkdir -p "${DOCDIR}"
+fi
+
 if [ "x${CDOCS}" = "TRUE" -o "${CDOCS}" = "ON" -o "${FDOCS}" = "TRUE" -o "${FDOCS}" = "ON" -o "${CDOCS_DEV}" != "FALSE" -o "${FDOCS_DEV}" != "FALSE" ]; then
     if [ ! -d /docs ]; then
         echo ""
@@ -135,9 +140,6 @@ if [ "x${CDOCS}" = "TRUE" -o "${CDOCS}" = "ON" -o "${FDOCS}" = "TRUE" -o "${FDOC
         echo -e "o FDOCS:\t${FDOCS}"
         echo ""
         exit 1
-    else
-        export DOCDIR="/docs/docs-$(date +%s | cut -c 4-)"
-        mkdir -p "${DOCDIR}"
     fi
 fi
 
