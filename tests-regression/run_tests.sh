@@ -58,8 +58,8 @@ dosummary() {
 # Check if any docs environment variables are set and validate /docs directory exists
 if [ -n "${FDOCS}" ] || [ -n "${CDOCS}" ] || [ -n "${CDOCS_DEV}" ] || [ -n "${FDOCS_DEV}" ]; then
     if [ ! -d "/docs" ]; then
-        echo "Error: /docs directory does not exist but docs environment variables are set"
-        exit 1
+        ${SUDOCMD} mkdir -p /docs 
+        ${SUDOCMD} chown -R tester:tester /docs
     fi
 fi
 
