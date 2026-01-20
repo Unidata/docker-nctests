@@ -5,7 +5,7 @@
 set -e
 
 echo -e ""
-echo -e "Building docker.unidata.ucar.edu/nctests for the following architectures:"
+echo -e "Building unidata/nctests for the following architectures:"
 echo -e "\to linux/arm64"
 echo -e "\to linux/amd64"
 echo -e "\to linux/s390x"
@@ -16,5 +16,5 @@ echo -e "[Press Return to Continue]"
 echo ""
 read
 
-time docker build -t docker.unidata.ucar.edu/nctests -f Dockerfile.nctests --platform linux/arm64,linux/amd64,linux/s390x . --push
+time docker build -t unidata/nctests:1.13.4 -f Dockerfile.nctests --platform linux/arm64,linux/amd64,linux/s390x . --push
 
