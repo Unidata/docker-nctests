@@ -15,7 +15,7 @@ set -e
 # This is only for intel 
 echo ""
 echo "Installing IntelOne Compiler: icx"
-if [ $(uname -m) = "x86_64"]; then
+if [ $(uname -m) = "x86_64" ]; then
 
     sudo apt update
     sudo apt install -y gpg
