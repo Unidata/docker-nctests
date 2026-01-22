@@ -1,4 +1,4 @@
-# docker.unidata.ucar.edu/nctests - Regression Testing
+s# docker.unidata.ucar.edu/nctests - Regression Testing
 
 This project contains the dockerfiles for two images, `docker.unidata.ucar.edu/nctests` and `docker.unidata.ucar.edu/ncabi`.  The documentaiton below relates to `nctests`.  Documentation for `ncabi` is forthcoming.
 
@@ -25,6 +25,7 @@ The docker containers will let you use the following compilers:
 * `gcc` and `g++`
 * `clang` and `clang++`
 * `mpicc` (from `mpich` package)
+* `intelone` (`x86_64` only).
 
 These are controlled via the `USE_CC` and `USE_CXX` environmental variables.
 
