@@ -26,7 +26,7 @@ if [ $(uname -m) = "x86_64" ]; then
     sudo echo "deb [signed-by=/usr/share/keyrings/oneapi-archive-keyring.gpg] https://apt.repos.intel.com/oneapi all main" | sudo tee /etc/apt/sources.list.d/oneAPI.list
 
     sudo apt update
-    sudo apt install intel-basekit
+    sudo apt install -y intel-basekit
 else
     echo "IntelOne not available for $(uname -m)"
     echo ""
