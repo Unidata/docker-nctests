@@ -312,6 +312,8 @@ if [ ${USE_CC} = "icx" ]; then
     echo "Installing IntelOne Compiler: icx"
     sleep 2
     ${SUDOCMD} /home/tester/install_intelone.sh
+    source /opt/intel/oneapi/2025.3/oneapi-vars.sh
+    sleep 2
 fi
 ##
 # End icx compiler stanza.
