@@ -9,6 +9,7 @@ H5COMPRESSION="bz2"
 H5UNTAR="tar -jxf"
 PNETCDFVER="1.14.0"
 NCCOMP="gcc"
+USE_CXX="g++"
 NUMPROC=$(nproc)
 DOPAR=""
 USEBUILD="ac"
@@ -61,7 +62,8 @@ dosummary() {
         echo -e "PNetCDF to be installed:\t${PNETCDFVER}"
     fi
     echo -e "Libraries:\t\t\t${BUILDTYPE}"
-    echo -e "Compiler to be used:\t\t${NCCOMP}"
+    echo -e "C Compiler to be used:\t\t${NCCOMP}"
+    echo -e "CXX Compiler to be used:\t${USE_CXX}"
     echo -e "Processors to use:\t\t${NUMPROC}"
     echo -e "Build system:\t\t\t${USEBUILD}"
     echo -e "Debug Symbols:\t\t\t${BUILDDEBUG}"
@@ -116,6 +118,7 @@ do
         -c | --compiler)
             NCCOMP="$2"
             if [ "x${NCCOMP}" = "xmpicc" ]; then
+                USE_CXX=mpic++
                 DOPAR=TRUE
                 H5PAROPT="--enable-parallel"
                 H5PAROPT_CMAKE="-DHDF5_ENABLE_PARALLEL=TRUE"
@@ -158,6 +161,18 @@ do
             ;;
     esac
 done
+
+### 
+# Set C++ compiler if need be.
+### 
+if [ "${NCCOMP}" = "clang" ]; then
+   export USE_CXX=clang++
+fi
+if [ "${NCCOMP}" = "icx" ]; then
+    echo "Activating IntelOne compiler: icx"
+    source /opt/intel/oneapi/2025.3/oneapi-vars.sh
+    export USE_CXX=icpx
+fi
 
 
 dosummary
@@ -281,13 +296,6 @@ if [ "x$DOPAR" = "xTRUE" ]; then
     fi
 fi
 
-### 
-# In case of icx
-### 
-if [ "x${NCCOMP}" = "icx" ]; then
-    echo "Activating IntelOne compiler: icx"
-    source /opt/intel/oneapi/2025.3/oneapi-vars.sh
-fi
 
 ###
 # Build HDF5
@@ -319,7 +327,7 @@ if [ "x${USEBUILD}" = "xac" ]; then
 
     autoreconf -if 
     H5_API_OP="--with-default-api-version=v110"
-    CFLAGS="${CFLAGS} ${HDF5_CFLAGS} -Wno-implicit-function-declaration" CC="${NCCOMP}" LDFLAGS="${LDFLAGS} ${HDF5_LDFLAGS}" ./configure ${BUILDARGAC} "${BUILDTESTSTRING}" --prefix="${TARGDIR}" "${H5PAROPT}" --enable-hl --with-szlib ${H5_API_OP} "${BUILDDEBUGHDF5}" "${ROS3OPT_AC}"
+    CFLAGS="${CFLAGS} ${HDF5_CFLAGS} -Wno-implicit-function-declaration" CXX=$USE_CXX CC="${NCCOMP}" LDFLAGS="${LDFLAGS} ${HDF5_LDFLAGS}" ./configure ${BUILDARGAC} "${BUILDTESTSTRING}" --prefix="${TARGDIR}" "${H5PAROPT}" --enable-hl --with-szlib ${H5_API_OP} "${BUILDDEBUGHDF5}" "${ROS3OPT_AC}"
     sleep 2
     make -j "${NUMPROC}"
     if [ "x${DONCTESTS}" = "xTRUE" ]; then
@@ -339,7 +347,7 @@ elif [ "x${USEBUILD}" = "xcmake" ]; then
     fi
     LDFLAGS_TMP="${LDFLAGS}"
     LDFLAGS="${LDFLAGS} ${HDF5_LDFLAGS}"
-    cmake .. -DHDF5_BUILD_TOOLS=OFF -DBUILD_TESTING="${BUILDTESTSTRING}" -DCMAKE_C_FLAGS="${CFLAGS} ${HDF5_CFLAGS}" ${H5PAROPT_CMAKE} -DCMAKE_C_COMPILER="${NCCOMP}" "${BUILDARGCMAKE}" -DCMAKE_INSTALL_PREFIX="${TARGDIR}" -DHDF5_ENABLE_SZIP_SUPPORT=TRUE -DHDF5_ENABLE_ZLIB_SUPPORT=TRUE ${H5_API_OP} "${ROS3OPT_CMAKE}" DCMAKE_INSTALL_NAME_DIR="${TARGDIR}/lib"
+    cmake .. -DHDF5_BUILD_TOOLS=OFF -DBUILD_TESTING="${BUILDTESTSTRING}" -DCMAKE_C_FLAGS="${CFLAGS} ${HDF5_CFLAGS}" ${H5PAROPT_CMAKE} -DCMAKE_C_COMPILER="${NCCOMP}" -DCMAKE_CXX_COMPILER="${USE_CXX}" "${BUILDARGCMAKE}" -DCMAKE_INSTALL_PREFIX="${TARGDIR}" -DHDF5_ENABLE_SZIP_SUPPORT=TRUE -DHDF5_ENABLE_ZLIB_SUPPORT=TRUE ${H5_API_OP} "${ROS3OPT_CMAKE}" DCMAKE_INSTALL_NAME_DIR="${TARGDIR}/lib"
     sleep 2
     make -j "${NUMPROC}"
     if [ "x${DONCTESTS}" = "xTRUE" ]; then

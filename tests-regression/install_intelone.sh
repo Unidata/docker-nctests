@@ -17,16 +17,21 @@ echo ""
 echo "Installing IntelOne Compiler: icx"
 if [ $(uname -m) = "x86_64" ]; then
 
-    sudo apt update
-    sudo apt install -y gpg
+    if [ -d "/opt/intel/oneapi/" ]; then
+        echo "Directory /opt/intel/openapi exists. Using contents."
+    else
 
-    sudo wget -O- https://apt.repos.intel.com/intel-gpg-keys/GPG-PUB-KEY-INTEL-SW-PRODUCTS.PUB \
-    | gpg --dearmor | sudo tee /usr/share/keyrings/oneapi-archive-keyring.gpg > /dev/null
+        sudo apt update
+        sudo apt install -y gpg
 
-    sudo echo "deb [signed-by=/usr/share/keyrings/oneapi-archive-keyring.gpg] https://apt.repos.intel.com/oneapi all main" | sudo tee /etc/apt/sources.list.d/oneAPI.list
+        sudo wget -O- https://apt.repos.intel.com/intel-gpg-keys/GPG-PUB-KEY-INTEL-SW-PRODUCTS.PUB \
+        | gpg --dearmor | sudo tee /usr/share/keyrings/oneapi-archive-keyring.gpg > /dev/null
 
-    sudo apt update
-    sudo apt install -y intel-basekit
+        sudo echo "deb [signed-by=/usr/share/keyrings/oneapi-archive-keyring.gpg] https://apt.repos.intel.com/oneapi all main" | sudo tee /etc/apt/sources.list.d/oneAPI.list
+
+        sudo apt update
+        sudo apt install -y intel-basekit
+    fi
 else
     echo "IntelOne not available for $(uname -m)"
     echo ""

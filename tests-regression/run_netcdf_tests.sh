@@ -309,10 +309,9 @@ fi
 # See https://www.intel.com/content/www/us/en/docs/dpcpp-cpp-compiler/get-started-guide/2024-0/get-started-on-linux.html
 ##
 if [ ${USE_CC} = "icx" ]; then
-    echo "Installing IntelOne Compiler: icx"
-    sleep 2
     ${SUDOCMD} /home/tester/install_intelone.sh
     source /opt/intel/oneapi/2025.3/oneapi-vars.sh
+    USE_CXX=icpx
     sleep 2
 fi
 ##
@@ -343,7 +342,7 @@ if [ "x$USES3SDK" != "xFALSE" ]; then
     cd "s3-sdk-${S3SDKVER}"
     mkdir build
     cd build
-    cmake .. -DCMAKE_BUILD_TYPE=Debug -DCMAKE_PREFIX_PATH="${TARGDIR}" -DCMAKE_INSTALL_PREFIX="${TARGDIR}" -DBUILD_ONLY="s3;transfer" -DCMAKE_INSTALL_RPATH="${TARGDIR}/lib" -DENABLE_TESTING=OFF -DCMAKE_MACOS_RPATH=ON
+    cmake .. -DCMAKE_BUILD_TYPE=Debug -DCMAKE_PREFIX_PATH="${TARGDIR}" -DCMAKE_INSTALL_PREFIX="${TARGDIR}" -DBUILD_ONLY="s3;transfer" -DCMAKE_INSTALL_RPATH="${TARGDIR}/lib" -DENABLE_TESTING=OFF -DCMAKE_MACOS_RPATH=ON -DCMAKE_C_COMPILER="${USE_CC}"
     make -j "${TESTPROC}"
     ${SUDOCMD} make install -j "${TESTPROC}"
     make clean -j "${TESTPROC}"
@@ -353,8 +352,8 @@ fi
 ###
 # Configure Environmental Variables
 ###
-
-export CPPFLAGS="-I${TARGDIR}/include"
+CPP
+export FLAGS="-I${TARGDIR}/include"
 export CFLAGS="-I${TARGDIR}/include"
 export LDFLAGS="-L${TARGDIR}/lib"
 export LD_LIBRARY_PATH="${TARGDIR}/lib"
@@ -493,7 +492,7 @@ while [[ $CCOUNT -le $CREPS ]]; do
         sleep 2
         mkdir -p build-netcdf-c
         cd build-netcdf-c
-        cmake ${WORKING_DIRECTORY}/netcdf-c -DCMAKE_INSTALL_PREFIX=${NC_TARGDIR} ${CMAKE_CDOC_OPTS} -DNETCDF_ENABLE_HDF4=OFF -DNETCDF_ENABLE_MMAP=ON -DBUILDNAME_PREFIX="docker$BITNESS-$USE_CC" -DBUILDNAME_SUFFIX="$CBRANCH" -DCMAKE_C_COMPILER=$USE_CC ${CMAKE_PAR_OPTS} ${CMAKE_COPTS} ${S3OPTS_CMAKE} -DCMAKE_C_FLAGS="${CMEM}" -DENABLE_TESTS="${RUNC}"; CHECKERR
+        cmake ${WORKING_DIRECTORY}/netcdf-c -DCMAKE_INSTALL_PREFIX=${NC_TARGDIR} ${CMAKE_CDOC_OPTS} -DNETCDF_ENABLE_HDF4=OFF -DNETCDF_ENABLE_MMAP=ON -DBUILDNAME_PREFIX="docker$BITNESS-$USE_CC" -DBUILDNAME_SUFFIX="$CBRANCH" -DCMAKE_C_COMPILER=$USE_CC -DCMAKE_CXX_COMPILER=${USE_CXX} ${CMAKE_PAR_OPTS} ${CMAKE_COPTS} ${S3OPTS_CMAKE} -DCMAKE_C_FLAGS="${CMEM}" -DENABLE_TESTS="${RUNC}"; CHECKERR
         make clean
 
         if [ "x$RUNC" == "xTRUE" ]; then
@@ -537,7 +536,7 @@ while [[ $CCOUNT -le $CREPS ]]; do
         if [ ! -f "configure" ]; then
             autoreconf -if
         fi
-        CC=$USE_CC ./configure --prefix=${NC_TARGDIR} ${AC_PAR_OPTS} ${AC_CDOC_OPTS} --disable-hdf4 --enable-extra-tests --enable-mmap ${AC_COPTS} ${S3OPTS_AC}
+        CXX=$USE_CXX CC=$USE_CC ./configure --prefix=${NC_TARGDIR} ${AC_PAR_OPTS} ${AC_CDOC_OPTS} --disable-hdf4 --enable-extra-tests --enable-mmap ${AC_COPTS} ${S3OPTS_AC}
         make clean
         make -j $TESTPROC ; CHECKERR
         if [ "x$RUNC" == "xTRUE" ]; then
