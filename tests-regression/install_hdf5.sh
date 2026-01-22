@@ -80,7 +80,7 @@ dohelp() {
 
     echo -e "\t-a | --h5suffix:\tAddendum to filename, e.g. 'hdf5-1.14.1-2' (default: \"\")"
     echo -e "\t-c | --compiler:\tCompiler to use."
-    echo -e "\t\tOptions:\n\t\to gcc\n\t\to clang\n\t\to mpicc"
+    echo -e "\t\tOptions:\n\t\to gcc\n\t\to clang\n\t\to mpicc\n\t\to icx"
     echo -e "\t-d | --h5ver:\t\tVersion of HDF5 to install." 
     echo -e "\t-h | --help:\t\tShow this help."
     echo -e "\t-j | --cpus:\t\tNumber of processors to use (default: $(nproc))"
@@ -281,6 +281,13 @@ if [ "x$DOPAR" = "xTRUE" ]; then
     fi
 fi
 
+### 
+# In case of icx
+### 
+if [ "x${NCCOMP}" = "icx" ]; then
+    echo "Activating IntelOne compiler: icx"
+    source /opt/intel/oneapi/2025.3/oneapi-vars.sh
+fi
 
 ###
 # Build HDF5
