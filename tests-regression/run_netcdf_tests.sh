@@ -305,6 +305,20 @@ if [ "${USE_CC}" = "mpicc" -a "${MPICHVER}" != "default" ]; then
 fi
 
 ##
+# If compiler is icx, we need to install inteone compiler.
+# See https://www.intel.com/content/www/us/en/docs/dpcpp-cpp-compiler/get-started-guide/2024-0/get-started-on-linux.html
+##
+if [ ${USE_CC} = "icx" ]; then
+    echo "Installing IntelOne Compiler: icx"
+    sleep 2
+    ${SUDOCMD} /home/tester/install_intelone.sh
+fi
+##
+# End icx compiler stanza.
+##
+
+
+##
 # Allow us to build dependencies from source.
 # For now, just HDF5
 ##
