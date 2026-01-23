@@ -342,7 +342,7 @@ if [ "x$USES3SDK" != "xFALSE" ]; then
     cd "s3-sdk-${S3SDKVER}"
     mkdir build
     cd build
-    cmake .. -DCMAKE_BUILD_TYPE=Debug -DCMAKE_PREFIX_PATH="${TARGDIR}" -DCMAKE_INSTALL_PREFIX="${TARGDIR}" -DBUILD_ONLY="s3;transfer" -DCMAKE_INSTALL_RPATH="${TARGDIR}/lib" -DENABLE_TESTING=OFF -DCMAKE_MACOS_RPATH=ON -DCMAKE_C_COMPILER="${USE_CC}"
+    cmake .. -DCMAKE_BUILD_TYPE=Debug -DCMAKE_PREFIX_PATH="${CMAKE_PREFIX_PATH}:${TARGDIR}" -DCMAKE_INSTALL_PREFIX="${TARGDIR}" -DBUILD_ONLY="s3;transfer" -DCMAKE_INSTALL_RPATH="${TARGDIR}/lib" -DENABLE_TESTING=OFF -DCMAKE_MACOS_RPATH=ON -DCMAKE_C_COMPILER="${USE_CC}"
     make -j "${TESTPROC}"
     ${SUDOCMD} make install -j "${TESTPROC}"
     make clean -j "${TESTPROC}"
@@ -352,14 +352,14 @@ fi
 ###
 # Configure Environmental Variables
 ###
-CPP
+
 export FLAGS="-I${TARGDIR}/include"
 export CFLAGS="-I${TARGDIR}/include"
 export LDFLAGS="-L${TARGDIR}/lib"
 export LD_LIBRARY_PATH="${TARGDIR}/lib"
 export LIBDIR="${TARGDIR}/lib"
 export PATH="${TARGDIR}/bin:$PATH"
-export CMAKE_PREFIX_PATH="${TARGDIR}"
+export CMAKE_PREFIX_PATH="${CMAKE_PREFIX_PATH}:${TARGDIR}"
 
 export USE_FC="gfortran"
 
