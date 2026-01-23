@@ -313,6 +313,14 @@ if [ ${USE_CC} = "icx" ]; then
     source /opt/intel/oneapi/2025.3/oneapi-vars.sh
     USE_CXX=icpx
     sleep 2
+    env | sort
+    echo ""
+    echo ""
+    echo "Press [RETURN] to continue"
+    echo ""
+    echo ""
+    read
+
 fi
 ##
 # End icx compiler stanza.
@@ -353,15 +361,24 @@ fi
 # Configure Environmental Variables
 ###
 
-export FLAGS="-I${TARGDIR}/include"
-export CFLAGS="-I${TARGDIR}/include"
-export LDFLAGS="-L${TARGDIR}/lib"
-export LD_LIBRARY_PATH="${TARGDIR}/lib"
-export LIBDIR="${TARGDIR}/lib"
+export FLAGS="-I${TARGDIR}/include:${FLAGS}"
+export CFLAGS="-I${TARGDIR}/include:${CFLAGS}"
+export LDFLAGS="-L${TARGDIR}/lib:${LDFLAGS}"
+export LD_LIBRARY_PATH="${TARGDIR}/lib:${LD_LIBRARY_PATH}"
+export LIBDIR="${TARGDIR}/lib:${LIBDIR}"
 export PATH="${TARGDIR}/bin:$PATH"
 export CMAKE_PREFIX_PATH="${CMAKE_PREFIX_PATH}:${TARGDIR}"
 
 export USE_FC="gfortran"
+
+env | sort
+echo ""
+echo ""
+echo "Press [RETURN] to continue"
+echo ""
+echo ""
+read
+
 
 if [ "${CDOCS}" = "TRUE" -o "${CDOCS}" = "ON" ]; then
     export CMAKE_CDOC_OPTS="-DENABLE_DOXYGEN=TRUE"
