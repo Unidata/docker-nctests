@@ -361,8 +361,8 @@ fi
 # Configure Environmental Variables
 ###
 
-export FLAGS="-I${TARGDIR}/include:${FLAGS}"
-export CFLAGS="-I${TARGDIR}/include:${CFLAGS}"
+export FLAGS="-I${TARGDIR}/include ${FLAGS}"
+export CFLAGS="-I${TARGDIR}/include ${CFLAGS}"
 export LDFLAGS="-L${TARGDIR}/lib:${LDFLAGS}"
 export LD_LIBRARY_PATH="${TARGDIR}/lib:${LD_LIBRARY_PATH}"
 export LIBDIR="${TARGDIR}/lib:${LIBDIR}"
