@@ -314,12 +314,7 @@ if [ ${USE_CC} = "icx" ]; then
     USE_CXX=icpx
     sleep 2
     env | sort
-    echo ""
-    echo ""
-    echo "Press [RETURN] to continue"
-    echo ""
-    echo ""
-    read
+
 
 fi
 ##
@@ -372,12 +367,7 @@ export CMAKE_PREFIX_PATH="${CMAKE_PREFIX_PATH}:${TARGDIR}"
 export USE_FC="gfortran"
 
 env | sort
-echo ""
-echo ""
-echo "Press [RETURN] to continue"
-echo ""
-echo ""
-read
+
 
 
 if [ "${CDOCS}" = "TRUE" -o "${CDOCS}" = "ON" ]; then
