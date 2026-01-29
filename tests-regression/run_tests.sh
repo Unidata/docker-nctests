@@ -105,7 +105,7 @@ fi
 
 if [ "x${USE_CC}" = "xmpicc" ]; then
     TESTTYPE="mpich"
-elif [ "x${USE_CC}" = "xgcc" -o "x${USE_CC}" = "xclang" ]; then
+elif [ "x${USE_CC}" = "xgcc" -o "x${USE_CC}" = "xclang" -o "x${USE_CC}" = "xicx" ]; then
     TESTTYPE="serial"
 else
     echo "Unknown compiler requested:  ${USE_CC}"

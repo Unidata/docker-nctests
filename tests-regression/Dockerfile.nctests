@@ -128,15 +128,18 @@ RUN apt-get install -y tzdata
 
 COPY provision_base_ubuntu.sh ${HOME}/
 COPY install_mpich.sh ${HOME}/
-COPY install_hdf5.sh ${HOME}
+COPY install_hdf5.sh ${HOME}/
+COPY install_intelone.sh ${HOME}/
 RUN chmod 755 ${HOME}/provision_base_ubuntu.sh
 RUN chmod 755 ${HOME}/install_mpich.sh
 RUN chmod 755 ${HOME}/install_hdf5.sh
+RUN chmod 755 ${HOME}/install_intelone.sh
 RUN apt update
 RUN apt install -y dos2unix
 RUN dos2unix /root/provision_base_ubuntu.sh
 RUN dos2unix /root/install_mpich.sh
 RUN dos2unix /root/install_hdf5.sh
+RUN dos2unix /root/install_intelone.sh
 
 RUN /bin/sh -x /root/provision_base_ubuntu.sh
 RUN sudo bash -x /root/install_mpich.sh -v 4.3.0 -j $(nproc)
@@ -158,6 +161,7 @@ COPY install_hdf5.sh ${HOME}/
 COPY install_mpich.sh ${HOME}/
 COPY env_activate.sh ${HOME}/
 COPY env_deactivate.sh ${HOME}/
+COPY install_intelone.sh ${HOME}/
 
 COPY README.md ${HOME}/
 COPY Dockerfile.nctests ${HOME}/
@@ -174,10 +178,12 @@ RUN dos2unix ${HOME}/install_hdf5.sh
 RUN dos2unix ${HOME}/install_mpich.sh
 RUN dos2unix ${HOME}/env_activate.sh
 RUN dos2unix ${HOME}/env_deactivate.sh
+RUN dos2unix ${HOME}/install_intelone.sh
 RUN chmod 755 ${HOME}/install_mpich.sh
 RUN chmod 755 ${HOME}/install_hdf5.sh
 RUN chmod 755 ${HOME}/env_activate.sh
 RUN chmod 755 ${HOME}/env_deactivate.sh
+RUN chmod 755 ${HOME}/install_intelone.sh
 
 
 ENTRYPOINT ["/bin/bash", "-l", "-e", "/home/tester/run_tests.sh"]
