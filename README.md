@@ -1,4 +1,4 @@
-# docker.unidata.ucar.edu/nctests - Regression Testing
+s# docker.unidata.ucar.edu/nctests - Regression Testing
 
 This project contains the dockerfiles for two images, `docker.unidata.ucar.edu/nctests` and `docker.unidata.ucar.edu/ncabi`.  The documentaiton below relates to `nctests`.  Documentation for `ncabi` is forthcoming.
 
@@ -25,6 +25,7 @@ The docker containers will let you use the following compilers:
 * `gcc` and `g++`
 * `clang` and `clang++`
 * `mpicc` (from `mpich` package)
+* `intelone` (`x86_64` only).
 
 These are controlled via the `USE_CC` and `USE_CXX` environmental variables.
 
@@ -81,7 +82,8 @@ The following environmental variables can be used to control the behavior at run
 * `CXXBRANCH` - Git branch for `netcdf-cxx4`
 * `JAVABRANCH` - Git branch for `netcdf-java` 
     * Default: `maint-5.x`
-    * `JDKVER` - Version of `OpenJDK` to run for tests. Default: `8` 
+    * `JDKVER` - Version of `OpenJDK` to run for tests. Default: `17` 
+        * Minimum version: `17`.
 * `PBRANCH` - Git branch for `netcdf4-python`
 * `NCOBRANCH` - Git branch for `NCO`. 
     * Default: `4.5.4`.
@@ -89,10 +91,18 @@ The following environmental variables can be used to control the behavior at run
 ### Select HDF5 Version to Use
 ---
 
-* `H5VER` - Set to the version you want to use. Default: `1.14.3`
+* `H5VER` - Set to the version you want to use. Default: `1.14.6`
   * Introduced in version `1.9.3`. 
   * If non-empty, the specified HDF5 version will be downloaded, compiled and installed at runtime instead of using the pre-built version.
-    * Example: -e HDF5SRC="1.14.3"
+    * Example: -e HDF5SRC="1.14.6"
+
+### Select AWS-S3-SDK
+
+`USES3INT` takes precedence over `USES3SDK`
+
+* `USES3INT` - Set TRUE to use Internal interface.  Default: `FALSE`
+* `USES3SDK` - Set TRUE to use AWS-S3-SDK. Default: `FALSE`
+* `S3SDKVER` - Version of AWS-S3-SDK to download and compile. Default: `main`
 
 ### Compiler Option
 ---
@@ -133,8 +143,6 @@ The following environmental variables can be used to control the behavior at run
 ---
 
 * `USE_BUILDSYSTEM` - 'Defaults to 'cmake'.  Options are `cmake`, `autotools`, `both`. 
-* ~~`USECMAKE` - Default to `TRUE`. When `TRUE`, run `cmake` builds.~~ **DEPRECATED**
-* ~~`USEAC` - Default to `FALSE`. When `TRUE`, run *in-source* `autoconf`-based builds.~~ **DEPRECATED**
 * `DISTCHECK` - Default to `FALSE`.  Requires `USE_BUILDSYSTEM` to be `autotools` or `both`.  Runs `make distcheck` after `make check`.
 
 ### Documentation generation
