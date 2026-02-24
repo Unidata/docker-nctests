@@ -103,7 +103,12 @@ if [ "${USE_CC}" = "mpicc" ]; then
     echo "Using MPICH version: ${MPICHVER}"
 fi
 
-echo "Using HDF5 version: ${H5VER}"
+if [ "$H5PACKAGE" = "TRUE" ]; then
+    echo "Using HDF5 version:"
+    apt search libhdf5-dev
+else    
+    echo "Using HDF5 version: ${H5VER}"
+fi
 echo ""
 sleep 3
 ###
@@ -327,14 +332,32 @@ fi
 # For now, just HDF5
 ##
 #if [ "x${HDF5SRC}" != "x" ]; then
-if [ ! -d "${TARGDIR}" ]; then
-    echo "Building HDF5 ${H5VER} from source."
+if [ "${H5PACKAGE}" = "TRUE" ]; then
+    echo "Installing HDF5 from package manager"
+    echo ""
+    sleep 3
+    ${SUDOCMD} apt update && ${SUDOCMD} apt install -y libhdf5-dev
+    ${SUDOCMD} ln -s /usr/lib/$(uname -m)-linux-gnu/hdf5/serial/libhdf5.so /usr/lib/libhdf5.so
+    ${SUDOCMD} ln -s /usr/lib/$(uname -m)-linux-gnu/hdf5/serial/libhdf5_hl.so /usr/lib/libhdf5_hl.so
+    ${SUDOCMD} ln -s /usr/lib/$(uname -m)-linux-gnu/hdf5/serial/libhdf5_fortran.so /usr/lib/libhdf5_fortran.so
+    ${SUDOCMD} ln -s /usr/lib/$(uname -m)-linux-gnu/hdf5/serial/libhdf5hl_fortran.so /usr/lib/libhdf5hl_fortran.so
+    ${SUDOCMD} ln -s /usr/lib/$(uname -m)-linux-gnu/hdf5/serial/libhdf5_cpp.so /usr/lib/libhdf5_cpp.so
+    ${SUDOCMD} ln -s /usr/lib/$(uname -m)-linux-gnu/hdf5/serial/libhdf5.a /usr/lib/libhdf5.a
+    ${SUDOCMD} ln -s /usr/lib/$(uname -m)-linux-gnu/hdf5/serial/libhdf5_cpp.a /usr/lib/libhdf5_cpp.a
+    ${SUDOCMD} ln -s /usr/lib/$(uname -m)-linux-gnu/hdf5/serial/libhdf5_fortran.a /usr/lib/libhdf5_fortran.a
+    ${SUDOCMD} ldconfig
 
-    if [ "${H5ROS3}" = "FALSE" ]; then
-        TMPROS3OPT="-v"
+else 
+    if [ ! -d "${TARGDIR}" ]; then
+        echo "Building HDF5 ${H5VER} from source."
+        echo ""
+        sleep 3
+        if [ "${H5ROS3}" = "FALSE" ]; then
+            TMPROS3OPT="-v"
+        fi
+
+        ${SUDOCMD} /home/tester/install_hdf5.sh -c "${USE_CC}" -d "${H5VER}" -j "${TESTPROC}" -t "${TARGDIR}" "${TMPROS3OPT}"
     fi
-
-    ${SUDOCMD} /home/tester/install_hdf5.sh -c "${USE_CC}" -d "${H5VER}" -j "${TESTPROC}" -t "${TARGDIR}" "${TMPROS3OPT}"
 fi
 
 ###
@@ -356,11 +379,11 @@ fi
 # Configure Environmental Variables
 ###
 
-export FLAGS="-I${TARGDIR}/include ${FLAGS}"
-export CFLAGS="-I${TARGDIR}/include ${CFLAGS}"
-export LDFLAGS="-L${TARGDIR}/lib ${LDFLAGS}"
-export LD_LIBRARY_PATH="${TARGDIR}/lib:${LD_LIBRARY_PATH}"
-export LIBDIR="${TARGDIR}/lib:${LIBDIR}"
+export FLAGS="-I${TARGDIR}/include -I/usr/include/hdf5/serial ${FLAGS}"
+export CFLAGS="-I${TARGDIR}/include -I/usr/include/hdf5/serial ${CFLAGS}"
+export LDFLAGS="-L${TARGDIR}/lib ${LDFLAGS} -L/usr/lib/$(uname -m)-linux-gnu/"
+export LD_LIBRARY_PATH="${TARGDIR}/lib:${LD_LIBRARY_PATH}:/usr/lib/$(uname -m)-linux-gnu"
+export LIBDIR="${TARGDIR}/lib:${LIBDIR}:/usr/lib/$(uname-m)-linux-gnu/"
 export PATH="${TARGDIR}/bin:$PATH"
 export CMAKE_PREFIX_PATH="${CMAKE_PREFIX_PATH}:${TARGDIR}"
 
@@ -569,11 +592,11 @@ done
 
 cd "${WORKING_DIRECTORY}"
 
-export CPPFLAGS="${CPPFLAGS} -I${NC_TARGDIR}/include"
-export CFLAGS="${CFLAGS} -I${NC_TARGDIR}/include"
-export LDFLAGS="${LDFLAGS} -L${NC_TARGDIR}/lib"
-export LD_LIBRARY_PATH="${LD_LIBRARY_PATH}:${NC_TARGDIR}/lib"
-export LIBDIR="${LIBDIR}:${NC_TARGDIR}/lib"
+export CPPFLAGS="${CPPFLAGS} -I/usr/include/hdf5/serial -I${NC_TARGDIR}/include"
+export CFLAGS="${CFLAGS} -I/usr/include/hdf5/serial -I${NC_TARGDIR}/include"
+export LDFLAGS="${LDFLAGS} -L${NC_TARGDIR}/lib -L/usr/lib/$(uname -m)-linux-gnu/"
+export LD_LIBRARY_PATH="${LD_LIBRARY_PATH}:${NC_TARGDIR}/lib:/usr/lib/$(uname -m)-linux-gnu"
+export LIBDIR="${LIBDIR}:${NC_TARGDIR}/lib:/usr/lib/$(uname-m)-linux-gnu/"
 export PATH="${NC_TARGDIR}/bin:$PATH"
 export CMAKE_PREFIX_PATH="${CMAKE_PREFIX_PATH}:${NC_TARGDIR}"
 

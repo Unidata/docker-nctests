@@ -95,6 +95,8 @@ The following environmental variables can be used to control the behavior at run
   * Introduced in version `1.9.3`. 
   * If non-empty, the specified HDF5 version will be downloaded, compiled and installed at runtime instead of using the pre-built version.
     * Example: -e HDF5SRC="1.14.6"
+* `H5PACKAGE` - If `TRUE`, install via package manager instead of from source. 
+
 
 ### Select AWS-S3-SDK
 
