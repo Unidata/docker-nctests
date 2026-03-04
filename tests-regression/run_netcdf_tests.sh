@@ -326,6 +326,29 @@ fi
 # End icx compiler stanza.
 ##
 
+###
+# Install HDF4
+###
+H4MAJ=$(echo $H4VER | cut -d '.' -f 1)
+H4MIN=$(echo $H4VER | cut -d '.' -f 2)
+H4REV=$(echo $H4VER | cut -d '.' -f 3)
+H4DIR="hdf4-hdf${H4VER}"
+H4FILE="hdf${H4VER}.tar.gz"
+H4URL="https://github.com/HDFGroup/hdf4/archive/refs/tags/${H4FILE}"
+
+tar -zxf "${H4FILE}"
+cd "${H4DIR}"
+autoreconf -if
+CFLAGS="${CFLAGS} -Wno-implicit-function-declaration" CC="${NCCOMP}" ./configure --prefix="${TARGDIR}" ${BUILDARGAC} --disable-netcdf --disable-fortran
+sleep 2
+make install -j "${NUMPROC}"
+make clean -j "${NUMPROC}"
+
+cd ..
+
+###
+# End Install HDF4
+###
 
 ##
 # Allow us to build dependencies from source.
@@ -522,7 +545,7 @@ while [[ $CCOUNT -le $CREPS ]]; do
         sleep 2
         mkdir -p build-netcdf-c
         cd build-netcdf-c
-        cmake ${WORKING_DIRECTORY}/netcdf-c -DCMAKE_INSTALL_PREFIX=${NC_TARGDIR} ${CMAKE_CDOC_OPTS} -DNETCDF_ENABLE_HDF4=OFF -DNETCDF_ENABLE_MMAP=ON -DBUILDNAME_PREFIX="docker$BITNESS-$USE_CC" -DBUILDNAME_SUFFIX="$CBRANCH" -DCMAKE_C_COMPILER=$USE_CC -DCMAKE_CXX_COMPILER=${USE_CXX} ${CMAKE_PAR_OPTS} ${CMAKE_COPTS} ${S3OPTS_CMAKE} -DCMAKE_C_FLAGS="${CMEM}" -DENABLE_TESTS="${RUNC}"; CHECKERR
+        cmake ${WORKING_DIRECTORY}/netcdf-c -DCMAKE_INSTALL_PREFIX=${NC_TARGDIR} ${CMAKE_CDOC_OPTS} -DNETCDF_ENABLE_MMAP=ON -DNETCDF_ENABLE_HDF4=TRUE -DBUILDNAME_PREFIX="docker$BITNESS-$USE_CC" -DBUILDNAME_SUFFIX="$CBRANCH" -DCMAKE_C_COMPILER=$USE_CC -DCMAKE_CXX_COMPILER=${USE_CXX} ${CMAKE_PAR_OPTS} ${CMAKE_COPTS} ${S3OPTS_CMAKE} -DCMAKE_C_FLAGS="${CMEM}" -DENABLE_TESTS="${RUNC}"; CHECKERR
         make clean
 
         if [ "x$RUNC" == "xTRUE" ]; then
@@ -566,7 +589,7 @@ while [[ $CCOUNT -le $CREPS ]]; do
         if [ ! -f "configure" ]; then
             autoreconf -if
         fi
-        CXX=$USE_CXX CC=$USE_CC ./configure --prefix=${NC_TARGDIR} ${AC_PAR_OPTS} ${AC_CDOC_OPTS} --disable-hdf4 --enable-extra-tests --enable-mmap ${AC_COPTS} ${S3OPTS_AC}
+        CXX=$USE_CXX CC=$USE_CC ./configure --prefix=${NC_TARGDIR} ${AC_PAR_OPTS} ${AC_CDOC_OPTS} --enable-hdf4 --enable-extra-tests --enable-mmap ${AC_COPTS} ${S3OPTS_AC}
         make clean
         make -j $TESTPROC ; CHECKERR
         if [ "x$RUNC" == "xTRUE" ]; then
@@ -574,7 +597,7 @@ while [[ $CCOUNT -le $CREPS ]]; do
             make check -j $TESTPROC ; CHECKERR_AC
 
             if [ "x$DISTCHECK" == "xTRUE" ]; then
-                DISTCHECK_CONFIGURE_FLAGS="--disable-hdf4 --enable-extra-tests --enable-mmap ${S3OPTS_AC} ${AC_COPTS}" make distcheck ; CHECKERR
+                DISTCHECK_CONFIGURE_FLAGS="--enable-hdf4 --enable-extra-tests --enable-mmap ${S3OPTS_AC} ${AC_COPTS}" make distcheck ; CHECKERR
             fi
 
         fi
