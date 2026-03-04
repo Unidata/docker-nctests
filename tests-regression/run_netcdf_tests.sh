@@ -326,30 +326,6 @@ fi
 # End icx compiler stanza.
 ##
 
-###
-# Install HDF4
-###
-H4MAJ=$(echo $H4VER | cut -d '.' -f 1)
-H4MIN=$(echo $H4VER | cut -d '.' -f 2)
-H4REV=$(echo $H4VER | cut -d '.' -f 3)
-H4DIR="hdf4-hdf${H4VER}"
-H4FILE="hdf${H4VER}.tar.gz"
-H4URL="https://github.com/HDFGroup/hdf4/archive/refs/tags/${H4FILE}"
-
-tar -zxf "${H4FILE}"
-cd "${H4DIR}"
-autoreconf -if
-CFLAGS="${CFLAGS} -Wno-implicit-function-declaration" CC="${NCCOMP}" ./configure --prefix="${TARGDIR}" ${BUILDARGAC} --disable-netcdf --disable-fortran
-sleep 2
-make install -j "${NUMPROC}"
-make clean -j "${NUMPROC}"
-
-cd ..
-
-###
-# End Install HDF4
-###
-
 ##
 # Allow us to build dependencies from source.
 # For now, just HDF5
@@ -382,6 +358,35 @@ else
         ${SUDOCMD} /home/tester/install_hdf5.sh -c "${USE_CC}" -d "${H5VER}" -j "${TESTPROC}" -t "${TARGDIR}" "${TMPROS3OPT}"
     fi
 fi
+
+###
+# Install HDF4
+###
+echo "Installing HDF4 Version: ${H4VER}"
+echo ""
+sleep 2
+
+H4MAJ=$(echo $H4VER | cut -d '.' -f 1)
+H4MIN=$(echo $H4VER | cut -d '.' -f 2)
+H4REV=$(echo $H4VER | cut -d '.' -f 3)
+H4DIR="hdf4-hdf${H4VER}"
+H4FILE="hdf${H4VER}.tar.gz"
+H4URL="https://github.com/HDFGroup/hdf4/archive/refs/tags/${H4FILE}"
+wget "${H4URL}"
+tar -zxf "${H4FILE}"
+cd "${H4DIR}"
+autoreconf -if
+CFLAGS="${CFLAGS} -Wno-implicit-function-declaration -fPIC" CC="${NCCOMP}" ./configure --prefix="${TARGDIR}" ${BUILDARGAC} --disable-netcdf --disable-fortran
+sleep 2
+${SUDOCMD} make install -j "${TESTPROC}"
+make clean -j "${TESTPROC}"
+
+cd ..
+
+###
+# End Install HDF4
+###
+
 
 ###
 # Install S3 SDK if need be.

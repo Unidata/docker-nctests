@@ -92,6 +92,7 @@ The following environmental variables can be used to control the behavior at run
 ---
 
 * `H4VER` - Set to version you want to use. Default: `4.3.1`
+    * Note: This versions < 4.3.0 do not work on `arm` architecture. 
 * `H5VER` - Set to the version you want to use. Default: `1.14.6`
   * Introduced in version `1.9.3`. 
   * If non-empty, the specified HDF5 version will be downloaded, compiled and installed at runtime instead of using the pre-built version.
