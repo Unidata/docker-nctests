@@ -88,9 +88,12 @@ The following environmental variables can be used to control the behavior at run
 * `NCOBRANCH` - Git branch for `NCO`. 
     * Default: `4.5.4`.
 
-### Select HDF5 Version to Use
+### Select HDF Version to Use
 ---
 
+* `H4VER` - Set to version you want to use. Default: None
+    * Note: This versions < 4.3.0 do not work on `arm` architecture. 
+    * Note: If empty, no HDF4 tests are run. 
 * `H5VER` - Set to the version you want to use. Default: `1.14.6`
   * Introduced in version `1.9.3`. 
   * If non-empty, the specified HDF5 version will be downloaded, compiled and installed at runtime instead of using the pre-built version.
