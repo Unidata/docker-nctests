@@ -97,7 +97,7 @@ ENV NCOREPS=1
 ENV TESTPROC=""
 ENV TESTPROC_FORTRAN=""
 ENV CUSER=tester
-ENV CUSSERPWORD=""
+ENV CUSERPWORD=""
 ENV CTEST_REPEAT=3
 
 
@@ -109,7 +109,7 @@ ENV CTEST_REPEAT=3
 
 
 ###
-# Run the provision scripot.
+# Run the provision script.
 ###
 ARG DEBIAN_FRONTEND=noninteractive
 ENV TZ=America/Denver
@@ -175,11 +175,8 @@ USER ${CUSER}
 
 RUN dos2unix ${HOME}/run_tests.sh
 RUN dos2unix ${HOME}/run_netcdf_tests.sh 
-RUN dos2unix ${HOME}/install_hdf5.sh
-RUN dos2unix ${HOME}/install_mpich.sh
 RUN dos2unix ${HOME}/env_activate.sh
 RUN dos2unix ${HOME}/env_deactivate.sh
-RUN dos2unix ${HOME}/install_intelone.sh
 RUN chmod 755 ${HOME}/install_mpich.sh
 RUN chmod 755 ${HOME}/install_hdf5.sh
 RUN chmod 755 ${HOME}/env_activate.sh
