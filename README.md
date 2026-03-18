@@ -1,6 +1,6 @@
-s# docker.unidata.ucar.edu/nctests - Regression Testing
+s# unidata/nctests - Regression Testing
 
-This project contains the dockerfiles for two images, `docker.unidata.ucar.edu/nctests` and `docker.unidata.ucar.edu/ncabi`.  The documentaiton below relates to `nctests`.  Documentation for `ncabi` is forthcoming.
+This project contains the dockerfiles for two images, `unidata/nctests` and `unidata/ncabi`.  The documentaiton below relates to `nctests`.  Documentation for `ncabi` is forthcoming.
 
 
 ## Overview
@@ -53,14 +53,14 @@ NCO integration adds additional regression testing.
 
 You can specify an alternative branch for `netcdf-c` than `main` using the following syntax.
 
-    $ docker run -e CBRANCH="branch name" docker.unidata.ucar.edu/nctests
+    $ docker run -e CBRANCH="branch name" unidata/nctests
 
 
 ## Working with local copies instead of pulling from GitHub
 
 It is possible to use local directories instead of pulling from github. You do this by mounting your local git directory to the root of the docker image filesystem, e.g.
 
-    $ docker run -v $(pwd)/netcdf-c:/netcdf-c docker.unidata.ucar.edu/nctests
+    $ docker run -v $(pwd)/netcdf-c:/netcdf-c unidata/nctests
 
 When the image runs, it will check for the existence of `/netcdf-c`, `/netcdf-fortran`, `/netcdf-cxx4` and `/netcdf4-python`.  If they exist, the image will clone from these instead of pulling from GitHub.
 
@@ -88,13 +88,18 @@ The following environmental variables can be used to control the behavior at run
 * `NCOBRANCH` - Git branch for `NCO`. 
     * Default: `4.5.4`.
 
-### Select HDF5 Version to Use
+### Select HDF Version to Use
 ---
 
+* `H4VER` - Set to version you want to use. Default: None
+    * Note: This versions < 4.3.0 do not work on `arm` architecture. 
+    * Note: If empty, no HDF4 tests are run. 
 * `H5VER` - Set to the version you want to use. Default: `1.14.6`
   * Introduced in version `1.9.3`. 
   * If non-empty, the specified HDF5 version will be downloaded, compiled and installed at runtime instead of using the pre-built version.
     * Example: -e HDF5SRC="1.14.6"
+* `H5PACKAGE` - If `TRUE`, install via package manager instead of from source. 
+
 
 ### Select AWS-S3-SDK
 
@@ -180,60 +185,60 @@ In order to build documentation for `netcdf-c` and `netcdf-fortran`, you must sp
 * `-v`: Mount a local volume to the docker image.
 * `-e`: Set an environmental variable.
 
-See [the section on environmental variables](#variables) for a complete list of variables understood by `docker.unidata.ucar.edu/nctests`.
+See [the section on environmental variables](#variables) for a complete list of variables understood by `unidata/nctests`.
 
 ### - Show the help file
 
 This will show you the help file for the docker image.
 
-    $ docker run --rm -it -e CMD=help docker.unidata.ucar.edu/nctests
+    $ docker run --rm -it -e CMD=help unidata/nctests
 
 ### - Run a docker container *interactively*
 
 This will put you into the shell for the docker container.  Note that any changes you make will not persist once you exit.  
 
-    $ docker run --rm -it --entrypoint /bin/bash docker.unidata.ucar.edu/nctests
+    $ docker run --rm -it --entrypoint /bin/bash unidata/nctests
 
 ### - Run all tests (standard use case)
 
-    $ docker run --rm -it docker.unidata.ucar.edu/nctests
+    $ docker run --rm -it unidata/nctests
 
 ### - Run all tests (standard use case) using `clang` instead of `gcc`
 
-    $ docker run --rm -it -e USE_CC=clang -e USE_CXX=clang++ docker.unidata.ucar.edu/nctests
+    $ docker run --rm -it -e USE_CC=clang -e USE_CXX=clang++ unidata/nctests
 
 ### - Run all tests against a specific branch
 
-    $ docker run --rm -it -e CBRANCH=working docker.unidata.ucar.edu/nctests
+    $ docker run --rm -it -e CBRANCH=working unidata/nctests
 
 ### - Turn off DAP tests by passing in a cmake variable
 
-    $ docker run --rm -it -e COPTS="-DNETCDF_ENABLE_DAP=OFF" docker.unidata.ucar.edu/nctests
+    $ docker run --rm -it -e COPTS="-DNETCDF_ENABLE_DAP=OFF" unidata/nctests
 
 ### - Run all of the tests but do not use the remote dashboard
 
-    $ docker run --rm -it -e USEDASH=OFF docker.unidata.ucar.edu/nctests
+    $ docker run --rm -it -e USEDASH=OFF unidata/nctests
 
 ### - Run the tests against a local copy of the netcdf-c git repository instead of pulling from GitHub
 
 > Note that you will not switch branches inside the docker container when running like this; you must make sure your local repository (that you're at the root of, remember?) is on the branch you want to analyze.
 
-    $ docker run --rm -it -v $(pwd):/netcdf-c docker.unidata.ucar.edu/nctests
+    $ docker run --rm -it -v $(pwd):/netcdf-c unidata/nctests
 
 ### - Run the tests against a local copy, and disable the fortran, c++ and remote dashboard.
 
-    $ docker run --rm -it -v $(pwd):/netcdf-c -e USEDASH=OFF -e RUNF=OFF -e RUNCXX=OFF docker.unidata.ucar.edu/nctests
+    $ docker run --rm -it -v $(pwd):/netcdf-c -e USEDASH=OFF -e RUNF=OFF -e RUNCXX=OFF unidata/nctests
 
 ### - Run the NetCDF-C tests using Autootools instead of CMake, and repeat the build twice.
 
-    $ docker run --rm -it -e USE_BUILDSYSTEM=both -e CREPS=2 docker.unidata.ucar.edu/nctests
+    $ docker run --rm -it -e USE_BUILDSYSTEM=both -e CREPS=2 unidata/nctests
 
 ### Running non-serial tests
 
-    $ docker run --rm -it -e USE_BUILDSYSTEM=cmake -e USE_CC=mpicc docker.unidata.ucar.edu/nctests
+    $ docker run --rm -it -e USE_BUILDSYSTEM=cmake -e USE_CC=mpicc unidata/nctests
 
 ### Running Java tests with internal data and ctest repeats 3 times to try to get success.
 
-    $ docker run --rm -it -e CBRANCH=v4.9.2 -e RUNF=OFF -e CTEST_REPEAT=3 -e RUNJAVA=TRUE -v /path/to/cdmUnitTest:/share/testdata/cdmUnitTest -v ./results:/results docker.unidata.ucar.edu/nctests
+    $ docker run --rm -it -e CBRANCH=v4.9.2 -e RUNF=OFF -e CTEST_REPEAT=3 -e RUNJAVA=TRUE -v /path/to/cdmUnitTest:/share/testdata/cdmUnitTest -v ./results:/results unidata/nctests
 
     
