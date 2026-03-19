@@ -4,8 +4,8 @@
 # shared layers that docker provides.
 #####
 #FROM ubuntu:22.04
-#FROM ubuntu:24.04
-FROM ubuntu:25.04
+FROM ubuntu:24.04
+#FROM ubuntu:25.04
 USER root
 ENV HOME=/root
 WORKDIR /root
