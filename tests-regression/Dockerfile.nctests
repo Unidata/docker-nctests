@@ -158,12 +158,11 @@ WORKDIR ${HOME}
 
 COPY run_netcdf_tests.sh ${HOME}/
 COPY run_tests.sh ${HOME}/
-COPY install_hdf5.sh ${HOME}/
-COPY install_mpich.sh ${HOME}/
 COPY env_activate.sh ${HOME}/
 COPY env_deactivate.sh ${HOME}/
+COPY install_mpich.sh ${HOME}/
 COPY install_intelone.sh ${HOME}/
-
+COPY install_hdf5.sh ${HOME}/
 COPY README.md ${HOME}/
 COPY Dockerfile.nctests ${HOME}/
 
@@ -177,11 +176,18 @@ RUN dos2unix ${HOME}/run_tests.sh
 RUN dos2unix ${HOME}/run_netcdf_tests.sh 
 RUN dos2unix ${HOME}/env_activate.sh
 RUN dos2unix ${HOME}/env_deactivate.sh
-RUN chmod 755 ${HOME}/install_mpich.sh
-RUN chmod 755 ${HOME}/install_hdf5.sh
+RUN dos2unix ${HOME}/install_mpich.sh
+RUN dos2unix ${HOME}/install_hdf5.sh
+RUN dos2unix ${HOME}/install_intelone.sh
+
+RUN chmod 755 ${HOME}/run_tests.sh
+RUN chmod 755 ${HOME}/run_netcdf_tests.sh
 RUN chmod 755 ${HOME}/env_activate.sh
 RUN chmod 755 ${HOME}/env_deactivate.sh
+RUN chmod 755 ${HOME}/install_mpich.sh
+RUN chmod 755 ${HOME}/install_hdf5.sh
 RUN chmod 755 ${HOME}/install_intelone.sh
+
 
 
 ENTRYPOINT ["/bin/bash", "-l", "-e", "/home/tester/run_tests.sh"]
