@@ -417,7 +417,7 @@ export FLAGS="-I${TARGDIR}/include -I/usr/include/hdf5/serial ${FLAGS}"
 export CFLAGS="-I${TARGDIR}/include -I/usr/include/hdf5/serial ${CFLAGS}"
 export LDFLAGS="-L${TARGDIR}/lib ${LDFLAGS} -L/usr/lib/$(uname -m)-linux-gnu/"
 export LD_LIBRARY_PATH="${TARGDIR}/lib:${LD_LIBRARY_PATH}:/usr/lib/$(uname -m)-linux-gnu"
-export LIBDIR="${TARGDIR}/lib:${LIBDIR}:/usr/lib/$(uname-m)-linux-gnu/"
+export LIBDIR="${TARGDIR}/lib:${LIBDIR}:/usr/lib/$(uname -m)-linux-gnu/"
 export PATH="${TARGDIR}/bin:$PATH"
 export CMAKE_PREFIX_PATH="${CMAKE_PREFIX_PATH}:${TARGDIR}"
 
