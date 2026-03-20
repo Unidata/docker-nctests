@@ -57,10 +57,9 @@ CHECKERRJAVA() {
             mkdir /results/netcdf-java
         fi
         # copy junit test report
-        if [ -f "./netcdf4/build/reports/tests/test/index.html" ]; then
-            cp -r netcdf4/build/reports/tests/test/* /results/netcdf-java
-        fi
-        # copy java error log file if something in the netCDF-C stack trigggers
+        cp -rf netcdf4/build/reports/tests/test* /results/netcdf-java >/dev/null 2>&1
+
+        # copy java error log file if something in the netCDF-C stack triggers
         # a core dump
         find ./netcdf4 -maxdepth 1 -name \*.log -exec cp {} /results/netcdf-java \;
     fi
@@ -813,22 +812,40 @@ if [ "x$RUNJAVA" == "xTRUE" ]; then
     fi
 
     # set test task name
-    TEST_TASK="testWithJdk$JDKVER"
-    if [ "$JDKVER" == "$MINIMUM_TEST_JDK" ]; then
+    TEST_TASK="test$JDKVER"
+    if [[ "$JDKVER" == "$MINIMUM_TEST_JDK" ]]; then
         TEST_TASK="test"
     fi
 
     cd ${WORKING_DIRECTORY}/netcdf-java
 
+    # configure gradle to run slow tests, use the netCDF-C library, and
+    # (optional, if available) extended test datasets.
     GRADLE_OPTS="-DrunSlowTests=True -Djna.library.path=${LIBDIR}"
     if [ -d "/share/testdata/cdmUnitTest" ]; then
         GRADLE_OPTS="${GRADLE_OPTS} -Dunidata.testdata.path=/share/testdata"
     fi
 
+    # use gradle.properties to inform gradle of installed JDKs
+    mkdir -p ~/.gradle
+    JDK_LOCATIONS=""
+    mapfile -t JDK_HOMES < <(update-java-alternatives -l | awk '{print $3}')
+    for JDK_HOME in "${JDK_HOMES[@]}"; do
+      if [[ -n "$JDK_LOCATIONS" ]]; then
+        JDK_LOCATIONS+=","
+      fi
+      JDK_LOCATIONS+="${JDK_HOME}"
+    done
+    GRADLE_TOOLCHAIN_CONFIG="org.gradle.java.installations.paths=${JDK_LOCATIONS}"
+    printf '\n# Installed JDK locations\n%s\n' "${GRADLE_TOOLCHAIN_CONFIG}" >> ~/.gradle/gradle.properties
+    cat ~/.gradle/gradle.properties
+
+    # show gradle detected JDKs
+    ./gradlew ${GRADLE_OPTS} javaToolChains
+
     # run netCDF-Java tests that rely on the netCDF-C library
     # and do not trigger trap on failure
-    ./gradlew ${GRADLE_OPTS} clean :netcdf4:test${JDKVER} ; CHECKERRJAVA
-
+    ./gradlew ${GRADLE_OPTS} clean :netcdf4:${TEST_TASK} ; CHECKERRJAVA
 
     cd ${WORKING_DIRECTORY}
 
