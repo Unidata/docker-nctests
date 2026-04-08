@@ -630,7 +630,7 @@ export CPPFLAGS="${CPPFLAGS} -I/usr/include/hdf5/serial -I${NC_TARGDIR}/include"
 export CFLAGS="${CFLAGS} -I/usr/include/hdf5/serial -I${NC_TARGDIR}/include"
 export LDFLAGS="${LDFLAGS} -L${NC_TARGDIR}/lib -L/usr/lib/$(uname -m)-linux-gnu/"
 export LD_LIBRARY_PATH="${LD_LIBRARY_PATH}:${NC_TARGDIR}/lib:/usr/lib/$(uname -m)-linux-gnu"
-export LIBDIR="${LIBDIR}:${NC_TARGDIR}/lib:/usr/lib/$(uname-m)-linux-gnu/"
+export LIBDIR="${LIBDIR}:${NC_TARGDIR}/lib:/usr/lib/$(uname -m)-linux-gnu/"
 export PATH="${NC_TARGDIR}/bin:$PATH"
 export CMAKE_PREFIX_PATH="${CMAKE_PREFIX_PATH}:${NC_TARGDIR}"
 
