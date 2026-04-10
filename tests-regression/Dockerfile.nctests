@@ -67,6 +67,10 @@ ENV WORKING_DIRECTORY=/workdir
 ##
 # Other variables
 ##
+
+# TARGETARCH is automatically provided by Docker Buildx in multi-platform builds.
+# Accepted values: amd64, arm64, s390x, 386 (linux/386 = 32-bit x86).
+ARG TARGETARCH
 ENV BITNESS=64
 ENV USE_CC=gcc
 ENV USE_CXX=g++
@@ -145,6 +149,16 @@ RUN dos2unix /root/install_intelone.sh
 RUN /bin/sh -x /root/provision_base_ubuntu.sh
 RUN sudo bash -x /root/install_mpich.sh -v 4.3.0 -j $(nproc)
 
+# Set BITNESS=32 at runtime for linux/386 builds; all other platforms stay at 64.
+# The ENTRYPOINT uses 'bash -l' (login shell), which sources /etc/profile.d/*.
+# This overrides the ENV BITNESS=64 default above for 386 containers.
+ARG TARGETARCH
+RUN if [ "${TARGETARCH}" = "386" ]; then \
+      printf 'BITNESS=32\nexport BITNESS\n' > /etc/profile.d/bitness.sh; \
+    else \
+      printf 'BITNESS=64\nexport BITNESS\n' > /etc/profile.d/bitness.sh; \
+    fi
+
 #####
 # Configure system and environment.
 #####
@@ -166,7 +180,7 @@ COPY install_hdf5.sh ${HOME}/
 COPY README.md ${HOME}/
 COPY Dockerfile.nctests ${HOME}/
 
-RUN echo "Version:\n\tunidata/nctests ($BITNESS) :\t$NCTEST_VERSION\t$(date)" > "/home/tester/${VERSION_FILE}"
+RUN . /etc/profile.d/bitness.sh && echo "Version:\n\tunidata/nctests ($BITNESS) :\t$NCTEST_VERSION\t$(date)" > "/home/tester/${VERSION_FILE}"
 
 USER root
 RUN chown -R tester:tester ${HOME}

@@ -22,7 +22,12 @@ echo "${CUSER} ALL=NOPASSWD: ALL" >> /etc/sudoers
 ###
 # Install some basics.
 ###
-sudo apt-get -y install --no-install-recommends bzip2 g++ gfortran libtool automake autoconf m4 bison flex libcurl4-openssl-dev zlib1g-dev git wget curl libjpeg-dev cmake gdb dos2unix gsl-bin libgsl0-dev udunits-bin libudunits2-0 libudunits2-dev clang zip valgrind python-setuptools-doc make build-essential less unzip patch libsz2 libssl-dev cmake libxml2 libxml2-dev mpich nano libmpich-dev graphviz doxygen bpytop
+sudo apt-get -y install --no-install-recommends bzip2 g++ gfortran libtool automake autoconf m4 bison flex libcurl4-openssl-dev zlib1g-dev git wget curl libjpeg-dev cmake gdb dos2unix gsl-bin libgsl0-dev udunits-bin libudunits2-0 libudunits2-dev clang zip valgrind python-setuptools-doc make build-essential less unzip patch libsz2 libssl-dev cmake libxml2 libxml2-dev mpich nano libmpich-dev graphviz doxygen
+
+# bpytop is not packaged for i686/i386 in Ubuntu 24.04; skip on 32-bit builds.
+if [ "$(uname -m)" != "i686" ] && [ "$(uname -m)" != "i386" ]; then
+    sudo apt-get -y install --no-install-recommends bpytop
+fi
 
 ###
 # Custom mpich installs
