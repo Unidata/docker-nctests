@@ -31,7 +31,7 @@ fi
 
 # Debian Bookworm ships CMake 3.25; libaec v1.1.6+ requires CMake 3.26+.
 # Pull a newer CMake from bookworm-backports when on Debian.
-if grep -qi 'debian' /etc/os-release 2>/dev/null; then
+if grep -qi 'ID=debian' /etc/os-release 2>/dev/null; then
     echo 'deb http://deb.debian.org/debian bookworm-backports main' >> /etc/apt/sources.list
     apt-get update -qq
     sudo apt-get install -y -t bookworm-backports cmake
