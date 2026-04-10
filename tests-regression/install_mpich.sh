@@ -6,6 +6,7 @@
 MPICHVER=4.3.0
 TARGDIR="/usr"
 NUMPROC=$(nproc)
+DOAPT=""
 
 # Check if 'apt' is available
 if ! command -v apt &> /dev/null; then
@@ -18,9 +19,13 @@ fi
 
 dosummary() {
     echo -e ""
-    echo -e "MPICH Version to be installed:\t${MPICHVER}"
-    echo -e "Processors to use:\t\t${NUMPROC}"
-
+    if [ "$DOAPT" != "" ]; then
+        echo "Using MPICH Version:"
+        apt search mpich | grep ^mpich | grep -v mpich-doc
+    else 
+        echo -e "MPICH Version to be installed:\t${MPICHVER}"
+        echo -e "Processors to use:\t\t${NUMPROC}"
+    fi
     echo
     
     echo -e ""
@@ -55,6 +60,7 @@ dohelp() {
     echo -e "\t-j | --cpus:\tNumber of cpus to use to compile (default: ${NUMPROC})"
     echo -e "\t-t | --targdir:\tTarget directory to install to (default: ${TARGDIR})"
     echo -e "\t-v | --version:\tVersion of mpich to install (default: ${MPICHVER})"
+    echo -e "\t-p | --package:\tInstall from package manager (apt) instead of manually"
     echo -e ""
     echo -e ""
 }
@@ -67,7 +73,7 @@ if [ $# -lt 1 ]; then
 fi
 
 ALLARGS="$@"
-LONGARGS=$(getopt -o j:t:v: --long cpus:,targdir:,version: -- "$@")
+LONGARGS=$(getopt -o j:t:v:p --long cpus:,targdir:,version:,package -- "$@")
 
 #echo "LONGARGS: ${LONGARGS}"
 eval set -- $LONGARGS
@@ -86,6 +92,10 @@ do
         -v | --version)
             MPICHVER="${2}"
             shift 2
+            ;;
+        -p | --package)
+            DOAPT="TRUE"
+            shift
             ;;
         --) shift; break;;
         *)
@@ -106,31 +116,37 @@ MPICHDIR="mpich-${MPICHVER}"
 MPICHFILE="${MPICHDIR}.tar.gz"
 MPICHURL="https://www.mpich.org/static/downloads/${MPICHVER}/${MPICHFILE}"
 
-###
-# Fetch the file
-###
-wget "${MPICHURL}"
 
-###
-# Clean up any existing versions.
-###
-apt update 
-apt remove -y mpich
-apt autoremove -y
+if [ "$DOAPT" = "TRUE" ]; then
+    sudo apt update && sudo apt install -y mpich
+else
 
-###
-# Install Python3 Dependency
-###
-sudo apt install -y python3
+    ###
+    # Fetch the file
+    ###
+    wget "${MPICHURL}"
 
-###
-# Install mpich
-###
-tar -zxf "${MPICHFILE}"
-pushd "${MPICHDIR}"
-./configure --prefix="${TARGDIR}"
-make -j "${NUMPROC}"
-make install -j "${NUMPROC}"
-popd
-rm -rf "${MPICHDIR}"
+    ###
+    # Clean up any existing versions.
+    ###
+    apt update 
+    apt remove -y mpich
+    apt autoremove -y
+
+    ###
+    # Install Python3 Dependency
+    ###
+    sudo apt install -y python3
+
+    ###
+    # Install mpich
+    ###
+    tar -zxf "${MPICHFILE}"
+    pushd "${MPICHDIR}"
+    ./configure --prefix="${TARGDIR}"
+    make -j "${NUMPROC}"
+    make install -j "${NUMPROC}"
+    popd
+    rm -rf "${MPICHDIR}"
+fi
 echo "Finished"
