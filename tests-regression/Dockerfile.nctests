@@ -3,8 +3,21 @@
 # so that we can take advantage of the
 # shared layers that docker provides.
 #####
+#
+# Base image selection:
+#   ubuntu:24.04 does not publish a linux/386 manifest (Ubuntu dropped i386
+#   from official Docker images). debian:bookworm is used for linux/386 because
+#   Debian maintains full i386 support and package names are compatible.
+#   All other platforms continue to use ubuntu:24.04.
+#
 #FROM ubuntu:22.04
-FROM ubuntu:24.04
+FROM ubuntu:24.04 AS base-amd64
+FROM ubuntu:24.04 AS base-arm64
+FROM ubuntu:24.04 AS base-s390x
+FROM debian:bookworm AS base-386
+
+ARG TARGETARCH=amd64
+FROM base-${TARGETARCH}
 #FROM ubuntu:25.04
 USER root
 ENV HOME=/root
