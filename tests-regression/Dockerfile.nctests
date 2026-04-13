@@ -160,8 +160,9 @@ RUN dos2unix /root/install_hdf5.sh
 RUN dos2unix /root/install_intelone.sh
 
 RUN /bin/sh -x /root/provision_base_ubuntu.sh
-#RUN sudo bash -x /root/install_mpich.sh -v 4.3.0 -j $(nproc)
-RUN sudo bash -x /root/install_mpich.sh -p 
+RUN sudo bash -x /root/install_mpich.sh -v 4.3.0 -j $(nproc)
+## Install system mpich and use that.
+#RUN sudo bash -x /root/install_mpich.sh -p 
 # Set BITNESS=32 at runtime for linux/386 builds; all other platforms stay at 64.
 # The ENTRYPOINT uses 'bash -l' (login shell), which sources /etc/profile.d/*.
 # This overrides the ENV BITNESS=64 default above for 386 containers.
