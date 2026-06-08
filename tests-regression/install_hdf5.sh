@@ -9,7 +9,6 @@ H5COMPRESSION="bz2"
 H5UNTAR="tar -jxf"
 PNETCDFVER="1.14.0"
 NCCOMP="gcc"
-USE_CXX="g++"
 NUMPROC=$(nproc)
 DOPAR=""
 USEBUILD="ac"
@@ -62,8 +61,7 @@ dosummary() {
         echo -e "PNetCDF to be installed:\t${PNETCDFVER}"
     fi
     echo -e "Libraries:\t\t\t${BUILDTYPE}"
-    echo -e "C Compiler to be used:\t\t${NCCOMP}"
-    echo -e "CXX Compiler to be used:\t${USE_CXX}"
+    echo -e "Compiler to be used:\t\t${NCCOMP}"
     echo -e "Processors to use:\t\t${NUMPROC}"
     echo -e "Build system:\t\t\t${USEBUILD}"
     echo -e "Debug Symbols:\t\t\t${BUILDDEBUG}"
@@ -82,7 +80,7 @@ dohelp() {
 
     echo -e "\t-a | --h5suffix:\tAddendum to filename, e.g. 'hdf5-1.14.1-2' (default: \"\")"
     echo -e "\t-c | --compiler:\tCompiler to use."
-    echo -e "\t\tOptions:\n\t\to gcc\n\t\to clang\n\t\to mpicc\n\t\to icx"
+    echo -e "\t\tOptions:\n\t\to gcc\n\t\to clang\n\t\to mpicc"
     echo -e "\t-d | --h5ver:\t\tVersion of HDF5 to install." 
     echo -e "\t-h | --help:\t\tShow this help."
     echo -e "\t-j | --cpus:\t\tNumber of processors to use (default: $(nproc))"
@@ -118,7 +116,6 @@ do
         -c | --compiler)
             NCCOMP="$2"
             if [ "x${NCCOMP}" = "xmpicc" ]; then
-                USE_CXX=mpic++
                 DOPAR=TRUE
                 H5PAROPT="--enable-parallel"
                 H5PAROPT_CMAKE="-DHDF5_ENABLE_PARALLEL=TRUE"
@@ -162,18 +159,6 @@ do
     esac
 done
 
-### 
-# Set C++ compiler if need be.
-### 
-if [ "${NCCOMP}" = "clang" ]; then
-   export USE_CXX=clang++
-fi
-if [ "${NCCOMP}" = "icx" ]; then
-    echo "Activating IntelOne compiler: icx"
-    source /opt/intel/oneapi/2025.3/oneapi-vars.sh
-    export USE_CXX=icpx
-fi
-
 
 dosummary
 
@@ -196,11 +181,13 @@ if [ "x${H5VER}" != "xa" ]; then
     H5FILE="${H5DIR}.tar.bz2"
     H5FILEGZ="${H5DIR}.tar.gz"
     H5FILEGZ_ALT="${H5DIR_ALT}.tar.gz"
+    H5FILEGZ_ALT2="${H5VER}${H5VERSUFFIX}.tar.gz"
 
     H5URL_DIRECT="https://support.hdfgroup.org/ftp/HDF5/releases/hdf5-${H5MAJ}.${H5MIN}/hdf5-${H5VER}/src/${H5FILE}"
     H5URL_DIRECT_GZ="https://support.hdfgroup.org/ftp/HDF5/releases/hdf5-${H5MAJ}.${H5MIN}/hdf5-${H5VER}/src/${H5FILEGZ}"
     H5URL_GITHUB="https://github.com/HDFGroup/hdf5/archive/refs/tags/hdf5-${H5MAJ}.${H5MIN}.${H5REV}${H5VERSUFFIX}.tar.gz"
     H5URL_GITHUB_ALT="https://github.com/HDFGroup/hdf5/archive/refs/tags/hdf5_${H5MAJ}.${H5MIN}.${H5REV}${H5VERSUFFIX}.tar.gz"
+    H5URL_GITHUB_ALT2="https://github.com/HDFGroup/hdf5/archive/refs/tags/${H5MAJ}.${H5MIN}.${H5REV}${H5VERSUFFIX}.tar.gz"
 fi
 
 set +e
@@ -236,6 +223,7 @@ if [  "x${FILEFOUND}" = "x" ]; then
     if [ ${FILEGOT} -ne 0 ]; then SC=2 ; SCFLAG="-zxf" ; H5FILENAME=${H5FILEGZ} ; fi ; fetchfile "${H5URL_DIRECT_GZ}" "${FILEGOT}" ; FILEGOT=$?  
     if [ ${FILEGOT} -ne 0 ]; then SC=1 ; SCFLAG="-zxf" ; H5FILENAME=${H5FILEGZ} ; fi ; fetchfile "${H5URL_GITHUB}" "${FILEGOT}" ; FILEGOT=$?  
     if [ ${FILEGOT} -ne 0 ]; then SC=1 ; SCFLAG="-zxf" ; H5FILENAME=${H5FILEGZ_ALT} ; fi ; fetchfile "${H5URL_GITHUB_ALT}" "${FILEGOT}" ; FILEGOT=$?
+    if [ ${FILEGOT} -ne 0 ]; then SC=1 ; SCFLAG="-zxf" ; H5FILENAME=${H5FILEGZ_ALT2} ; fi ; fetchfile "${H5URL_GITHUB_ALT2}" "${FILEGOT}" ; FILEGOT=$?
 
     if [ 0 -ne $FILEGOT ]; then
         echo -e "\t\t\to Failure."
@@ -327,7 +315,7 @@ if [ "x${USEBUILD}" = "xac" ]; then
 
     autoreconf -if 
     H5_API_OP="--with-default-api-version=v110"
-    CFLAGS="${CFLAGS} ${HDF5_CFLAGS} -Wno-implicit-function-declaration" CXX=$USE_CXX CC="${NCCOMP}" LDFLAGS="${LDFLAGS} ${HDF5_LDFLAGS}" ./configure ${BUILDARGAC} "${BUILDTESTSTRING}" --prefix="${TARGDIR}" "${H5PAROPT}" --enable-hl --with-szlib ${H5_API_OP} "${BUILDDEBUGHDF5}" "${ROS3OPT_AC}"
+    CFLAGS="${CFLAGS} ${HDF5_CFLAGS} -Wno-implicit-function-declaration" CC="${NCCOMP}" LDFLAGS="${LDFLAGS} ${HDF5_LDFLAGS}" ./configure ${BUILDARGAC} "${BUILDTESTSTRING}" --prefix="${TARGDIR}" "${H5PAROPT}" --enable-hl --with-szlib ${H5_API_OP} "${BUILDDEBUGHDF5}" "${ROS3OPT_AC}"
     sleep 2
     make -j "${NUMPROC}"
     if [ "x${DONCTESTS}" = "xTRUE" ]; then
@@ -347,7 +335,7 @@ elif [ "x${USEBUILD}" = "xcmake" ]; then
     fi
     LDFLAGS_TMP="${LDFLAGS}"
     LDFLAGS="${LDFLAGS} ${HDF5_LDFLAGS}"
-    cmake .. -DHDF5_BUILD_TOOLS=OFF -DBUILD_TESTING="${BUILDTESTSTRING}" -DCMAKE_C_FLAGS="${CFLAGS} ${HDF5_CFLAGS}" ${H5PAROPT_CMAKE} -DCMAKE_C_COMPILER="${NCCOMP}" -DCMAKE_CXX_COMPILER="${USE_CXX}" "${BUILDARGCMAKE}" -DCMAKE_INSTALL_PREFIX="${TARGDIR}" -DHDF5_ENABLE_SZIP_SUPPORT=TRUE -DHDF5_ENABLE_ZLIB_SUPPORT=TRUE ${H5_API_OP} "${ROS3OPT_CMAKE}" DCMAKE_INSTALL_NAME_DIR="${TARGDIR}/lib"
+    cmake .. -DHDF5_BUILD_TOOLS=OFF -DBUILD_TESTING="${BUILDTESTSTRING}" -DCMAKE_C_FLAGS="${CFLAGS} ${HDF5_CFLAGS}" ${H5PAROPT_CMAKE} -DCMAKE_C_COMPILER="${NCCOMP}" "${BUILDARGCMAKE}" -DCMAKE_INSTALL_PREFIX="${TARGDIR}" -DHDF5_ENABLE_ZLIB_SUPPORT=TRUE ${H5_API_OP} "${ROS3OPT_CMAKE}" DCMAKE_INSTALL_NAME_DIR="${TARGDIR}/lib"
     sleep 2
     make -j "${NUMPROC}"
     if [ "x${DONCTESTS}" = "xTRUE" ]; then
@@ -358,7 +346,7 @@ elif [ "x${USEBUILD}" = "xcmake" ]; then
     rm -rf build
     LDFLAGS="${LDFLAGS_TMP}"
     unset LDFLAGS_TMP
-    cd ..
+
 fi
 
 if [ "x$DOPAR" = "xTRUE" ]; then
