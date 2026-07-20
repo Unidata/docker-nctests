@@ -147,7 +147,7 @@ The following environmental variables can be used to control the behavior at run
 ### Build Systems to use
 ---
 
-* `USE_BUILDSYSTEM` - 'Defaults to 'cmake'.  Options are `cmake`, `autotools`, `both`. 
+* `USE_BUILDSYSTEM` - 'Defaults to 'both'.  Options are `cmake`, `autotools`, `both`. 
 * `DISTCHECK` - Default to `FALSE`.  Requires `USE_BUILDSYSTEM` to be `autotools` or `both`.  Runs `make distcheck` after `make check`.
 
 ### Documentation generation
