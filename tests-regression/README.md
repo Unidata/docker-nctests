@@ -164,6 +164,7 @@ In order to build documentation for `netcdf-c` and `netcdf-fortran`, you must sp
 ### Advanced Options
 ---
 
+* `ENABLE_C_PLUGINS` - **ADVANCED** Defaults to `TRUE`. When `TRUE`, the `netcdf-c` plugins are **built** and **installed**.  
 * `NCOMAKETEST` - **ADVANCED** Default to `FALSE`. When `TRUE`, run `make test` for the `NCO` package and parse the output for `Unidata`-related output.
 * `TESTPROC` - **ADVANCED** Default to `1`.  Defines the number of processors to use when building and testing.
 * `TESTPROC_FORTRAN` - **ADVANCED** Default to `1`. Defines the number of processors to use when building and testing.
