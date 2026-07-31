@@ -24,7 +24,7 @@ ENV HOME=/root
 WORKDIR /root
 LABEL maintainer="Ward Fisher <wfisher@ucar.edu>"
 
-ENV NCTEST_VERSION="1.13.9 - Development"
+ENV NCTEST_VERSION="1.13.8"
 
 ENV VERSION_FILE=VERSION.md
 
