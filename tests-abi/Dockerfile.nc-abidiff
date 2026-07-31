@@ -5,7 +5,7 @@
 FROM unidata/nctests:latest
 LABEL maintainer="Ward Fisher <wfisher@ucar.edu>"
 USER root
-ENV H5VER=1.14.6
+ENV H5VER=2.1.1
 ENV HOME=/root
 WORKDIR /root
 
