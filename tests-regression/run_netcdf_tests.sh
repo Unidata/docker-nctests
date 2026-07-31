@@ -532,6 +532,16 @@ if [ "x$ENABLE_C_MEMCHECK" == "xTRUE" ]; then
     CMEM="-fsanitize=address -fno-omit-frame-pointer"
 fi
 
+###
+# Turn off plugin testing if ENABLE_C_PLUGINS != TRUE
+###
+CMAKE_PLUGIN_ARG=""
+AC_PLUGIN_ARG=""
+if [ "x$ENABLE_C_PLUGINS" = "xTRUE" ]; then
+    CMAKE_PLUGIN_ARG="-DNETCDF_ENABLE_PLUGINS=TRUE -DNETCDF_PLUGIN_INSTALL=TRUE"
+    AC_PLUGIN_ARG="--enable-plugins --with-plugin-dir=${NC_TARGDIR}/hdf5/lib/plugin"
+fi 
+
 S3OPTS_CMAKE=""
 S3OPTS_AC=""
 
@@ -556,7 +566,7 @@ while [[ $CCOUNT -le $CREPS ]]; do
         sleep 2
         mkdir -p build-netcdf-c
         cd build-netcdf-c
-        cmake ${WORKING_DIRECTORY}/netcdf-c -DCMAKE_INSTALL_PREFIX=${NC_TARGDIR} ${CMAKE_CDOC_OPTS} -DNETCDF_ENABLE_MMAP=ON "${H4CMAKEOPT}" -DBUILDNAME_PREFIX="docker$BITNESS-$USE_CC" -DBUILDNAME_SUFFIX="$CBRANCH" -DCMAKE_C_COMPILER=$USE_CC -DCMAKE_CXX_COMPILER=${USE_CXX} ${CMAKE_PAR_OPTS} ${CMAKE_COPTS} ${S3OPTS_CMAKE} -DCMAKE_C_FLAGS="${CMEM}" -DENABLE_TESTS="${RUNC}"; CHECKERR
+        cmake ${WORKING_DIRECTORY}/netcdf-c -DCMAKE_INSTALL_PREFIX=${NC_TARGDIR} ${CMAKE_CDOC_OPTS} -DNETCDF_ENABLE_MMAP=ON "${H4CMAKEOPT}" -DBUILDNAME_PREFIX="docker$BITNESS-$USE_CC" -DBUILDNAME_SUFFIX="$CBRANCH" -DCMAKE_C_COMPILER=$USE_CC -DCMAKE_CXX_COMPILER=${USE_CXX} ${CMAKE_PAR_OPTS} ${CMAKE_COPTS} ${S3OPTS_CMAKE} ${CMAKE_PLUGIN_ARG} -DCMAKE_C_FLAGS="${CMEM}" -DENABLE_TESTS="${RUNC}"; CHECKERR
         make clean
 
         if [ "x$RUNC" == "xTRUE" ]; then
@@ -600,7 +610,7 @@ while [[ $CCOUNT -le $CREPS ]]; do
         if [ ! -f "configure" ]; then
             autoreconf -if
         fi
-        CXX=$USE_CXX CC=$USE_CC ./configure --prefix=${NC_TARGDIR} ${AC_PAR_OPTS} ${AC_CDOC_OPTS} ${H4ACOPT} --enable-extra-tests --enable-mmap ${AC_COPTS} ${S3OPTS_AC}
+        CXX=$USE_CXX CC=$USE_CC ./configure --prefix=${NC_TARGDIR} ${AC_PAR_OPTS} ${AC_CDOC_OPTS} ${H4ACOPT} --enable-extra-tests --enable-mmap ${AC_PLUGIN_ARG} ${AC_COPTS} ${S3OPTS_AC}
         make clean
         make -j $TESTPROC ; CHECKERR
         if [ "x$RUNC" == "xTRUE" ]; then

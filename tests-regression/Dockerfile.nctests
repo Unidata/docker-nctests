@@ -24,7 +24,7 @@ ENV HOME=/root
 WORKDIR /root
 LABEL maintainer="Ward Fisher <wfisher@ucar.edu>"
 
-ENV NCTEST_VERSION="1.13.7 - Development"
+ENV NCTEST_VERSION="1.13.9 - Development"
 
 ENV VERSION_FILE=VERSION.md
 
@@ -106,7 +106,7 @@ ENV USEDASH=FALSE
 ENV USE_BUILDSYSTEM=both
 ENV USEAC=TRUE
 ENV USECMAKE=TRUE
-
+ENV ENABLE_C_PLUGINS=TRUE
 ENV CREPS=1
 ENV FREPS=1
 ENV CXXREPS=1
@@ -156,12 +156,18 @@ RUN chmod 755 ${HOME}/install_intelone.sh
 RUN apt update
 RUN apt install -y dos2unix
 RUN dos2unix /root/provision_base_ubuntu.sh
+
 RUN dos2unix /root/install_mpich.sh
+
 RUN dos2unix /root/install_hdf5.sh
 RUN dos2unix /root/install_intelone.sh
 
 RUN /bin/sh -x /root/provision_base_ubuntu.sh
-RUN sudo bash -x /root/install_mpich.sh -v 4.3.0 -j $(nproc)
+RUN if [ "${TARGETARCH}" = "amd64" ] || [ "${TARGETARCH}" = "arm64" ]; then \
+      sudo bash -x /root/install_mpich.sh -v 4.3.0 -j $(nproc); \
+    fi
+
+    
 ## Install system mpich and use that.
 #RUN sudo bash -x /root/install_mpich.sh -p 
 # Set BITNESS=32 at runtime for linux/386 builds; all other platforms stay at 64.
