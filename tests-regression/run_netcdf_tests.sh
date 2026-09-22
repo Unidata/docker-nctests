@@ -764,7 +764,7 @@ if [ "x$RUNCXX4" == "xTRUE" ]; then
 
             mkdir -p build-netcdf-cxx4
             cd build-netcdf-cxx4
-            cmake ${WORKING_DIRECTORY}/netcdf-c -DBUILDNAME_PREFIX="docker$BITNESS-$USE_CXX" -DBUILDNAME_SUFFIX="$CXX4BRANCH" -DCMAKE_CXX_COMPILER=$USE_CXX $CXXOPTS
+            cmake ${WORKING_DIRECTORY}/netcdf-cxx4 -DBUILDNAME_PREFIX="docker$BITNESS-$USE_CXX" -DBUILDNAME_SUFFIX="$CXX4BRANCH" -DCMAKE_CXX_COMPILER=$USE_CXX $CXXOPTS
             if [ "x$USEDASH" == "xTRUE" ]; then
                 ctest -D Experimental ; CHECKERR
             else
