@@ -138,7 +138,7 @@ The following environmental variables can be used to control the behavior at run
 
 * `RUNC` - Set to `OFF`, `FALSE`, anything but `TRUE`, to disable running `netcdf-c` tests. NetCDF-C is still downloaded, compiled and installed.
 * `RUNF` - Set to `OFF`, `FALSE`, anything but `TRUE`, to disable running `netcdf-fortran` tests.
-* `RUNCXX` - Set to `OFF`, `FALSE`, anything but `TRUE`, to disable running `netcdf-cxx4` tests.
+* `RUNCXX4` - Set to `OFF`, `FALSE`, anything but `TRUE`, to disable running `netcdf-cxx4` tests.
 * `RUNJAVA` - Set to Non-`TRUE` to disable.  
 * `RUNP` - Set to `OFF`, `FALSE`, anything but `TRUE`, to disable running `netcdf4-python` tests.
 * `RUNNCO` - Set to `OFF`, `FALSE`, anything but `TRUE`, to disable running `NCO` tests.
@@ -228,7 +228,7 @@ This will put you into the shell for the docker container.  Note that any change
 
 ### - Run the tests against a local copy, and disable the fortran, c++ and remote dashboard.
 
-    $ docker run --rm -it -v $(pwd):/netcdf-c -e USEDASH=OFF -e RUNF=OFF -e RUNCXX=OFF unidata/nctests
+    $ docker run --rm -it -v $(pwd):/netcdf-c -e USEDASH=OFF -e RUNF=OFF -e RUNCXX4=OFF unidata/nctests
 
 ### - Run the NetCDF-C tests using Autootools instead of CMake, and repeat the build twice.
 
