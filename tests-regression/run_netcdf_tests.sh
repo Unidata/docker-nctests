@@ -122,7 +122,7 @@ sleep 3
 # appropriate dashboard.
 #
 # Check out the branch
-# specified by "CBRANCH", "FBRANCH", "CXXBRANCH"
+# specified by "CBRANCH", "FBRANCH", "CXX4BRANCH"
 ###
 
 ###
@@ -204,14 +204,10 @@ if [ "x$RUNCXX4" == "xTRUE" ]; then
             cd ..
         fi
 
-        else
+    else
         echo "Using remote netcdf-cxx4 repository"
         git clone http://www.github.com/Unidata/netcdf-cxx4 --single-branch --branch $CXX4BRANCH --depth=1 $CXX4BRANCH
-        mv $CXX4BRANCH netcdf-cxx4
-    else
-        echo "Using remote netcdf-cxx4 repository, checking out branch: ${CXX4BRANCH}"
-        git clone https://www.github.com/Unidata/netcdf-cxx4 --branch ${CXX4BRANCH} --depth=1 ${CXX4BRANCH}
-        mv ${CXX4BRANCH} netcdf-cxx4
+        mv $CXX4BRANCH netcdf-cxx4  
     fi
 else
     echo "Skipping CXX4"
@@ -757,7 +753,7 @@ fi
 # Build & test netcdf-cxx4.
 ###
 
-if [ "x$RUNCXX" == "xTRUE" ]; then
+if [ "x$RUNCXX4" == "xTRUE" ]; then
 
 
     while [[ $CXXCOUNT -le $CXXREPS ]]; do
@@ -768,7 +764,7 @@ if [ "x$RUNCXX" == "xTRUE" ]; then
 
             mkdir -p build-netcdf-cxx4
             cd build-netcdf-cxx4
-            cmake ${WORKING_DIRECTORY}/netcdf-c -DBUILDNAME_PREFIX="docker$BITNESS-$USE_CXX" -DBUILDNAME_SUFFIX="$CXXBRANCH" -DCMAKE_CXX_COMPILER=$USE_CXX $CXXOPTS
+            cmake ${WORKING_DIRECTORY}/netcdf-c -DBUILDNAME_PREFIX="docker$BITNESS-$USE_CXX" -DBUILDNAME_SUFFIX="$CXX4BRANCH" -DCMAKE_CXX_COMPILER=$USE_CXX $CXXOPTS
             if [ "x$USEDASH" == "xTRUE" ]; then
                 ctest -D Experimental ; CHECKERR
             else
