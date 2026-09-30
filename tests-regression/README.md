@@ -94,10 +94,10 @@ The following environmental variables can be used to control the behavior at run
 * `H4VER` - Set to version you want to use. Default: None
     * Note: This versions < 4.3.0 do not work on `arm` architecture. 
     * Note: If empty, no HDF4 tests are run. 
-* `H5VER` - Set to the version you want to use. Default: `1.14.6`
+* `H5VER` - Set to the version you want to use. Default: `2.1.1`
   * Introduced in version `1.9.3`. 
   * If non-empty, the specified HDF5 version will be downloaded, compiled and installed at runtime instead of using the pre-built version.
-    * Example: -e HDF5SRC="1.14.6"
+    * Example: -e HDF5SRC="2.1.1"
 * `H5PACKAGE` - If `TRUE`, install via package manager instead of from source. 
 
 

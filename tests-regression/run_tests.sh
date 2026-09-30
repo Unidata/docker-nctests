@@ -100,7 +100,7 @@ fi
 export WORKING_DIRECTORY=${WORKING_DIRECTORY}/build-$(date +%s)
 
 if [ "${H5VER}" = "" ]; then
-    export H5VER=1.14.6
+    export H5VER=2.1.1
 fi
 
 if [ "x${USE_CC}" = "xmpicc" ]; then
