@@ -79,7 +79,7 @@ The following environmental variables can be used to control the behavior at run
 
 * `CBRANCH` - Git branch for `netcdf-c`
 * `FBRANCH` - Git branch for `netcdf-fortran`
-* `CXXBRANCH` - Git branch for `netcdf-cxx4`
+* `CXX4BRANCH` - Git branch for `netcdf-cxx4`
 * `JAVABRANCH` - Git branch for `netcdf-java` 
     * Default: `maint-5.x`
     * `JDKVER` - Version of `OpenJDK` to run for tests. Default: `17` 
@@ -214,7 +214,7 @@ This will put you into the shell for the docker container.  Note that any change
 
 ### - Turn off DAP tests by passing in a cmake variable
 
-    $ docker run --rm -it -e COPTS="-DNETCDF_ENABLE_DAP=OFF" unidata/nctests
+    $ docker run --rm -it -e CMAKE_COPTS="-DNETCDF_ENABLE_DAP_REMOTE_TESTS=OFF" -e AC_COPTS="--disable-dap-remote-tests" unidata/nctests
 
 ### - Run all of the tests but do not use the remote dashboard
 
