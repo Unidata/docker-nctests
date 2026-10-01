@@ -45,7 +45,7 @@ fi
 ###
 # Custom libaec install so that we get cmake config files.
 ###
-git clone https://gitlab.dkrz.de/k202009/libaec.git
+git clone https://github.com/Deutsches-Klimarechenzentrum/libaec
 cd libaec
 git checkout $(git tag -l | tail -n 1)
 mkdir build

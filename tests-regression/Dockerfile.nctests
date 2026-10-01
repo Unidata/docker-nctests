@@ -24,7 +24,7 @@ ENV HOME=/root
 WORKDIR /root
 LABEL maintainer="Ward Fisher <wfisher@ucar.edu>"
 
-ENV NCTEST_VERSION="1.13.9 - Development"
+ENV NCTEST_VERSION="1.14.0 - Development"
 
 ENV VERSION_FILE=VERSION.md
 
@@ -34,8 +34,8 @@ ENV VERSION_FILE=VERSION.md
 
 ENV CTEST_OUTPUT_ON_FAILURE=1
 
-ENV HDF5VER=1.14.6
-ENV H5VER=1.14.6
+ENV HDF5VER=2.1.1
+ENV H5VER=2.1.1
 ENV H5PACKAGE=FALSE
 ENV HDF5_VER=hdf5-${HDF5VER}
 ENV HDF5_FILE=${HDF5_VER}.tar.bz2
@@ -122,7 +122,7 @@ ENV CTEST_REPEAT=3
 # Copy over local tarballs.
 # No longer needed, all handled dynamically.
 ###
-#COPY hdf5-1.14.6.tar.bz2 pnetcdf-1.12.3.tar.gz hdf4.3.0.tar.gz ${HOME}/
+#COPY hdf5-2.1.1.tar.bz2 pnetcdf-1.12.3.tar.gz hdf4.3.0.tar.gz ${HOME}/
 
 
 ###
